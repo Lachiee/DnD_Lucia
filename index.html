@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Lazy Dungeon Master's Tome</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=IM+Fell+English:ital@0;1&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --parchment: #f4e8c1;
+  --parchment-dark: #e8d5a3;
+  --parchment-shadow: #c9a96e;
+  --ink: #2c1a0e;
+  --ink-light: #4a3020;
+  --red-wax: #8b1a1a;
+  --red-bright: #c0392b;
+  --gold: #b8860b;
+  --gold-light: #d4a017;
+  --green-ink: #1a4a2e;
+  --blue-ink: #1a2a4a;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background-color: #1a0e06;
+  background-image:
+    radial-gradient(ellipse at 20% 20%, #2e1a0a 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 80%, #1a0a04 0%, transparent 60%);
+  min-height: 100vh;
+  font-family: 'Crimson Text', serif;
+  color: var(--ink);
+  padding: 2rem 1rem 4rem;
+}
+.tome {
+  max-width: 880px;
+  margin: 0 auto;
+  background: var(--parchment);
+  background-image: linear-gradient(170deg, #f8eecc 0%, #eed9a0 40%, #f2e4b4 70%, #e6ce90 100%);
+  border-radius: 3px;
+  box-shadow: 0 0 0 3px #7a5c2e, 0 0 0 6px #3d2b10, 0 8px 60px rgba(0,0,0,0.8);
+  position: relative; overflow: hidden;
+}
+.tome::before {
+  content: '';
+  position: absolute; left: 0; top: 0; bottom: 0; width: 28px;
+  background: linear-gradient(90deg, #5a3a12 0%, #8a5c22 40%, #c49a4e 70%, var(--parchment-dark) 100%);
+  opacity: 0.6; pointer-events: none;
+}
+.tome-inner { padding: 3rem 3.5rem 3.5rem 4.5rem; position: relative; }
+
+/* HEADER */
+.tome-header { text-align: center; margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 2px solid var(--parchment-shadow); position: relative; }
+.tome-header::after { content: '⸻ ✦ ⸻'; position: absolute; bottom: -0.75em; left: 50%; transform: translateX(-50%); background: var(--parchment); padding: 0 1rem; color: var(--gold); font-size: 1rem; letter-spacing: 0.2em; }
+.tome-title { font-family: 'Cinzel', serif; font-size: clamp(1.5rem, 4vw, 2.5rem); font-weight: 700; color: var(--red-wax); letter-spacing: 0.05em; line-height: 1.2; }
+.tome-subtitle { font-family: 'IM Fell English', serif; font-style: italic; font-size: 1rem; color: var(--ink-light); margin-top: 0.4rem; }
+
+/* META */
+.meta-bar { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 0.8rem; margin-bottom: 2rem; padding: 1rem 1.2rem; background: rgba(180,130,60,0.1); border: 1px solid var(--parchment-shadow); border-radius: 2px; }
+
+/* TABS */
+.tabs { display: flex; gap: 0; margin-bottom: 2rem; border-bottom: 2px solid var(--parchment-shadow); overflow-x: auto; scrollbar-width: none; flex-wrap: nowrap; }
+.tabs::-webkit-scrollbar { display: none; }
+.tab-btn { background: none; border: none; border-bottom: 3px solid transparent; padding: 0.55rem 0.9rem; font-family: 'Cinzel', serif; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-light); cursor: pointer; white-space: nowrap; transition: all 0.2s; margin-bottom: -2px; }
+.tab-btn:hover { color: var(--red-wax); }
+.tab-btn.active { color: var(--red-wax); border-bottom-color: var(--red-wax); font-weight: 600; }
+.tab-pane { display: none; }
+.tab-pane.active { display: block; animation: fadeIn 0.3s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+/* SECTION */
+.section { margin-bottom: 2rem; }
+.section-title { font-family: 'Cinzel', serif; font-size: 0.82rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--red-wax); display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.6rem; }
+.section-title::before { content: ''; display: inline-block; width: 14px; height: 2px; background: var(--red-wax); opacity: 0.6; }
+.section-title::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, var(--parchment-shadow), transparent); opacity: 0.5; }
+.section-hint { font-family: 'IM Fell English', serif; font-style: italic; font-size: 0.82rem; color: var(--ink-light); opacity: 0.75; margin-bottom: 0.5rem; padding-left: 0.3rem; }
+
+/* INPUTS */
+label { display: block; font-family: 'Cinzel', serif; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-light); margin-bottom: 0.22rem; }
+input[type="text"], textarea, select {
+  width: 100%; background: rgba(255,255,255,0.25); border: 1px solid var(--parchment-shadow);
+  border-bottom: 2px solid var(--parchment-shadow); border-radius: 2px;
+  padding: 0.5rem 0.65rem; font-family: 'Crimson Text', serif; font-size: 1rem;
+  color: var(--ink); resize: vertical; transition: background 0.2s, border-color 0.2s; outline: none;
+}
+input[type="text"]:focus, textarea:focus, select:focus { background: rgba(255,255,255,0.5); border-color: var(--gold); box-shadow: 0 0 0 2px rgba(184,134,11,0.15); }
+textarea { min-height: 65px; line-height: 1.55; }
+textarea.tall { min-height: 95px; }
+
+/* CARDS */
+.card-list { display: flex; flex-direction: column; gap: 0.55rem; }
+.card { background: rgba(180,130,60,0.07); border: 1px solid rgba(180,130,60,0.3); border-radius: 2px; padding: 0.7rem 1rem; position: relative; animation: fadeIn 0.25s ease; }
+.card-row { display: grid; gap: 0.55rem; align-items: start; }
+.card-row + .card-row { margin-top: 0.55rem; }
+.card-row.two { grid-template-columns: 1fr 1fr; }
+.card-row.three { grid-template-columns: 1fr 1fr 1fr; }
+.card-row.four { grid-template-columns: 1fr 1fr 1fr 1fr; }
+.card-row.five { grid-template-columns: 1fr 1fr 1fr 1fr 1fr; }
+.remove-btn { position: absolute; top: 0.35rem; right: 0.45rem; background: none; border: none; color: var(--parchment-shadow); font-size: 0.9rem; cursor: pointer; padding: 0.1rem 0.3rem; transition: color 0.2s; }
+.remove-btn:hover { color: var(--red-bright); }
+.add-btn { display: inline-flex; align-items: center; gap: 0.35rem; margin-top: 0.4rem; background: none; border: 1px dashed var(--parchment-shadow); color: var(--ink-light); font-family: 'Cinzel', serif; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.35rem 0.8rem; cursor: pointer; border-radius: 2px; transition: all 0.2s; }
+.add-btn:hover { background: rgba(180,130,60,0.15); border-color: var(--gold); color: var(--ink); }
+
+/* SPECIAL BOXES */
+.strong-start-box { border: 2px solid var(--gold); padding: 1.1rem 1.3rem; background: rgba(184,134,11,0.06); border-radius: 2px; position: relative; }
+.strong-start-box::before { content: '★ Strong Start'; position: absolute; top: -0.7em; left: 1rem; background: var(--parchment); padding: 0 0.5rem; font-family: 'Cinzel', serif; font-size: 0.67rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); font-weight: 600; }
+
+.step-badge { display: inline-block; background: var(--red-wax); color: #f8e8c0; font-family: 'Cinzel', serif; font-size: 0.58rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.12rem 0.45rem; border-radius: 2px; margin-right: 0.3rem; vertical-align: middle; }
+
+/* ENCOUNTER CARDS */
+.encounter-card { border: 1px solid var(--parchment-shadow); border-left: 4px solid var(--red-wax); padding: 0.9rem 1.1rem; margin-bottom: 0.8rem; background: rgba(244,232,193,0.4); border-radius: 0 2px 2px 0; position: relative; animation: fadeIn 0.25s ease; }
+.encounter-num { font-family: 'Cinzel', serif; font-size: 0.62rem; color: var(--red-wax); letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 0.45rem; opacity: 0.7; }
+
+/* DIVIDER */
+.divider { text-align: center; color: var(--gold); font-size: 0.85rem; letter-spacing: 0.3em; margin: 1.8rem 0; opacity: 0.55; }
+
+/* CHARACTER SHEETS */
+.char-sheet-card { border: 1px solid var(--parchment-shadow); border-radius: 2px; overflow: hidden; margin-bottom: 1rem; animation: fadeIn 0.3s ease; }
+.char-sheet-header { background: rgba(139,26,26,0.12); padding: 0.75rem 1rem; display: flex; align-items: center; justify-content: space-between; cursor: pointer; border-bottom: 1px solid rgba(180,130,60,0.3); }
+.char-sheet-name { font-family: 'Cinzel', serif; font-size: 0.9rem; font-weight: 600; color: var(--red-wax); }
+.char-sheet-meta { font-family: 'IM Fell English', serif; font-style: italic; font-size: 0.85rem; color: var(--ink-light); }
+.char-sheet-body { padding: 1rem; display: none; }
+.char-sheet-body.open { display: block; }
+.stat-row { display: grid; grid-template-columns: repeat(6, 1fr); gap: 0.5rem; margin-bottom: 1rem; }
+.stat-box { background: rgba(180,130,60,0.12); border: 1px solid rgba(180,130,60,0.3); border-radius: 2px; padding: 0.4rem 0.3rem; text-align: center; }
+.stat-label { font-family: 'Cinzel', serif; font-size: 0.58rem; letter-spacing: 0.1em; color: var(--ink-light); text-transform: uppercase; }
+.stat-value { font-family: 'Cinzel', serif; font-size: 1.3rem; font-weight: 700; color: var(--red-wax); line-height: 1.1; }
+.stat-mod { font-family: 'Crimson Text', serif; font-size: 0.78rem; color: var(--ink-light); }
+.char-detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 0.75rem; }
+.char-detail-grid.three { grid-template-columns: 1fr 1fr 1fr; }
+.detail-block label { font-family: 'Cinzel', serif; font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-light); margin-bottom: 0.15rem; }
+.detail-block p { font-family: 'Crimson Text', serif; font-size: 0.95rem; color: var(--ink); line-height: 1.4; }
+.tag-list { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-top: 0.15rem; }
+.tag { background: rgba(139,26,26,0.1); border: 1px solid rgba(139,26,26,0.25); border-radius: 2px; padding: 0.1rem 0.45rem; font-family: 'Crimson Text', serif; font-size: 0.82rem; color: var(--ink); }
+.hp-row { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 0.5rem; margin-bottom: 0.75rem; }
+.hp-box { background: rgba(26,74,46,0.08); border: 1px solid rgba(26,74,46,0.25); border-radius: 2px; padding: 0.4rem 0.6rem; text-align: center; }
+.hp-box label { color: var(--green-ink); }
+.hp-box .hp-val { font-family: 'Cinzel', serif; font-size: 1.2rem; font-weight: 700; color: var(--green-ink); }
+.char-chevron { font-size: 0.75rem; color: var(--parchment-shadow); transition: transform 0.2s; }
+.char-chevron.open { transform: rotate(90deg); }
+.inspiration-pip { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 4px var(--gold); margin-left: 0.5rem; vertical-align: middle; }
+
+/* GITHUB LOADER */
+.github-loader { background: rgba(26,42,74,0.08); border: 1px solid rgba(26,42,74,0.2); border-radius: 2px; padding: 1.1rem 1.3rem; margin-bottom: 1.5rem; }
+.github-loader-title { font-family: 'Cinzel', serif; font-size: 0.75rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--blue-ink); margin-bottom: 0.7rem; }
+.github-url-row { display: grid; grid-template-columns: 1fr auto; gap: 0.6rem; align-items: end; }
+.github-status { font-family: 'IM Fell English', serif; font-style: italic; font-size: 0.82rem; margin-top: 0.5rem; min-height: 1.2em; }
+.github-status.ok { color: var(--green-ink); }
+.github-status.err { color: var(--red-wax); }
+.github-status.loading { color: var(--blue-ink); }
+.file-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.6rem; }
+.file-chip { display: inline-flex; align-items: center; gap: 0.35rem; background: rgba(26,42,74,0.08); border: 1px solid rgba(26,42,74,0.2); border-radius: 2px; padding: 0.2rem 0.6rem; font-family: 'Crimson Text', serif; font-size: 0.85rem; color: var(--blue-ink); cursor: pointer; transition: all 0.15s; }
+.file-chip:hover { background: rgba(26,42,74,0.15); }
+.file-chip .chip-x { font-size: 0.7rem; color: var(--parchment-shadow); }
+
+/* SESSION HOOK BOX */
+.hook-box { background: rgba(139,26,26,0.07); border: 1px dashed rgba(139,26,26,0.3); border-radius: 2px; padding: 0.7rem 0.9rem; margin-top: 0.6rem; }
+.hook-box-label { font-family: 'Cinzel', serif; font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--red-wax); margin-bottom: 0.3rem; }
+
+/* ACTION BAR */
+.action-bar { display: flex; gap: 0.8rem; margin-top: 2.2rem; padding-top: 1.2rem; border-top: 1px solid var(--parchment-shadow); flex-wrap: wrap; align-items: center; justify-content: space-between; }
+.btn-primary { background: var(--red-wax); color: #f8e8c0; border: none; font-family: 'Cinzel', serif; font-size: 0.73rem; letter-spacing: 0.13em; text-transform: uppercase; padding: 0.6rem 1.3rem; cursor: pointer; border-radius: 2px; transition: all 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.22); }
+.btn-primary:hover { background: var(--red-bright); transform: translateY(-1px); }
+.btn-secondary { background: transparent; color: var(--ink-light); border: 1px solid var(--parchment-shadow); font-family: 'Cinzel', serif; font-size: 0.73rem; letter-spacing: 0.13em; text-transform: uppercase; padding: 0.6rem 1.3rem; cursor: pointer; border-radius: 2px; transition: all 0.2s; }
+.btn-secondary:hover { background: rgba(180,130,60,0.15); border-color: var(--gold); }
+.save-status { font-family: 'IM Fell English', serif; font-style: italic; font-size: 0.9rem; color: var(--green-ink); opacity: 0; transition: opacity 0.3s; }
+.save-status.visible { opacity: 1; }
+
+@media (max-width: 600px) {
+  .tome-inner { padding: 2rem 1.5rem 2.5rem 2rem; }
+  .card-row.two, .card-row.three, .card-row.four, .card-row.five { grid-template-columns: 1fr; }
+  .meta-bar, .char-detail-grid, .char-detail-grid.three { grid-template-columns: 1fr 1fr; }
+  .stat-row { grid-template-columns: repeat(3, 1fr); }
+  .hp-row { grid-template-columns: 1fr 1fr; }
+}
+@media print {
+  body { background: white; padding: 0; }
+  .tome { box-shadow: none; }
+  .tabs, .action-bar, .add-btn, .remove-btn, .tab-btn, .github-loader { display: none !important; }
+  .tab-pane { display: block !important; }
+  .char-sheet-body { display: block !important; }
+}
+</style>
+</head>
+<body>
+<div class="tome">
+<div class="tome-inner">
+
+<!-- HEADER -->
+<header class="tome-header">
+  <h1 class="tome-title">The Lazy Dungeon Master's Tome</h1>
+  <p class="tome-subtitle">Eight Steps to a Memorable Game · After Sly Flourish's Return of the Lazy DM</p>
+</header>
+
+<!-- META BAR -->
+<div class="meta-bar">
+  <div><label>Campaign Name</label><input type="text" id="campaign-name" placeholder="e.g. Curse of Strahd"></div>
+  <div><label>Session #</label><input type="text" id="session-num" placeholder="Session 7"></div>
+  <div><label>Date</label><input type="text" id="session-date" placeholder="14 June 2025"></div>
+  <div><label>Party Level</label><input type="text" id="party-level" placeholder="5"></div>
+</div>
+
+<!-- TABS -->
+<nav class="tabs">
+  <button class="tab-btn active" onclick="switchTab('step1',this)">① Characters</button>
+  <button class="tab-btn" onclick="switchTab('step2',this)">② Strong Start</button>
+  <button class="tab-btn" onclick="switchTab('step3',this)">③ Scenes</button>
+  <button class="tab-btn" onclick="switchTab('step4',this)">④ Secrets</button>
+  <button class="tab-btn" onclick="switchTab('step5',this)">⑤ Locations</button>
+  <button class="tab-btn" onclick="switchTab('step6',this)">⑥ NPCs</button>
+  <button class="tab-btn" onclick="switchTab('step7',this)">⑦ Monsters</button>
+  <button class="tab-btn" onclick="switchTab('step8',this)">⑧ Treasure</button>
+  <button class="tab-btn" onclick="switchTab('campaign',this)">📜 Campaign</button>
+  <button class="tab-btn" onclick="switchTab('post',this)">✦ Post-Session</button>
+</nav>
+
+<!-- ══ STEP 1: REVIEW CHARACTERS ══ -->
+<div id="tab-step1" class="tab-pane active">
+  <div class="section">
+    <div class="section-title"><span class="step-badge">Step 1</span> Review the Characters</div>
+    <p class="section-hint">Before anything else — who are the characters? What do they want? What hook can you include this session for each one?</p>
+
+    <!-- GitHub Loader -->
+    <div class="github-loader">
+      <div class="github-loader-title">⇲ Load Character Sheets from GitHub</div>
+      <p style="font-family:'IM Fell English',serif;font-style:italic;font-size:0.82rem;color:var(--ink-light);margin-bottom:0.7rem;">
+        Enter a GitHub raw file URL or a folder URL to load player JSON sheets. Players can keep their sheets in your repo and you load them each session.
+      </p>
+      <div class="github-url-row">
+        <div>
+          <label>GitHub Raw JSON URL or Repo Folder URL</label>
+          <input type="text" id="gh-url" placeholder="https://raw.githubusercontent.com/user/repo/main/characters/aelindra.json">
+        </div>
+        <button class="btn-secondary" onclick="loadFromGitHub()" style="white-space:nowrap">Load Sheet</button>
+      </div>
+      <div class="github-status" id="gh-status"></div>
+      <div class="file-chips" id="gh-chips"></div>
+      <p style="font-family:'IM Fell English',serif;font-style:italic;font-size:0.78rem;color:var(--ink-light);margin-top:0.7rem;opacity:0.7;">
+        ℹ Tip: In your GitHub repo, put character JSON files in a <code>characters/</code> folder. Use the "Raw" button on GitHub to get the direct URL. See the included <code>example-character.json</code> for the format.
+      </p>
+    </div>
+
+    <!-- Loaded character sheets render here -->
+    <div id="char-sheets-loaded"></div>
+
+    <!-- Manual character hooks -->
+    <div class="section-title" style="margin-top:1.5rem"><span class="step-badge">Manual</span> Character Hooks This Session</div>
+    <p class="section-hint">For each character, jot the hook you'll use to draw them into this session.</p>
+    <div class="card-list" id="char-hooks-list"></div>
+    <button class="add-btn" onclick="addCharHook()">+ Add Character Hook</button>
+  </div>
+</div>
+
+<!-- ══ STEP 2: STRONG START ══ -->
+<div id="tab-step2" class="tab-pane">
+  <div class="section">
+    <div class="section-title"><span class="step-badge">Step 2</span> Create a Strong Start</div>
+    <p class="section-hint">"Something happens." Begin in the middle of the action — draw players out of the real world and into the game immediately.</p>
+    <div class="strong-start-box">
+      <textarea id="strong-start" class="tall" placeholder="e.g. The party wakes to find the inn on fire. A hooded figure flees out the back window clutching a leather satchel. The barmaid screams — it's the one who served them last night…"></textarea>
+    </div>
+    <div style="margin-top:1rem">
+      <label>Hook to Pull Characters Into the Adventure</label>
+      <textarea id="adventure-hook" placeholder="How does the strong start lead into the session's main thread?"></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- ══ STEP 3: SCENES ══ -->
+<div id="tab-step3" class="tab-pane">
+  <div class="section">
+    <div class="section-title"><span class="step-badge">Step 3</span> Outline Potential Scenes</div>
+    <p class="section-hint">What scenes <em>might</em> occur? Keep these brief — one scene per ~45 min of play. Don't over-plan; be ready to discard these entirely.</p>
+    <div class="card-list" id="scenes-list"></div>
+    <button class="add-btn" onclick="addScene()">+ Add Scene</button>
+  </div>
+  <div class="divider">· · · ✦ · · ·</div>
+  <div class="section">
+    <div class="section-title">Encounters &amp; Situations</div>
+    <p class="section-hint">Possible combat, social, or exploration beats. Leave room to improvise based on pacing.</p>
+    <div id="encounters-list"></div>
+    <button class="add-btn" onclick="addEncounter()">+ Add Encounter</button>
+  </div>
+</div>
+
+<!-- ══ STEP 4: SECRETS & CLUES ══ -->
+<div id="tab-step4" class="tab-pane">
+  <div class="section">
+    <div class="section-title"><span class="step-badge">Step 4</span> Define Secrets &amp; Clues</div>
+    <p class="section-hint">
+      The heart of the eight steps. Write up to ten secrets — short, relevant, and <strong>not tied to a specific location or method of discovery</strong>. You decide how they're revealed during play.
+    </p>
+    <div class="card-list" id="secrets-list"></div>
+    <button class="add-btn" onclick="addSecret()">+ Add Secret</button>
+  </div>
+</div>
+
+<!-- ══ STEP 5: LOCATIONS ══ -->
+<div id="tab-step5" class="tab-pane">
+  <div class="section">
+    <div class="section-title"><span class="step-badge">Step 5</span> Develop Fantastic Locations</div>
+    <p class="section-hint">What locations might come up? A name and a few evocative features are often enough. Add 1–3 "aspects" for set-piece locations.</p>
+    <div class="card-list" id="locations-list"></div>
+    <button class="add-btn" onclick="addLocation()">+ Add Location</button>
+  </div>
+</div>
+
+<!-- ══ STEP 6: NPCs ══ -->
+<div id="tab-step6" class="tab-pane">
+  <div class="section">
+    <div class="section-title"><span class="step-badge">Step 6</span> Outline Important NPCs</div>
+    <p class="section-hint">Name, one distinguishing trait, and what they want. Consider grabbing mannerisms from a character in fiction for instant depth.</p>
+    <div class="card-list" id="npcs-list"></div>
+    <button class="add-btn" onclick="addNPC()">+ Add NPC</button>
+  </div>
+</div>
+
+<!-- ══ STEP 7: MONSTERS ══ -->
+<div id="tab-step7" class="tab-pane">
+  <div class="section">
+    <div class="section-title"><span class="step-badge">Step 7</span> Choose Relevant Monsters</div>
+    <p class="section-hint">List potential monsters separately from encounters so you can drop them in anywhere based on pacing and situation. Include the lazy encounter benchmark.</p>
+    <div>
+      <label>Lazy Encounter Benchmark (×2 char level = potentially deadly)</label>
+      <input type="text" id="encounter-benchmark" placeholder="e.g. Party of 4 at lvl 5 → benchmark = 40 (8 CR per monster × 5)">
+    </div>
+    <div style="margin-top:1rem" class="card-list" id="monsters-list"></div>
+    <button class="add-btn" onclick="addMonster()">+ Add Monster</button>
+  </div>
+</div>
+
+<!-- ══ STEP 8: TREASURE ══ -->
+<div id="tab-step8" class="tab-pane">
+  <div class="section">
+    <div class="section-title"><span class="step-badge">Step 8</span> Select Treasure &amp; Magic Items</div>
+    <p class="section-hint">Choose items that fit specific characters <em>or</em> roll randomly — mixing both works well. Players love loot; it's worth a few minutes of prep.</p>
+    <div class="card-list" id="treasure-list"></div>
+    <button class="add-btn" onclick="addTreasure()">+ Add Reward</button>
+  </div>
+</div>
+
+<!-- ══ CAMPAIGN ══ -->
+<div id="tab-campaign" class="tab-pane">
+  <div class="section">
+    <div class="section-title">Campaign Fronts &amp; Factions</div>
+    <p class="section-hint">Major forces in the world, what they want, and what they're doing right now.</p>
+    <div class="card-list" id="factions-list"></div>
+    <button class="add-btn" onclick="addFaction()">+ Add Faction</button>
+  </div>
+  <div class="divider">· · · ✦ · · ·</div>
+  <div class="section">
+    <div class="section-title">World Truths</div>
+    <p class="section-hint">The established facts of your world — things that will not change.</p>
+    <textarea id="world-truths" class="tall" placeholder="e.g. The gods are silent since the Sundering. Magic requires sacrifice. The old empire fell 300 years ago and its ruins dot the land…"></textarea>
+  </div>
+  <div class="section">
+    <div class="section-title">Open Threads &amp; Campaign Notes</div>
+    <textarea id="campaign-notes" class="tall" placeholder="Running threads, unresolved mysteries, long-term arcs…"></textarea>
+  </div>
+</div>
+
+<!-- ══ POST-SESSION ══ -->
+<div id="tab-post" class="tab-pane">
+  <div class="section">
+    <div class="section-title">Post-Session Review</div>
+    <p class="section-hint">A few minutes after each session keeps your prep focused. What happened, what worked, what to carry forward.</p>
+    <div style="display:grid;gap:1rem;">
+      <div><label>Session Summary</label><textarea class="tall" id="summary" placeholder="Brief recap of what actually happened…"></textarea></div>
+      <div><label>What Worked Well</label><textarea id="worked-well" placeholder="Moments that landed, player engagement, memorable scenes…"></textarea></div>
+      <div><label>What to Improve</label><textarea id="improve" placeholder="Pacing, clarity, balance, anything to do differently…"></textarea></div>
+      <div><label>Loose Threads &amp; Player Interests</label><textarea class="tall" id="loose-threads" placeholder="What were players excited about? New threads to pick up next session…"></textarea></div>
+      <div><label>Secrets Discovered This Session</label><textarea id="secrets-used" placeholder="Which secrets/clues came up? Which to carry forward?"></textarea></div>
+      <div><label>First Prep Tasks for Next Session</label><textarea id="next-prep" placeholder="What to prep first — usually reviewing characters and the strong start…"></textarea></div>
+    </div>
+  </div>
+</div>
+
+<!-- ACTION BAR -->
+<div class="action-bar">
+  <div style="display:flex;gap:0.6rem;flex-wrap:wrap;">
+    <button class="btn-primary" onclick="saveAll()">✦ Save Session</button>
+    <button class="btn-secondary" onclick="loadSave()">Load Saved</button>
+    <button class="btn-secondary" onclick="exportPrint()">Print / Export</button>
+    <button class="btn-secondary" onclick="clearAll()" style="color:var(--red-wax)">Clear All</button>
+  </div>
+  <span class="save-status" id="save-status">✓ Saved to browser</span>
+</div>
+
+</div><!-- /tome-inner -->
+</div><!-- /tome -->
+
+<script>
+// ─── TABS ───
+function switchTab(name, el) {
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  el.classList.add('active');
+}
+
+// ─── CARD FACTORY ───
+function makeCard(listId, fields) {
+  const list = document.getElementById(listId);
+  if (!list) return null;
+  const card = document.createElement('div');
+  card.className = 'card';
+  fields.forEach(row => {
+    const rowEl = document.createElement('div');
+    rowEl.className = 'card-row ' + (row.cols === 2 ? 'two' : row.cols === 3 ? 'three' : row.cols === 4 ? 'four' : row.cols === 5 ? 'five' : '');
+    row.items.forEach(f => {
+      const wrap = document.createElement('div');
+      if (f.span) wrap.style.gridColumn = '1 / -1';
+      const lbl = document.createElement('label'); lbl.textContent = f.label; wrap.appendChild(lbl);
+      let inp;
+      if (f.type === 'textarea') { inp = document.createElement('textarea'); inp.rows = f.rows || 2; }
+      else { inp = document.createElement('input'); inp.type = 'text'; }
+      inp.placeholder = f.placeholder || ''; inp.dataset.key = f.key; wrap.appendChild(inp); rowEl.appendChild(wrap);
+    });
+    card.appendChild(rowEl);
+  });
+  const rm = document.createElement('button'); rm.className = 'remove-btn'; rm.textContent = '✕';
+  rm.onclick = () => card.remove(); card.appendChild(rm);
+  list.appendChild(card); return card;
+}
+
+function addCharHook() {
+  makeCard('char-hooks-list', [
+    { cols: 2, items: [
+      { key: 'hook-char', label: 'Character Name', placeholder: 'e.g. Aelindra' },
+      { key: 'hook-player', label: 'Player', placeholder: 'e.g. Jamie' }
+    ]},
+    { cols: 1, items: [{ key: 'hook-text', label: 'Session Hook', type: 'textarea', rows: 2, placeholder: 'What happens this session that connects to this character\'s goals or backstory?', span: true }] }
+  ]);
+}
+
+function addScene() {
+  makeCard('scenes-list', [
+    { cols: 3, items: [
+      { key: 'scene-name', label: 'Scene', placeholder: 'e.g. Ambush at the Ford' },
+      { key: 'scene-type', label: 'Type', placeholder: 'Combat / Social / Exploration' },
+      { key: 'scene-trigger', label: 'Trigger / Branch', placeholder: 'What causes this scene?' }
+    ]},
+    { cols: 1, items: [{ key: 'scene-notes', label: 'Notes', type: 'textarea', rows: 1, placeholder: 'Key beats, stakes, possible outcomes…', span: true }] }
+  ]);
+}
+
+let encNum = 0;
+function addEncounter() {
+  encNum++;
+  const list = document.getElementById('encounters-list');
+  const card = document.createElement('div'); card.className = 'encounter-card';
+  card.innerHTML = `<div class="encounter-num">Encounter ${encNum}</div>
+    <div class="card-row two"><div><label>Name</label><input type="text" data-key="enc-name" placeholder="e.g. Goblin Ambush at Millstone Bridge"></div><div><label>Difficulty</label><input type="text" data-key="enc-diff" placeholder="Easy / Medium / Hard / Deadly"></div></div>
+    <div class="card-row two" style="margin-top:0.5rem"><div><label>Location</label><input type="text" data-key="enc-loc" placeholder="Where?"></div><div><label>Monsters / Participants</label><input type="text" data-key="enc-mon" placeholder="e.g. 4 Goblins, 1 Bugbear"></div></div>
+    <div style="margin-top:0.5rem"><label>Tactics &amp; What Makes It Memorable</label><textarea rows="2" data-key="enc-notes" placeholder="How might it end non-violently? What do enemies want? Interesting terrain features?"></textarea></div>
+    <button class="remove-btn" onclick="this.parentElement.remove()">✕</button>`;
+  list.appendChild(card);
+}
+
+function addSecret() {
+  makeCard('secrets-list', [
+    { cols: 1, items: [{ key: 'secret', label: 'Secret / Clue', type: 'textarea', rows: 2, placeholder: 'e.g. The blacksmith is a wererat informant for the thieves guild. (Don\'t decide HOW they find this — leave that for the table.)' }] }
+  ]);
+}
+
+function addLocation() {
+  makeCard('locations-list', [
+    { cols: 3, items: [
+      { key: 'loc-name', label: 'Location Name', placeholder: 'e.g. Hall of Storms' },
+      { key: 'loc-type', label: 'Type', placeholder: 'Dungeon / City / Wilds…' },
+      { key: 'loc-scale', label: 'Scale', placeholder: 'Room / District / Region' }
+    ]},
+    { cols: 1, items: [{ key: 'loc-desc', label: 'Evocative Description (senses)', type: 'textarea', rows: 2, placeholder: 'Stench of brine, drowned shadows, crumbling pillars…', span: true }] },
+    { cols: 1, items: [{ key: 'loc-aspects', label: 'Fantastic Aspects (1–3 interactive features)', type: 'textarea', rows: 1, placeholder: 'e.g. Lightning-charged throne, pit dropping to the sky below, crumbling bridge over acid pool', span: true }] }
+  ]);
+}
+
+function addNPC() {
+  makeCard('npcs-list', [
+    { cols: 3, items: [
+      { key: 'npc-name', label: 'Name', placeholder: 'e.g. Mira Ashveil' },
+      { key: 'npc-role', label: 'Role', placeholder: 'Innkeeper / Spy / Guard' },
+      { key: 'npc-faction', label: 'Allegiance', placeholder: 'e.g. Harpers' }
+    ]},
+    { cols: 2, items: [
+      { key: 'npc-trait', label: 'One Distinguishing Trait', placeholder: 'Never makes eye contact; twirls her ring' },
+      { key: 'npc-want', label: 'What They Want', placeholder: 'Find her missing brother before the Zhentarim' }
+    ]},
+    { cols: 2, items: [
+      { key: 'npc-goal', label: 'Quest / Goal', placeholder: 'What are they actively doing to get what they want?' },
+      { key: 'npc-fiction', label: 'Based On (fiction char)', placeholder: 'e.g. Cersei Lannister — for mannerisms' }
+    ]},
+    { cols: 1, items: [{ key: 'npc-notes', label: 'Notes / Secrets', type: 'textarea', rows: 1, placeholder: 'Background, hooks, attitude toward the party…', span: true }] }
+  ]);
+}
+
+function addMonster() {
+  makeCard('monsters-list', [
+    { cols: 5, items: [
+      { key: 'mon-name', label: 'Name', placeholder: 'Vampire Spawn' },
+      { key: 'mon-cr', label: 'CR', placeholder: '5' },
+      { key: 'mon-hp', label: 'HP', placeholder: '82' },
+      { key: 'mon-ac', label: 'AC', placeholder: '15' },
+      { key: 'mon-count', label: 'Count', placeholder: '2' }
+    ]},
+    { cols: 2, items: [
+      { key: 'mon-motive', label: 'Motivation', placeholder: 'e.g. Feed and obey Strahd' },
+      { key: 'mon-tactics', label: 'Tactics', placeholder: 'e.g. Bite first, charm if outnumbered' }
+    ]},
+    { cols: 1, items: [{ key: 'mon-notes', label: 'What Makes This Monster Interesting?', type: 'textarea', rows: 1, placeholder: 'Beyond the stat block — unique abilities, personality, environmental role…', span: true }] }
+  ]);
+}
+
+function addTreasure() {
+  makeCard('treasure-list', [
+    { cols: 4, items: [
+      { key: 'tr-name', label: 'Item / Reward', placeholder: '+1 Longsword' },
+      { key: 'tr-type', label: 'Type', placeholder: 'Magic / Coin / Info / Favour' },
+      { key: 'tr-method', label: 'Selection Method', placeholder: 'Chosen / Random' },
+      { key: 'tr-for', label: 'Best For', placeholder: 'Character name or "Any"' }
+    ]},
+    { cols: 1, items: [{ key: 'tr-desc', label: 'Description / Lore / Mechanical Notes', type: 'textarea', rows: 1, placeholder: 'Where found, what it does, any story hooks…', span: true }] }
+  ]);
+}
+
+function addFaction() {
+  makeCard('factions-list', [
+    { cols: 3, items: [
+      { key: 'fac-name', label: 'Faction Name', placeholder: 'e.g. The Iron Circle' },
+      { key: 'fac-attitude', label: 'Attitude to Party', placeholder: 'Hostile / Neutral / Allied' },
+      { key: 'fac-power', label: 'Resources / Power', placeholder: 'Mercenaries, noble patron…' }
+    ]},
+    { cols: 2, items: [
+      { key: 'fac-goal', label: 'What They Want', placeholder: 'Control the southern trade routes…' },
+      { key: 'fac-action', label: 'Current Action', placeholder: 'What are they doing right now?' }
+    ]},
+    { cols: 1, items: [{ key: 'fac-notes', label: 'Notes', type: 'textarea', rows: 1, placeholder: 'Key members, recent events…', span: true }] }
+  ]);
+}
+
+// ─── GITHUB CHARACTER LOADER ───
+const loadedUrls = new Set();
+
+async function loadFromGitHub() {
+  const urlInput = document.getElementById('gh-url');
+  const status = document.getElementById('gh-status');
+  const url = urlInput.value.trim();
+  if (!url) { setStatus('err', 'Please enter a URL.'); return; }
+  if (loadedUrls.has(url)) { setStatus('err', 'Already loaded this URL.'); return; }
+
+  setStatus('loading', '⟳ Fetching…');
+  try {
+    // Convert github.com blob URL to raw if needed
+    let fetchUrl = url
+      .replace('github.com', 'raw.githubusercontent.com')
+      .replace('/blob/', '/');
+
+    const res = await fetch(fetchUrl);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+
+    if (!data.name) throw new Error('JSON missing "name" field — check the character sheet format.');
+
+    loadedUrls.add(url);
+    renderCharacterSheet(data);
+    addChip(url, data.name);
+    setStatus('ok', `✓ Loaded ${data.name} (${data.class} ${data.level})`);
+    urlInput.value = '';
+  } catch(e) {
+    setStatus('err', `✗ ${e.message}`);
+  }
+}
+
+function setStatus(type, msg) {
+  const el = document.getElementById('gh-status');
+  el.className = 'github-status ' + type;
+  el.textContent = msg;
+}
+
+function addChip(url, name) {
+  const chips = document.getElementById('gh-chips');
+  const chip = document.createElement('div');
+  chip.className = 'file-chip';
+  chip.innerHTML = `${name} <span class="chip-x">✕</span>`;
+  chip.querySelector('.chip-x').onclick = (e) => {
+    e.stopPropagation();
+    loadedUrls.delete(url);
+    chip.remove();
+    // Remove the sheet card
+    const sheetId = 'sheet-' + name.replace(/\s+/g,'-').toLowerCase();
+    const el = document.getElementById(sheetId);
+    if (el) el.remove();
+  };
+  chips.appendChild(chip);
+}
+
+function mod(score) {
+  const m = Math.floor((score - 10) / 2);
+  return (m >= 0 ? '+' : '') + m;
+}
+
+function renderCharacterSheet(c) {
+  const container = document.getElementById('char-sheets-loaded');
+  const id = 'sheet-' + c.name.replace(/\s+/g,'-').toLowerCase();
+  if (document.getElementById(id)) return;
+
+  const div = document.createElement('div');
+  div.className = 'char-sheet-card';
+  div.id = id;
+
+  const inspBadge = c.inspiration ? '<span class="inspiration-pip" title="Has Inspiration"></span>' : '';
+  div.innerHTML = `
+    <div class="char-sheet-header" onclick="toggleSheet('${id}')">
+      <div>
+        <span class="char-sheet-name">${c.name}${inspBadge}</span>
+        <span class="char-sheet-meta"> · ${c.race} ${c.class} ${c.subclass ? '('+c.subclass+')' : ''} · Level ${c.level}</span>
+      </div>
+      <span class="char-chevron" id="chev-${id}">▶</span>
+    </div>
+    <div class="char-sheet-body" id="body-${id}">
+      <div class="hp-row">
+        <div class="hp-box"><label>HP Max</label><div class="hp-val">${c.hp_max}</div></div>
+        <div class="hp-box"><label>HP Current</label><div class="hp-val">${c.hp_current}</div></div>
+        <div class="hp-box"><label>AC</label><div class="hp-val">${c.ac}</div></div>
+        <div class="hp-box"><label>Speed</label><div class="hp-val">${c.speed}</div></div>
+      </div>
+      <div class="stat-row">
+        ${['STR','DEX','CON','INT','WIS','CHA'].map(s => `
+          <div class="stat-box">
+            <div class="stat-label">${s}</div>
+            <div class="stat-value">${c.stats[s]}</div>
+            <div class="stat-mod">${mod(c.stats[s])}</div>
+          </div>`).join('')}
+      </div>
+      <div class="char-detail-grid three">
+        <div class="detail-block"><label>Player</label><p>${c.player||'—'}</p></div>
+        <div class="detail-block"><label>Background</label><p>${c.background||'—'}</p></div>
+        <div class="detail-block"><label>Passive Perception</label><p>${c.passive_perception||'—'}</p></div>
+      </div>
+      <div class="char-detail-grid">
+        <div class="detail-block"><label>Personality</label><p>${c.personality||'—'}</p></div>
+        <div class="detail-block"><label>Ideals</label><p>${c.ideals||'—'}</p></div>
+        <div class="detail-block"><label>Bonds</label><p>${c.bonds||'—'}</p></div>
+        <div class="detail-block"><label>Flaws</label><p>${c.flaws||'—'}</p></div>
+      </div>
+      <div class="detail-block" style="margin-bottom:0.6rem"><label>Goals</label>
+        <div class="tag-list">${(c.goals||[]).map(g=>`<span class="tag">${g}</span>`).join('')}</div>
+      </div>
+      <div class="detail-block" style="margin-bottom:0.6rem"><label>Skills</label>
+        <div class="tag-list">${(c.skills||[]).map(s=>`<span class="tag">${s}</span>`).join('')}</div>
+      </div>
+      <div class="detail-block" style="margin-bottom:0.6rem"><label>Notable Equipment</label>
+        <div class="tag-list">${(c.equipment||[]).map(e=>`<span class="tag">${e}</span>`).join('')}</div>
+      </div>
+      ${(c.spells||[]).length ? `<div class="detail-block" style="margin-bottom:0.6rem"><label>Spells</label><div class="tag-list">${c.spells.map(s=>`<span class="tag">${s}</span>`).join('')}</div></div>` : ''}
+      <div class="detail-block" style="margin-bottom:0.6rem"><label>Features</label>
+        <div class="tag-list">${(c.features||[]).map(f=>`<span class="tag">${f}</span>`).join('')}</div>
+      </div>
+      ${c.notes ? `<div class="detail-block" style="margin-bottom:0.6rem"><label>DM Notes</label><p>${c.notes}</p></div>` : ''}
+      <div class="hook-box">
+        <div class="hook-box-label">★ Session Hook for ${c.name}</div>
+        <input type="text" placeholder="What happens this session that connects to ${c.name}'s story?" style="margin-top:0.2rem">
+      </div>
+    </div>`;
+  container.appendChild(div);
+}
+
+function toggleSheet(id) {
+  const body = document.getElementById('body-' + id);
+  const chev = document.getElementById('chev-' + id);
+  const open = body.classList.toggle('open');
+  chev.classList.toggle('open', open);
+}
+
+// ─── SAVE / LOAD ───
+function collectData() {
+  const data = {};
+  ['campaign-name','session-num','session-date','party-level','strong-start','adventure-hook',
+   'encounter-benchmark','world-truths','campaign-notes','summary','worked-well','improve',
+   'loose-threads','secrets-used','next-prep'].forEach(id => {
+    const el = document.getElementById(id); if (el) data[id] = el.value;
+  });
+  const cardLists = ['char-hooks-list','scenes-list','secrets-list','locations-list','npcs-list','monsters-list','treasure-list','factions-list'];
+  cardLists.forEach(listId => {
+    const list = document.getElementById(listId); if (!list) return;
+    data[listId] = Array.from(list.querySelectorAll('.card')).map(card =>
+      Object.fromEntries(Array.from(card.querySelectorAll('[data-key]')).map(i => [i.dataset.key, i.value]))
+    );
+  });
+  const encList = document.getElementById('encounters-list');
+  if (encList) data['encounters-raw'] = encList.innerHTML;
+  data['encNum'] = encNum;
+  return data;
+}
+
+function saveAll() {
+  localStorage.setItem('lazy-dm-v2', JSON.stringify(collectData()));
+  const s = document.getElementById('save-status'); s.classList.add('visible');
+  setTimeout(() => s.classList.remove('visible'), 2500);
+}
+
+function loadSave() {
+  const raw = localStorage.getItem('lazy-dm-v2');
+  if (!raw) { alert('No saved session found.'); return; }
+  const data = JSON.parse(raw);
+  ['campaign-name','session-num','session-date','party-level','strong-start','adventure-hook',
+   'encounter-benchmark','world-truths','campaign-notes','summary','worked-well','improve',
+   'loose-threads','secrets-used','next-prep'].forEach(id => {
+    const el = document.getElementById(id); if (el && data[id] !== undefined) el.value = data[id];
+  });
+  const restorers = {
+    'char-hooks-list': addCharHook, 'scenes-list': addScene, 'secrets-list': addSecret,
+    'locations-list': addLocation, 'npcs-list': addNPC, 'monsters-list': addMonster,
+    'treasure-list': addTreasure, 'factions-list': addFaction
+  };
+  Object.keys(restorers).forEach(listId => {
+    const list = document.getElementById(listId); if (!list || !data[listId]) return;
+    list.innerHTML = '';
+    data[listId].forEach(row => {
+      restorers[listId]();
+      const card = list.lastElementChild;
+      Object.entries(row).forEach(([key, val]) => {
+        const inp = card.querySelector(`[data-key="${key}"]`); if (inp) inp.value = val;
+      });
+    });
+  });
+  if (data['encounters-raw']) document.getElementById('encounters-list').innerHTML = data['encounters-raw'];
+  if (data['encNum']) encNum = data['encNum'];
+  alert('Session loaded!');
+}
+
+function clearAll() { if (!confirm('Clear all data?')) return; localStorage.removeItem('lazy-dm-v2'); location.reload(); }
+function exportPrint() { window.print(); }
+
+// Seed some starter cards
+window.addEventListener('DOMContentLoaded', () => {
+  if (!localStorage.getItem('lazy-dm-v2')) {
+    addCharHook(); addCharHook();
+    addScene(); addScene();
+    addSecret(); addSecret(); addSecret();
+    addLocation(); addLocation();
+    addNPC(); addNPC();
+    addMonster();
+    addEncounter();
+    addTreasure();
+  }
+});
+</script>
+</body>
+</html>
