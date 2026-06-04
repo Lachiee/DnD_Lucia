@@ -1,57 +1,67 @@
 # The Lazy Dungeon Master's Tome
 
-A session prep tool following Sly Flourish's *Return of the Lazy Dungeon Master* eight-step framework.
+Session prep tool following Sly Flourish's *Return of the Lazy Dungeon Master* — all eight steps, initiative tracker, character sheet viewer, and session archive.
 
-## Setup on GitHub Pages
+## GitHub Pages Setup
 
-1. Fork or upload this repo to GitHub
-2. Go to **Settings → Pages → Source: main branch / root folder**
-3. Your tool will be live at `https://yourusername.github.io/repo-name/`
+1. Upload all files to a GitHub repo keeping the folder structure
+2. **Settings → Pages → Source: main branch / root**
+3. Live at `https://yourusername.github.io/repo-name/`
 
-## File Structure
+## Folder Structure
 
 ```
 /
-├── index.html                  ← Main DM prep app
+├── index.html                        ← Main app
 ├── README.md
-└── characters/
-    ├── example-character.json  ← Template for player sheets
-    └── example-character2.json ← Second example
+├── characters/
+│   ├── stuart-warryn.json            ← Warryn's sheet
+│   ├── example-character.json        ← Template
+│   └── example-character2.json
+└── sessions/                         ← Export sessions here
+    └── session-01-campaign.json
 ```
 
-## How to Load Player Character Sheets
+## Loading Character Sheets
 
-1. Each player (or you) creates a JSON file in the `characters/` folder using the format in `example-character.json`
-2. Push the file to GitHub
-3. In the app's **① Characters** tab, click the **Raw** button on the file in GitHub to get a URL like:
-   ```
-   https://raw.githubusercontent.com/USERNAME/REPO/main/characters/playername.json
-   ```
-4. Paste that URL into the loader and click **Load Sheet**
-5. The sheet will render inline with stats, traits, goals, and a session hook field
+**Two ways to load a character sheet:**
 
-## Player Workflow
+### 1. From GitHub (JSON)
+- Put the character JSON in `/characters/` folder
+- Click **Raw** on GitHub to get the direct URL
+- Paste into the loader in the **① Characters** tab
 
-Players can update their own character sheet between sessions:
-- Edit their JSON file on GitHub (or via a PR)
-- The DM loads the updated sheet each session
+### 2. Paste directly (any format)
+- Click **Paste / Type Character Sheet**
+- Paste YAML-style stat blocks (like the ones in your campaign notes), plain text, or JSON
+- The parser will extract name, stats, HP, AC, features, spells, backstory, and more
 
-## Character JSON Format
+### Character JSON format
+See `characters/stuart-warryn.json` for a full example. Key fields:
 
-See `characters/example-character.json` for the full schema. Key fields:
+| Field | Description |
+|-------|-------------|
+| `name`, `player` | Character and player names |
+| `race`, `class`, `level` | Core info |
+| `stats` | Array: [STR, DEX, CON, INT, WIS, CHA] |
+| `hp_max`, `ac`, `speed` | Combat stats |
+| `goals` | Array of character goals |
+| `backstory` | Full backstory text |
+| `class_features`, `traits`, `spellcasting`, `actions` | Feature blocks |
+| `equipment`, `spells`, `skills`, `languages` | Tag lists |
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `name` | string | Character name |
-| `player` | string | Player's name |
-| `class` / `race` / `level` | string/number | Core info |
-| `stats` | object | `{STR, DEX, CON, INT, WIS, CHA}` |
-| `hp_max` / `hp_current` | number | Hit points |
-| `goals` | array | What the character wants |
-| `equipment` / `spells` / `features` | arrays | Lists |
-| `personality` / `ideals` / `bonds` / `flaws` | string | Character traits |
-| `notes` | string | DM-only notes |
+## Initiative Tracker
+
+- **Add combatants** manually or click **Import PCs from Sheets** to pull in loaded characters
+- **Roll All Initiative** auto-rolls d20 + DEX mod for everyone
+- **Next Turn** advances the active combatant, auto-increments round
+- **Quick Damage/Heal** — select a target and apply in one click
+- **Add Condition** — all standard 5e conditions with click-to-remove pips
+
+## Session Archive
+
+Export sessions as JSON after each game, upload to the `sessions/` folder on GitHub. Load them back in the **📚 History** tab or drag-and-drop the JSON file directly. Sessions expand to show strong start, what happened, loose threads, and next prep notes.
 
 ## Attribution
 
-Built on the eight-step framework from *Return of the Lazy Dungeon Master* by Michael E. Shea (Sly Flourish). For personal/non-commercial use.
+Built on the eight-step framework from *Return of the Lazy Dungeon Master* by Michael E. Shea (Sly Flourish). Non-commercial personal use.
