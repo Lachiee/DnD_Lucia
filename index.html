@@ -223,18 +223,18 @@ textarea.tall{min-height:90px}
 
 <!-- TABS -->
 <nav class="tabs">
-  <button class="tb active" onclick="sw('s1',this)">① Characters</button>
-  <button class="tb" onclick="sw('s2',this)">② Strong Start</button>
-  <button class="tb" onclick="sw('s3',this)">③ Scenes</button>
-  <button class="tb" onclick="sw('s4',this)">④ Secrets</button>
-  <button class="tb" onclick="sw('s5',this)">⑤ Locations</button>
-  <button class="tb" onclick="sw('s6',this)">⑥ NPCs</button>
-  <button class="tb" onclick="sw('s7',this)">⑦ Monsters</button>
-  <button class="tb" onclick="sw('s8',this)">⑧ Treasure</button>
-  <button class="tb" onclick="sw('init',this)">⚔ Initiative</button>
-  <button class="tb" onclick="sw('camp',this)">📜 Campaign</button>
-  <button class="tb" onclick="sw('post',this)">✦ Post-Session</button>
-  <button class="tb" onclick="sw('hist',this)">📚 History</button>
+  <button class="tb active" data-ac="tab-s1">① Characters</button>
+  <button class="tb" data-ac="tab-s2">② Strong Start</button>
+  <button class="tb" data-ac="tab-s3">③ Scenes</button>
+  <button class="tb" data-ac="tab-s4">④ Secrets</button>
+  <button class="tb" data-ac="tab-s5">⑤ Locations</button>
+  <button class="tb" data-ac="tab-s6">⑥ NPCs</button>
+  <button class="tb" data-ac="tab-s7">⑦ Monsters</button>
+  <button class="tb" data-ac="tab-s8">⑧ Treasure</button>
+  <button class="tb" data-ac="tab-init">⚔ Initiative</button>
+  <button class="tb" data-ac="tab-camp">📜 Campaign</button>
+  <button class="tb" data-ac="tab-post">✦ Post-Session</button>
+  <button class="tb" data-ac="tab-hist">📚 History</button>
 </nav>
 
 <!-- ══ S1: CHARACTERS ══ -->
@@ -247,21 +247,21 @@ textarea.tall{min-height:90px}
       <div class="gh-title">⇲ Load Character Sheet from GitHub (JSON or YAML-style text)</div>
       <div class="gh-row">
         <div><label>GitHub Raw URL (.json file)</label><input type="text" id="gh-url" placeholder="https://raw.githubusercontent.com/user/repo/main/characters/stuart.json"></div>
-        <button class="btns" onclick="loadGH()" style="white-space:nowrap">Load</button>
+        <button class="btns" data-ac="fn-loadGH" style="white-space:nowrap">Load</button>
       </div>
       <div class="gh-status" id="gh-status"></div>
       <div class="chips" id="gh-chips"></div>
     </div>
 
     <div style="margin-bottom:.8rem">
-      <button class="abtn" onclick="openParseModal()" style="border-style:solid;border-color:var(--blue);color:var(--blue)">⌨ Paste / Type Character Sheet (any format)</button>
+      <button class="abtn" data-ac="fn-openParse" style="border-style:solid;border-color:var(--blue);color:var(--blue)">⌨ Paste / Type Character Sheet (any format)</button>
     </div>
 
     <div id="char-sheets"></div>
 
     <div class="stitle" style="margin-top:1.4rem"><span class="sbadge">Hooks</span>Session Hooks Per Character</div>
     <div class="cl" id="hook-list"></div>
-    <button class="abtn" onclick="addHook()">+ Add Hook</button>
+    <button class="abtn" data-ac="fn-addHook">+ Add Hook</button>
   </div>
 </div>
 
@@ -281,13 +281,13 @@ textarea.tall{min-height:90px}
     <div class="stitle"><span class="sbadge">Step 3</span>Outline Potential Scenes</div>
     <p class="shint">~1 scene per 45 min. Keep these brief — be ready to throw them away. Include adventure hooks, forks, and options.</p>
     <div class="cl" id="scenes-list"></div>
-    <button class="abtn" onclick="addScene()">+ Add Scene</button>
+    <button class="abtn" data-ac="fn-addScene">+ Add Scene</button>
   </div>
   <div class="div">· · · ✦ · · ·</div>
   <div class="sec">
     <div class="stitle">Encounters &amp; Situations</div>
     <div id="enc-list"></div>
-    <button class="abtn" onclick="addEnc()">+ Add Encounter</button>
+    <button class="abtn" data-ac="fn-addEnc">+ Add Encounter</button>
   </div>
 </div>
 
@@ -297,7 +297,7 @@ textarea.tall{min-height:90px}
     <div class="stitle"><span class="sbadge">Step 4</span>Define Secrets &amp; Clues</div>
     <p class="shint">The heart of the eight steps. Short, relevant, <strong>not tied to a location or discovery method</strong>. Up to ten — carry forward undiscovered ones from last session.</p>
     <div class="cl" id="secrets-list"></div>
-    <button class="abtn" onclick="addSecret()">+ Add Secret</button>
+    <button class="abtn" data-ac="fn-addSecret">+ Add Secret</button>
   </div>
 </div>
 
@@ -307,7 +307,7 @@ textarea.tall{min-height:90px}
     <div class="stitle"><span class="sbadge">Step 5</span>Develop Fantastic Locations</div>
     <p class="shint">A name and 1–3 evocative aspects is often enough. For set-piece battles add interactive features.</p>
     <div class="cl" id="loc-list"></div>
-    <button class="abtn" onclick="addLoc()">+ Add Location</button>
+    <button class="abtn" data-ac="fn-addLoc">+ Add Location</button>
   </div>
 </div>
 
@@ -317,7 +317,7 @@ textarea.tall{min-height:90px}
     <div class="stitle"><span class="sbadge">Step 6</span>Outline Important NPCs</div>
     <p class="shint">Name, one distinguishing trait, what they want. Base on a fiction character for instant mannerisms.</p>
     <div class="cl" id="npc-list"></div>
-    <button class="abtn" onclick="addNPC()">+ Add NPC</button>
+    <button class="abtn" data-ac="fn-addNPC">+ Add NPC</button>
   </div>
 </div>
 
@@ -328,7 +328,7 @@ textarea.tall{min-height:90px}
     <p class="shint">List separately from encounters so you can drop them anywhere based on pacing. Note the lazy encounter benchmark.</p>
     <div><label>Lazy Encounter Benchmark</label><input type="text" id="enc-bench" placeholder="e.g. Party 4 × Lvl 5 → benchmark CR = 40 total (deadly)"></div>
     <div style="margin-top:.8rem" class="cl" id="mon-list"></div>
-    <button class="abtn" onclick="addMon()">+ Add Monster</button>
+    <button class="abtn" data-ac="fn-addMon">+ Add Monster</button>
   </div>
 </div>
 
@@ -338,7 +338,7 @@ textarea.tall{min-height:90px}
     <div class="stitle"><span class="sbadge">Step 8</span>Select Treasure &amp; Magic Items</div>
     <p class="shint">Choose items that fit specific characters OR roll randomly — mix both. Players love loot.</p>
     <div class="cl" id="treas-list"></div>
-    <button class="abtn" onclick="addTreas()">+ Add Reward</button>
+    <button class="abtn" data-ac="fn-addTreas">+ Add Reward</button>
   </div>
 </div>
 
@@ -354,8 +354,8 @@ textarea.tall{min-height:90px}
         <div class="init-controls">
           <span class="turn-indicator" id="turn-label">Ready</span>
           <span class="round-badge" id="round-label">Round 1</span>
-          <button class="btns" onclick="nextTurn()" style="padding:.3rem .7rem;font-size:.62rem">Next Turn ▶</button>
-          <button class="btns" onclick="resetCombat()" style="padding:.3rem .7rem;font-size:.62rem;color:var(--red)">Reset ✕</button>
+          <button class="btns" data-ac="fn-nextTurn" style="padding:.3rem .7rem;font-size:.62rem">Next Turn ▶</button>
+          <button class="btns" data-ac="fn-resetCombat" style="padding:.3rem .7rem;font-size:.62rem;color:var(--red)">Reset ✕</button>
         </div>
       </div>
 
@@ -373,8 +373,8 @@ textarea.tall{min-height:90px}
               <select id="dmg-target" style="min-width:130px"><option value="">— select —</option></select>
             </div>
             <div><label>Amount</label><input type="number" id="dmg-amount" style="width:70px" placeholder="10"></div>
-            <button class="btnp" onclick="applyDmg()" style="padding:.45rem .8rem;font-size:.63rem">Damage</button>
-            <button class="btns" onclick="applyHeal()" style="padding:.45rem .8rem;font-size:.63rem">Heal</button>
+            <button class="btnp" data-ac="fn-applyDmg" style="padding:.45rem .8rem;font-size:.63rem">Damage</button>
+            <button class="btns" data-ac="fn-applyHeal" style="padding:.45rem .8rem;font-size:.63rem">Heal</button>
           </div>
         </div>
         <div style="margin-left:auto">
@@ -387,7 +387,7 @@ textarea.tall{min-height:90px}
               <option>Paralyzed</option><option>Petrified</option><option>Poisoned</option><option>Prone</option>
               <option>Restrained</option><option>Stunned</option><option>Unconscious</option>
             </select></div>
-            <button class="btns" onclick="addCond()" style="padding:.45rem .8rem;font-size:.63rem">Add</button>
+            <button class="btns" data-ac="fn-addCond" style="padding:.45rem .8rem;font-size:.63rem">Add</button>
           </div>
         </div>
       </div>
@@ -399,11 +399,11 @@ textarea.tall{min-height:90px}
         <div><label>Initiative</label><input type="number" id="new-init" placeholder="roll or enter"></div>
         <div><label>HP</label><input type="number" id="new-hp" placeholder="max hp"></div>
         <div><label>AC</label><input type="number" id="new-ac" placeholder="ac"></div>
-        <button class="btnp" onclick="addCombatant()" style="padding:.55rem .8rem;font-size:.63rem;white-space:nowrap;align-self:end">+ Add</button>
+        <button class="btnp" data-ac="fn-addCombatant" style="padding:.55rem .8rem;font-size:.63rem;white-space:nowrap;align-self:end">+ Add</button>
       </div>
       <div style="padding:.5rem .9rem;border-top:1px solid rgba(180,130,60,.2);display:flex;gap:.5rem">
-        <button class="btns" onclick="rollAllInit()" style="font-size:.63rem;padding:.38rem .75rem">🎲 Roll All Initiative</button>
-        <button class="btns" onclick="addFromChars()" style="font-size:.63rem;padding:.38rem .75rem">⇲ Import PCs from Sheets</button>
+        <button class="btns" data-ac="fn-rollAllInit" style="font-size:.63rem;padding:.38rem .75rem">🎲 Roll All Initiative</button>
+        <button class="btns" data-ac="fn-addFromChars" style="font-size:.63rem;padding:.38rem .75rem">⇲ Import PCs from Sheets</button>
       </div>
     </div>
   </div>
@@ -414,7 +414,7 @@ textarea.tall{min-height:90px}
   <div class="sec">
     <div class="stitle">Campaign Fronts &amp; Factions</div>
     <div class="cl" id="faction-list"></div>
-    <button class="abtn" onclick="addFaction()">+ Add Faction</button>
+    <button class="abtn" data-ac="fn-addFaction">+ Add Faction</button>
   </div>
   <div class="div">· · · ✦ · · ·</div>
   <div class="sec">
@@ -452,12 +452,12 @@ textarea.tall{min-height:90px}
       <div class="gh-title">⇲ Load Past Session from GitHub</div>
       <div class="gh-row">
         <div><label>Raw URL of saved session JSON</label><input type="text" id="hist-url" placeholder="https://raw.githubusercontent.com/user/repo/main/sessions/session-07.json"></div>
-        <button class="btns" onclick="loadHistSession()">Load</button>
+        <button class="btns" data-ac="fn-loadHistSession">Load</button>
       </div>
       <div class="gh-status" id="hist-status"></div>
     </div>
 
-    <div class="upload-area" id="upload-drop" onclick="document.getElementById('file-upload').click()" ondragover="e=event;e.preventDefault();this.classList.add('drag')" ondragleave="this.classList.remove('drag')" ondrop="handleDrop(event)">
+    <div class="upload-area" id="upload-drop" data-ac="fn-fileUpload" ondragover="e=event;e.preventDefault();this.classList.add('drag')" ondragleave="this.classList.remove('drag')" ondrop="handleDrop(event)">
       <input type="file" id="file-upload" accept=".json" style="display:none" onchange="handleFileUpload(this)">
       <div class="upload-icon">📄</div>
       <div class="upload-text">Click or drag &amp; drop a session JSON file to view it</div>
@@ -470,11 +470,11 @@ textarea.tall{min-height:90px}
 <!-- ACTION BAR -->
 <div class="actbar">
   <div style="display:flex;gap:.55rem;flex-wrap:wrap">
-    <button class="btnp" onclick="saveAll()">✦ Save Session</button>
-    <button class="btns" onclick="loadSave()">Load Saved</button>
-    <button class="btnp" onclick="exportSession()" style="background:var(--blue)">⇩ Export JSON</button>
-    <button class="btns" onclick="window.print()">Print</button>
-    <button class="btns" onclick="clearAll()" style="color:var(--red)">Clear All</button>
+    <button class="btnp" data-ac="fn-saveAll">✦ Save Session</button>
+    <button class="btns" data-ac="fn-loadSave">Load Saved</button>
+    <button class="btnp" data-ac="fn-exportSession" style="background:var(--blue)">⇩ Export JSON</button>
+    <button class="btns" data-ac="fn-print">Print</button>
+    <button class="btns" data-ac="fn-clearAll" style="color:var(--red)">Clear All</button>
   </div>
   <span class="sst" id="sst">✓ Saved</span>
 </div>
@@ -484,19 +484,63 @@ textarea.tall{min-height:90px}
 <!-- PARSE MODAL -->
 <div class="modal-bg" id="parse-modal">
   <div class="modal">
-    <button class="modal-close" onclick="closeParseModal()">✕</button>
+    <button class="modal-close" data-ac="fn-closeParse">✕</button>
     <div class="modal-title">Paste Character Sheet</div>
     <div class="modal-sub">Paste text in any format — YAML-style stat blocks, plain notes, or the JSON format. The app will parse what it can.</div>
     <textarea class="parse-area" id="parse-text" placeholder="name: Warryn Umpen Pallabar...&#10;size: Small&#10;hp: 22&#10;ac: 13&#10;stats: [10,13,12,13,14,17]&#10;...&#10;&#10;Or just paste freeform notes about the character."></textarea>
     <div style="margin-top:.9rem;display:flex;gap:.5rem">
-      <button class="btnp" onclick="parseAndLoad()">Parse &amp; Load Sheet</button>
-      <button class="btns" onclick="closeParseModal()">Cancel</button>
+      <button class="btnp" data-ac="fn-parseAndLoad">Parse &amp; Load Sheet</button>
+      <button class="btns" data-ac="fn-closeParse">Cancel</button>
     </div>
     <div class="gh-status" id="parse-status" style="margin-top:.5rem"></div>
   </div>
 </div>
 
 <script>
+
+// ══════════════════════════════════════════════════════
+//  DELEGATED EVENT DISPATCH (replaces inline onclick)
+// ══════════════════════════════════════════════════════
+document.addEventListener('click', function(e) {
+  const el = e.target.closest('[data-ac]');
+  if (!el) return;
+  const ac = el.getAttribute('data-ac');
+  // Tab switching
+  if (ac.startsWith('tab-')) { sw(ac.slice(4), el); return; }
+  // Function dispatch
+  const fnMap = {
+    'fn-loadGH': loadGH,
+    'fn-openParse': openParseModal,
+    'fn-addHook': addHook,
+    'fn-addScene': addScene,
+    'fn-addEnc': addEnc,
+    'fn-addSecret': addSecret,
+    'fn-addLoc': addLoc,
+    'fn-addNPC': addNPC,
+    'fn-addMon': addMon,
+    'fn-addTreas': addTreas,
+    'fn-nextTurn': nextTurn,
+    'fn-resetCombat': resetCombat,
+    'fn-applyDmg': applyDmg,
+    'fn-applyHeal': applyHeal,
+    'fn-addCond': addCond,
+    'fn-addCombatant': addCombatant,
+    'fn-rollAllInit': rollAllInit,
+    'fn-addFromChars': addFromChars,
+    'fn-addFaction': addFaction,
+    'fn-loadHistSession': loadHistSession,
+    'fn-fileUpload': () => document.getElementById('file-upload').click(),
+    'fn-saveAll': saveAll,
+    'fn-loadSave': loadSave,
+    'fn-exportSession': exportSession,
+    'fn-print': () => window.print(),
+    'fn-clearAll': clearAll,
+    'fn-closeParse': closeParseModal,
+    'fn-parseAndLoad': parseAndLoad,
+  };
+  if (fnMap[ac]) fnMap[ac](e);
+});
+
 // ══════════════════════════════════════════════════════
 //  TAB SWITCHING
 // ══════════════════════════════════════════════════════
@@ -504,7 +548,8 @@ function sw(name,el){
   document.querySelectorAll('.pane').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.tb').forEach(b=>b.classList.remove('active'));
   document.getElementById('tab-'+name).classList.add('active');
-  el.classList.add('active');
+  if(el)el.classList.add('active');
+  else{const btn=document.querySelector('[data-ac="tab-'+name+'"]');if(btn)btn.classList.add('active');}
 }
 
 // ══════════════════════════════════════════════════════
@@ -547,7 +592,9 @@ function addEnc(){
     <div class="cr c2"><div><label>Name</label><input type="text" data-key="en-name" placeholder="e.g. Goblin Ambush"></div><div><label>Difficulty</label><input type="text" data-key="en-diff" placeholder="Easy/Medium/Hard/Deadly"></div></div>
     <div class="cr c2" style="margin-top:.4rem"><div><label>Location</label><input type="text" data-key="en-loc" placeholder="Where?"></div><div><label>Monsters</label><input type="text" data-key="en-mon" placeholder="e.g. 4 Goblins, 1 Bugbear"></div></div>
     <div style="margin-top:.4rem"><label>Tactics &amp; Memorable Elements</label><textarea rows="2" data-key="en-notes" placeholder="How might it end non-violently? What do enemies want?"></textarea></div>
-    <button class="rbtn" onclick="this.parentElement.remove()">✕</button>`;
+    <button class="rbtn" class="rbtn enc-rm">✕</button>`;
+  const rmb=card.querySelector('.enc-rm');
+  if(rmb)rmb.addEventListener('click',()=>card.remove());
   list.appendChild(card);
 }
 function addSecret(){mkCard('secrets-list',[
@@ -630,7 +677,7 @@ function renderChar(c){
   const div=document.createElement('div');
   div.className='char-card';div.id=sid;
   div.innerHTML=`
-    <div class="char-hdr" onclick="toggleCS('${sid}')">
+    <div class="char-hdr" data-char-toggle="${sid}">
       <div>
         <span class="char-name">${c.name}${insp}</span>
         <span class="char-meta"> · ${c.size||''} ${c.race||c.type||''} ${c.class||''} ${c.subclass?'('+c.subclass+')':''} · Level ${c.level||'?'}</span>
@@ -665,9 +712,14 @@ function renderChar(c){
       ${personalityText?`<div class="backstory-box"><div class="backstory-lbl">Personality</div><p style="font-family:'Crimson Text',serif;font-size:.95rem;line-height:1.5">${personalityText}</p></div>`:''}
       ${backstory?`<div class="backstory-box"><div class="backstory-lbl">Backstory</div><p style="font-family:'Crimson Text',serif;font-size:.95rem;line-height:1.5">${backstory.replace(/\n/g,'<br>')}</p></div>`:''}
       <div class="hook-box"><div class="hook-lbl">★ Session Hook for ${c.name}</div><input type="text" placeholder="What connects ${c.name} to this session?" style="margin-top:.2rem"></div>
-      <button class="abtn" style="margin-top:.6rem;border-color:var(--blue);color:var(--blue)" onclick="importToInit('${sid}')">⚔ Add to Initiative Tracker</button>
+      <button class="abtn" style="margin-top:.6rem;border-color:var(--blue);color:var(--blue)" data-char-import="${sid}">⚔ Add to Initiative Tracker</button>
     </div>`;
   container.appendChild(div);
+  // Attach event listeners after insertion
+  const hdrEl=div.querySelector('[data-char-toggle]');
+  if(hdrEl)hdrEl.addEventListener('click',()=>toggleCS(sid));
+  const impBtn=div.querySelector('[data-char-import]');
+  if(impBtn)impBtn.addEventListener('click',()=>importToInit(sid));
 }
 
 function toggleCS(id){
@@ -888,28 +940,39 @@ function renderInitList(){
   if(combatants.length===0){list.innerHTML='<div style="padding:1rem;text-align:center;font-family:\'IM Fell English\',serif;font-style:italic;color:var(--ink-light);font-size:.9rem">No combatants. Add below.</div>';return;}
   const sorted=[...combatants].map((c,i)=>({...c,origIdx:i})).sort((a,b)=>b.initiative-a.initiative);
   list.innerHTML='';
-  sorted.forEach((c,displayIdx)=>{
+  sorted.forEach((c)=>{
     const isDead=c.hp<=0;
     const isActive=c.origIdx===currentTurn;
     const typeIcon=c.type==='pc'?'🧙':c.type==='monster'?'👹':'🧑';
-    const condHtml=(c.conditions||[]).map(cn=>`<span class="cond-pip" title="Click to remove" onclick="removeCond(${c.origIdx},'${cn}')">${cn.slice(0,3)}</span>`).join('');
     const row=document.createElement('div');
     row.className='init-row'+(isActive?' active-turn':'')+(isDead?' dead':'');
-    row.innerHTML=`
-      <div class="init-num">${c.initiative||'?'}</div>
-      <div class="init-type">${typeIcon}</div>
-      <div class="init-name">${c.name}</div>
-      <div class="init-hp-cell">
-        <input type="number" value="${c.hp}" min="0" onchange="updateHP(${c.origIdx},this.value)" style="width:52px">
-        <span class="init-hp-max">/${c.hpMax||'?'}</span>
-      </div>
-      <div class="init-ac">🛡 ${c.ac||'?'}</div>
-      <div class="cond-cell">${condHtml}</div>
-      <div class="init-btns">
-        <button class="ibtn" title="Move up" onclick="moveUp(${c.origIdx})">▲</button>
-        <button class="ibtn" title="Kill/KO" onclick="killCombatant(${c.origIdx})" style="color:var(--red)">☠</button>
-        <button class="ibtn" title="Remove" onclick="removeCombatant(${c.origIdx})">✕</button>
-      </div>`;
+
+    const numDiv=document.createElement('div');numDiv.className='init-num';numDiv.textContent=c.initiative||'?';
+    const typeDiv=document.createElement('div');typeDiv.className='init-type';typeDiv.textContent=typeIcon;
+    const nameDiv=document.createElement('div');nameDiv.className='init-name';nameDiv.textContent=c.name;
+
+    const hpCell=document.createElement('div');hpCell.className='init-hp-cell';
+    const hpInput=document.createElement('input');hpInput.type='number';hpInput.value=c.hp;hpInput.min=0;hpInput.style.width='52px';
+    hpInput.addEventListener('change',()=>updateHP(c.origIdx,hpInput.value));
+    const hpMax=document.createElement('span');hpMax.className='init-hp-max';hpMax.textContent='/'+( c.hpMax||'?');
+    hpCell.appendChild(hpInput);hpCell.appendChild(hpMax);
+
+    const acDiv=document.createElement('div');acDiv.className='init-ac';acDiv.textContent='🛡 '+(c.ac||'?');
+
+    const condDiv=document.createElement('div');condDiv.className='cond-cell';
+    (c.conditions||[]).forEach(cn=>{
+      const pip=document.createElement('span');pip.className='cond-pip';pip.title='Click to remove';pip.textContent=cn.slice(0,3);
+      pip.addEventListener('click',()=>{removeCond(c.origIdx,cn);});
+      condDiv.appendChild(pip);
+    });
+
+    const btnsDiv=document.createElement('div');btnsDiv.className='init-btns';
+    const upBtn=document.createElement('button');upBtn.className='ibtn';upBtn.title='Move up';upBtn.textContent='▲';upBtn.addEventListener('click',()=>moveUp(c.origIdx));
+    const killBtn=document.createElement('button');killBtn.className='ibtn';killBtn.title='Kill/KO';killBtn.textContent='☠';killBtn.style.color='var(--red)';killBtn.addEventListener('click',()=>killCombatant(c.origIdx));
+    const rmBtn=document.createElement('button');rmBtn.className='ibtn';rmBtn.title='Remove';rmBtn.textContent='✕';rmBtn.addEventListener('click',()=>removeCombatant(c.origIdx));
+    btnsDiv.appendChild(upBtn);btnsDiv.appendChild(killBtn);btnsDiv.appendChild(rmBtn);
+
+    row.appendChild(numDiv);row.appendChild(typeDiv);row.appendChild(nameDiv);row.appendChild(hpCell);row.appendChild(acDiv);row.appendChild(condDiv);row.appendChild(btnsDiv);
     list.appendChild(row);
   });
   document.getElementById('round-label').textContent=`Round ${round}`;
@@ -1012,7 +1075,7 @@ function importToInit(sid){
   const hp=char.hp||char.hp_max||10;
   combatants.push({name:char.name,type:'pc',initiative:0,hp,hpMax:hp,ac:char.ac||10,dex,conditions:[]});
   renderInitList();updateInitSelects();
-  sw('init',document.querySelector('.tb:nth-child(9)'));
+  sw('init',document.querySelector('[data-ac="tab-init"]'));
 }
 
 function addFromChars(){
@@ -1094,4 +1157,98 @@ function handleDrop(e){
   const reader=new FileReader();
   reader.onload=ev=>{
     try{histSessions.push(JSON.parse(ev.target.result));renderHistList();}
-    catch{alert('Invalid JSON.
+    catch{alert('Invalid JSON.');}
+  };
+  reader.readAsText(file);
+}
+
+// ══════════════════════════════════════════════════════
+//  SAVE / LOAD / EXPORT
+// ══════════════════════════════════════════════════════
+function collectData(){
+  const data={};
+  const ids=['campaign-name','session-num','session-date','party-level',
+    'strong-start','adv-hook','enc-bench','world-truths','camp-notes',
+    'summary','worked-well','improve','loose-threads','secrets-used','next-prep'];
+  ids.forEach(id=>{const el=document.getElementById(id);if(el)data[id]=el.value;});
+  const cardLists=['hook-list','scenes-list','secrets-list','loc-list',
+    'npc-list','mon-list','treas-list','faction-list'];
+  cardLists.forEach(lid=>{
+    const list=document.getElementById(lid);if(!list)return;
+    data[lid]=Array.from(list.querySelectorAll('.card')).map(card=>
+      Object.fromEntries(Array.from(card.querySelectorAll('[data-key]')).map(i=>[i.dataset.key,i.value]))
+    );
+  });
+  const encEl=document.getElementById('enc-list');
+  if(encEl)data['enc-list-html']=encEl.innerHTML;
+  data.encN=encN;
+  data.savedAt=new Date().toISOString();
+  return data;
+}
+
+function saveAll(){
+  localStorage.setItem('lazy-dm-v3',JSON.stringify(collectData()));
+  const s=document.getElementById('sst');s.classList.add('vis');
+  setTimeout(()=>s.classList.remove('vis'),2500);
+}
+
+function loadSave(){
+  const raw=localStorage.getItem('lazy-dm-v3');
+  if(!raw){alert('No saved session found.');return;}
+  applyData(JSON.parse(raw));
+  alert('Session loaded!');
+}
+
+function applyData(data){
+  const ids=['campaign-name','session-num','session-date','party-level',
+    'strong-start','adv-hook','enc-bench','world-truths','camp-notes',
+    'summary','worked-well','improve','loose-threads','secrets-used','next-prep'];
+  ids.forEach(id=>{const el=document.getElementById(id);if(el&&data[id]!==undefined)el.value=data[id];});
+  const restorers={'hook-list':addHook,'scenes-list':addScene,'secrets-list':addSecret,
+    'loc-list':addLoc,'npc-list':addNPC,'mon-list':addMon,
+    'treas-list':addTreas,'faction-list':addFaction};
+  Object.keys(restorers).forEach(lid=>{
+    const list=document.getElementById(lid);if(!list||!data[lid])return;
+    list.innerHTML='';
+    data[lid].forEach(row=>{
+      restorers[lid]();
+      const card=list.lastElementChild;
+      Object.entries(row).forEach(([key,val])=>{
+        const inp=card.querySelector('[data-key="'+key+'"]');if(inp)inp.value=val;
+      });
+    });
+  });
+  if(data['enc-list-html'])document.getElementById('enc-list').innerHTML=data['enc-list-html'];
+  if(data.encN)encN=data.encN;
+}
+
+function exportSession(){
+  const data=collectData();
+  const sn=(data['session-num']||'unknown').replace(/\s+/g,'-').toLowerCase();
+  const cn=data['campaign-name']?'-'+data['campaign-name'].replace(/\s+/g,'-').toLowerCase():'';
+  const name='session'+cn+'-'+sn+'.json';
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();
+}
+
+function clearAll(){
+  if(!confirm('Clear all session data?'))return;
+  localStorage.removeItem('lazy-dm-v3');
+  location.reload();
+}
+
+// ══════════════════════════════════════════════════════
+//  BOOT
+// ══════════════════════════════════════════════════════
+window.addEventListener('DOMContentLoaded',()=>{
+  if(!localStorage.getItem('lazy-dm-v3')){
+    addHook();addScene();addScene();
+    addSecret();addSecret();addSecret();
+    addLoc();addLoc();addNPC();addNPC();
+    addMon();addTreas();
+  }
+  renderInitList();
+});
+</script>
+</body>
+</html>
