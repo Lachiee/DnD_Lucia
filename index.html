@@ -1458,6 +1458,7 @@ async function autoLoadCharacters(){
   let loaded = 0, failed = [];
   for(const fname of GITHUB_CONFIG.characterFiles){
     const url = RAW_BASE + fname;
+    console.log('Fetching character:', url);
     if(loadedUrls.has(url)) continue;
     try{
       const res = await fetch(url);
@@ -1469,14 +1470,24 @@ async function autoLoadCharacters(){
       addChip(url, data.name);
       loaded++;
     } catch(e){
+      console.error('Failed:', url, e.message);
       failed.push(fname+' ('+e.message+')');
     }
   }
   if(statusEl){
-    if(failed.length === 0)
-      statusEl.className='gh-status ok'; statusEl.textContent = loaded > 0 ? `✓ Loaded ${loaded} character sheet${loaded>1?'s':''} from GitHub` : '(No character files configured)';
-    if(failed.length > 0)
-      statusEl.textContent += ' · Failed: '+failed.join(', ');
+    if(failed.length === 0 && loaded > 0){
+      statusEl.className='gh-status ok';
+      statusEl.textContent = `✓ Loaded ${loaded} character sheet${loaded>1?'s':''} from GitHub`;
+    } else if(GITHUB_CONFIG.characterFiles.length === 0){
+      statusEl.className='gh-status';
+      statusEl.textContent = '(No character files configured)';
+    } else if(failed.length > 0 && loaded === 0){
+      statusEl.className='gh-status err';
+      statusEl.textContent = 'Failed to load: '+failed.join(', ')+'. Check browser console (F12) for exact URL.';
+    } else if(failed.length > 0){
+      statusEl.className='gh-status ok';
+      statusEl.textContent = `✓ Loaded ${loaded} · Failed: `+failed.join(', ');
+    }
   }
 }
 
