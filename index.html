@@ -457,6 +457,40 @@ canvas#web-canvas:active { cursor: grabbing; }
   padding: .4rem .9rem; border-top: 1px solid rgba(180,130,60,.15);
 }
 
+
+/* ═══════ SECRETS CARRY-FORWARD ═══════ */
+.cf-secret-item {
+  display: flex; align-items: flex-start; gap: .6rem;
+  background: rgba(255,255,255,.2);
+  border: 1px solid rgba(184,134,11,.3);
+  border-radius: 2px; padding: .55rem .75rem;
+  font-family: 'Crimson Text', serif; font-size: .95rem;
+  color: var(--ink); line-height: 1.45;
+  cursor: pointer; transition: background .15s;
+}
+.cf-secret-item:hover { background: rgba(184,134,11,.15); }
+.cf-secret-item .cf-icon { font-size: .85rem; margin-top: .1rem; flex-shrink: 0; }
+.cf-secret-item .cf-text { flex: 1; }
+.cf-secret-item .cf-btn {
+  flex-shrink: 0; background: var(--gold); color: #f8e8c0;
+  border: none; border-radius: 2px; font-family: 'Cinzel', serif;
+  font-size: .58rem; letter-spacing: .1em; text-transform: uppercase;
+  padding: .2rem .5rem; cursor: pointer; white-space: nowrap;
+  transition: background .15s;
+}
+.cf-secret-item .cf-btn:hover { background: var(--gold-l); }
+.cf-secret-item.carried { opacity: .45; pointer-events: none; }
+
+/* ═══════ SCENE FORK CARDS ═══════ */
+.fork-card {
+  border-left: 4px solid var(--gold);
+  background: rgba(184,134,11,.06);
+  border-radius: 0 2px 2px 0;
+}
+
+/* ═══════ SECRET COUNTER ═══════ */
+#secret-counter.at-limit { color: var(--red); font-weight: 600; }
+
 </style>
 </head>
 <body>
@@ -540,15 +574,40 @@ canvas#web-canvas:active { cursor: grabbing; }
 
 <!-- ══ S3: SCENES ══ -->
 <div id="tab-s3" class="pane">
+
+  <!-- ADVENTURE HOOK -->
   <div class="sec">
-    <div class="stitle"><span class="sbadge">Step 3</span>Outline Potential Scenes</div>
-    <p class="shint">~1 scene per 45 min. Keep these brief — be ready to throw them away. Include adventure hooks, forks, and options.</p>
+    <div class="stitle"><span class="sbadge">Hook</span>Adventure Hook</div>
+    <p class="shint">What draws the characters into this session's adventure? One clear hook that flows from the strong start.</p>
+    <textarea id="scene-hook" placeholder="e.g. The courier who was carrying Albus's last known address was found dead at the city gate — Warryn recognises the ink on the letter as the same used in his wife's last note…"></textarea>
+  </div>
+
+  <div class="div">· · · ✦ · · ·</div>
+
+  <!-- FORKS & OPTIONS -->
+  <div class="sec">
+    <div class="stitle"><span class="sbadge">Forks</span>Paths &amp; Player Options</div>
+    <p class="shint">What meaningful choices might the players face? Prepare 2–4 forks — directions the session could go. Don't railroad; these are possibilities, not a script.</p>
+    <div class="cl" id="forks-list"></div>
+    <button class="abtn" data-ac="fn-addFork">+ Add Fork</button>
+  </div>
+
+  <div class="div">· · · ✦ · · ·</div>
+
+  <!-- POTENTIAL SCENES -->
+  <div class="sec">
+    <div class="stitle"><span class="sbadge">Step 3</span>Potential Scenes</div>
+    <p class="shint">~1 scene per 45 min of play. Keep each to a few words — be ready to throw these away entirely. One to two sentences maximum per scene.</p>
     <div class="cl" id="scenes-list"></div>
     <button class="abtn" data-ac="fn-addScene">+ Add Scene</button>
   </div>
+
   <div class="div">· · · ✦ · · ·</div>
+
+  <!-- ENCOUNTERS -->
   <div class="sec">
     <div class="stitle">Encounters &amp; Situations</div>
+    <p class="shint">Combat, social, and exploration encounters that might arise. Keep them flexible — drop them in based on pacing.</p>
     <div id="enc-list"></div>
     <button class="abtn" data-ac="fn-addEnc">+ Add Encounter</button>
   </div>
@@ -558,7 +617,36 @@ canvas#web-canvas:active { cursor: grabbing; }
 <div id="tab-s4" class="pane">
   <div class="sec">
     <div class="stitle"><span class="sbadge">Step 4</span>Define Secrets &amp; Clues</div>
-    <p class="shint">The heart of the eight steps. Short, relevant, <strong>not tied to a location or discovery method</strong>. Up to ten — carry forward undiscovered ones from last session.</p>
+    <p class="shint">The heart of the eight steps. Short, relevant, <strong>not tied to a location or discovery method</strong>. Write up to ten. How they are discovered is decided at the table — not here.</p>
+
+    <!-- CARRY FORWARD PANEL -->
+    <div id="carry-forward-panel" style="display:none;margin-bottom:1rem;background:rgba(184,134,11,.08);border:1px solid rgba(184,134,11,.35);border-radius:2px;padding:.9rem 1.1rem">
+      <div style="font-family:'Cinzel',serif;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:.5rem;font-weight:600">⇲ Undiscovered Secrets from Last Session</div>
+      <p style="font-family:'IM Fell English',serif;font-style:italic;font-size:.82rem;color:var(--ink-light);margin-bottom:.7rem">These secrets were not discovered in the previous session. Click any to carry it forward into this session.</p>
+      <div id="carry-forward-list" style="display:flex;flex-direction:column;gap:.4rem"></div>
+    </div>
+
+    <!-- LOAD FROM HISTORY -->
+    <div style="display:flex;gap:.6rem;align-items:end;margin-bottom:.9rem;flex-wrap:wrap">
+      <div style="flex:1;min-width:200px">
+        <label>Load previous session JSON to carry forward secrets</label>
+        <input type="text" id="cf-url" placeholder="https://raw.githubusercontent.com/Lachiee/DnD_Lucia/main/sessions/session-06.json">
+      </div>
+      <button class="btns" data-ac="fn-loadCarryForward" style="white-space:nowrap">⇲ Load &amp; Compare</button>
+      <div style="font-family:'IM Fell English',serif;font-style:italic">or</div>
+      <div>
+        <label>Upload session JSON file</label>
+        <input type="file" id="cf-file" accept=".json" style="font-family:'Crimson Text',serif;font-size:.88rem" id="cf-file-input">
+      </div>
+    </div>
+    <div class="gh-status" id="cf-status" style="margin-bottom:.7rem"></div>
+
+    <!-- SECRET COUNTER -->
+    <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:.4rem">
+      <div style="font-family:'Cinzel',serif;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-light)">Current Session Secrets</div>
+      <div id="secret-counter" style="font-family:'Cinzel',serif;font-size:.72rem;color:var(--gold)">0 / 10</div>
+    </div>
+
     <div class="cl" id="secrets-list"></div>
     <button class="abtn" data-ac="fn-addSecret">+ Add Secret</button>
   </div>
@@ -933,6 +1021,8 @@ document.addEventListener('click', function(e) {
     'fn-print': () => window.print(),
     'fn-clearAll': clearAll,
     'fn-addConseq': addConseq,
+    'fn-addFork': addFork,
+    'fn-loadCarryForward': loadCarryForward,
     'fn-closeParse': closeParseModal,
     'fn-parseAndLoad': parseAndLoad,
     'fn-tabsLeft': () => scrollTabs(-120),
@@ -1606,10 +1696,10 @@ function addConseq(){
 function collectData(){
   const data={};
   const ids=['campaign-name','session-num','session-date','party-level',
-    'strong-start','adv-hook','enc-bench','world-truths','camp-notes',
+    'strong-start','adv-hook','scene-hook','enc-bench','world-truths','camp-notes',
     'summary','worked-well','improve','loose-threads','secrets-used','next-prep'];
   ids.forEach(id=>{const el=document.getElementById(id);if(el)data[id]=el.value;});
-  const cardLists=['hook-list','scenes-list','secrets-list','loc-list',
+  const cardLists=['hook-list','scenes-list','forks-list','secrets-list','loc-list',
     'npc-list','mon-list','treas-list','faction-list','conseq-list'];
   cardLists.forEach(lid=>{
     const list=document.getElementById(lid);if(!list)return;
@@ -1639,10 +1729,10 @@ function loadSave(){
 
 function applyData(data){
   const ids=['campaign-name','session-num','session-date','party-level',
-    'strong-start','adv-hook','enc-bench','world-truths','camp-notes',
+    'strong-start','adv-hook','scene-hook','enc-bench','world-truths','camp-notes',
     'summary','worked-well','improve','loose-threads','secrets-used','next-prep'];
   ids.forEach(id=>{const el=document.getElementById(id);if(el&&data[id]!==undefined)el.value=data[id];});
-  const restorers={'hook-list':addHook,'scenes-list':addScene,'secrets-list':addSecret,
+  const restorers={'hook-list':addHook,'scenes-list':addScene,'forks-list':addFork,'secrets-list':addSecret,
     'loc-list':addLoc,'npc-list':addNPC,'mon-list':addMon,
     'treas-list':addTreas,'faction-list':addFaction,'conseq-list':addConseq};
   Object.keys(restorers).forEach(lid=>{
@@ -1690,6 +1780,12 @@ window.addEventListener('DOMContentLoaded',()=>{
   filterMonsters();
   initSpellUI();
   setTimeout(()=>wrapSpellsInElement(document.body), 600);
+  initSecretCounter();
+  // CF file input
+  setTimeout(()=>{
+    const cfFile = document.getElementById('cf-file-input');
+    if(cfFile) cfFile.addEventListener('change', ()=>handleCFFile(cfFile));
+  }, 200);
   renderConditions();
   // Init web when its tab is first clicked
   document.querySelector('[data-ac="tab-web"]').addEventListener('click', ()=>{
@@ -2597,13 +2693,46 @@ function webResizeCanvas(){
   webCanvas.height = 520;
 }
 
+function webShortName(ch){
+  // Use player name if available, otherwise first word of character name
+  if(ch.player) return ch.player + ' (' + ch.name.split(' ')[0] + ')';
+  return ch.name.split(' ')[0];
+}
+
 function webSyncPCs(){
   if(!webCanvas) return; // Canvas not ready yet — will be called again in webInit
   let changed = false;
   loadedChars.forEach(ch => {
-    const existing = webNodes.find(n=>n.name===ch.name);
-    if(!existing){ webAddNodeData(ch.name, 'pc'); changed = true; }
-    else existing.type = 'pc';
+    const shortName = webShortName(ch);
+    const fullName = ch.name;
+
+    // Check for exact match on short name, full name, or first word of full name
+    const firstWord = fullName.split(' ')[0];
+    const existing = webNodes.find(n =>
+      n.name === fullName ||
+      n.name === shortName ||
+      n.name === firstWord ||
+      fullName.toLowerCase().startsWith(n.name.toLowerCase()) ||
+      n.name.toLowerCase().startsWith(firstWord.toLowerCase())
+    );
+
+    if(existing){
+      // Rename existing node to the short display name and mark as PC
+      const oldName = existing.name;
+      if(oldName !== shortName){
+        // Update all edges referencing old name
+        webEdges.forEach(e => {
+          if(e.from === oldName) e.from = shortName;
+          if(e.to === oldName) e.to = shortName;
+        });
+        existing.name = shortName;
+        changed = true;
+      }
+      existing.type = 'pc';
+    } else {
+      webAddNodeData(shortName, 'pc');
+      changed = true;
+    }
   });
   webUpdateNodePanel();
   webUpdateRelTarget();
@@ -2902,6 +3031,14 @@ function webLoad(){
     const data=JSON.parse(raw);
     if(data.nodes) webNodes=data.nodes.map(n=>({...n,vx:0,vy:0,r:28}));
     if(data.edges) webEdges=data.edges;
+    // Remove any obviously duplicate PC nodes — keep the shorter/player-named one
+    const seen = new Set();
+    webNodes = webNodes.filter(n => {
+      const key = n.name.split(' ')[0].toLowerCase();
+      if(n.type === 'pc' && seen.has(key)){ return false; }
+      if(n.type === 'pc') seen.add(key);
+      return true;
+    });
   }catch(e){ console.warn('Web load error',e); }
 }
 
@@ -2912,6 +3049,144 @@ function webDeleteNodeDispatch(){ webDeleteNode(); }
 function webClosePanelDispatch(){ webClosePanel(); }
 function webResetDispatch(){ webResetFn(); }
 function webSaveDispatch(){ webSave(); const s=document.getElementById('sst');s.classList.add('vis');setTimeout(()=>s.classList.remove('vis'),1500); }
+
+
+// ══════════════════════════════════════════════════════
+//  SCENES — FORK CARDS
+// ══════════════════════════════════════════════════════
+function addFork(){
+  const card = mkCard('forks-list',[
+    {cols:1, items:[{key:'fork-title', label:'Fork / Player Choice', placeholder:'e.g. Do they pursue Albus directly, or follow the gnome expedition first?'}]},
+    {cols:2, items:[
+      {key:'fork-a', label:'Path A', placeholder:'e.g. Follow Albus\'s trail north — faster but dangerous'},
+      {key:'fork-b', label:'Path B', placeholder:'e.g. Join the expedition — slower, but may yield a clue'}
+    ]},
+    {cols:1, items:[{key:'fork-notes', label:'What changes based on their choice?', type:'textarea', rows:1, placeholder:'How does each path affect the session? What do they risk or gain?', span:true}]}
+  ]);
+  if(card) card.classList.add('fork-card');
+}
+
+// ══════════════════════════════════════════════════════
+//  SECRETS — COUNTER + CARRY-FORWARD
+// ══════════════════════════════════════════════════════
+function updateSecretCounter(){
+  const list = document.getElementById('secrets-list');
+  const counter = document.getElementById('secret-counter');
+  if(!list || !counter) return;
+  const count = list.querySelectorAll('.card').length;
+  counter.textContent = count + ' / 10';
+  counter.classList.toggle('at-limit', count >= 10);
+}
+
+// Observe secrets list for changes
+function initSecretCounter(){
+  const list = document.getElementById('secrets-list');
+  if(!list) return;
+  const obs = new MutationObserver(updateSecretCounter);
+  obs.observe(list, {childList: true});
+  updateSecretCounter();
+}
+
+// Load a past session JSON and show undiscovered secrets
+async function loadCarryForward(){
+  const urlEl = document.getElementById('cf-url');
+  const statusEl = document.getElementById('cf-status');
+  const url = urlEl.value.trim();
+  if(!url){ statusEl.className='gh-status err'; statusEl.textContent='Enter a session URL.'; return; }
+
+  statusEl.className='gh-status ld'; statusEl.textContent='⟳ Loading past session…';
+  try{
+    const fetchUrl = url.replace('github.com','raw.githubusercontent.com').replace('/blob/','/');
+    const res = await fetch(fetchUrl);
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    const data = await res.json();
+    processCFData(data);
+    statusEl.className='gh-status ok'; statusEl.textContent='✓ Loaded. Click secrets below to carry them forward.';
+  } catch(e){
+    statusEl.className='gh-status err'; statusEl.textContent='✗ '+e.message;
+  }
+}
+
+function handleCFFile(input){
+  const file = input.files[0]; if(!file) return;
+  const statusEl = document.getElementById('cf-status');
+  const reader = new FileReader();
+  reader.onload = e => {
+    try{
+      const data = JSON.parse(e.target.result);
+      processCFData(data);
+      statusEl.className='gh-status ok';
+      statusEl.textContent='✓ File loaded. Click secrets below to carry them forward.';
+    } catch{ statusEl.className='gh-status err'; statusEl.textContent='Invalid JSON file.'; }
+  };
+  reader.readAsText(file);
+}
+
+function processCFData(data){
+  // Extract secrets from past session
+  // They're stored as [{sec: "text"}, ...] in secrets-list
+  const pastSecrets = data['secrets-list'] || [];
+  const pastDiscovered = (data['secrets-used'] || '').toLowerCase();
+
+  // Filter to ones NOT mentioned in the post-session "secrets discovered" field
+  const undiscovered = pastSecrets.filter(s => {
+    const text = (s.sec || '').trim();
+    if(!text) return false;
+    // If the secret text (first 20 chars) appears in the post-session notes, consider it discovered
+    const snippet = text.slice(0,20).toLowerCase();
+    return !pastDiscovered.includes(snippet);
+  });
+
+  const panel = document.getElementById('carry-forward-panel');
+  const list = document.getElementById('carry-forward-list');
+  list.innerHTML = '';
+
+  if(undiscovered.length === 0){
+    list.innerHTML = '<div style="font-family:\'IM Fell English\',serif;font-style:italic;font-size:.88rem;color:var(--ink-light)">All secrets from that session appear to have been discovered — or none were recorded.</div>';
+    panel.style.display='block';
+    return;
+  }
+
+  undiscovered.forEach((s, i) => {
+    const text = s.sec || '';
+    const item = document.createElement('div');
+    item.className = 'cf-secret-item';
+    item.id = 'cf-item-'+i;
+    item.innerHTML = `<span class="cf-icon">📜</span>
+      <span class="cf-text">${text}</span>
+      <button class="cf-btn">Carry Forward</button>`;
+    item.querySelector('.cf-btn').addEventListener('click', e => {
+      e.stopPropagation();
+      carryForwardSecret(text, i);
+    });
+    item.addEventListener('click', () => carryForwardSecret(text, i));
+    list.appendChild(item);
+  });
+
+  panel.style.display = 'block';
+}
+
+function carryForwardSecret(text, idx){
+  // Add to current session secrets list
+  addSecret();
+  const list = document.getElementById('secrets-list');
+  const lastCard = list.lastElementChild;
+  if(lastCard){
+    const inp = lastCard.querySelector('[data-key="sec"]');
+    if(inp) inp.value = text;
+  }
+  // Mark as carried in the carry-forward panel
+  const item = document.getElementById('cf-item-'+idx);
+  if(item){
+    item.classList.add('carried');
+    item.querySelector('.cf-btn').textContent = '✓ Added';
+  }
+  updateSecretCounter();
+}
+
+// Also override addSecret to update counter
+const _origAddSecret = addSecret;
+// We'll hook into it via MutationObserver set up in initSecretCounter
 
 </script>
 </body>
