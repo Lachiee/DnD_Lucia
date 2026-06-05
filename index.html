@@ -1654,19 +1654,32 @@ function addInitBtnToMonCard(card){
     return {name, hp, ac, count};
   }
 
-  function pushToTracker(rollRandom){
+  function pushToTracker(rollRandom, splitByInit){
     const {name, hp, ac, count} = getMonData();
-    const roll = rollRandom ? Math.floor(Math.random()*20)+1 : 0;
-    if(count > 1){
+    if(count > 1 && splitByInit){
+      // Each member gets their own initiative — add as individual rows
+      for(let i=0;i<count;i++){
+        const roll = Math.floor(Math.random()*20)+1;
+        let finalName = `${name} ${i+1}`;
+        let n = 2;
+        while(combatants.find(x=>x.name===finalName)){ finalName=`${name} ${i+1} (${n++})`; }
+        combatants.push({name:finalName, type:'monster', initiative:roll,
+          hp, hpMax:hp, ac, dex:10, conditions:[]});
+      }
+    } else if(count > 1){
+      // Group with shared initiative, but store individual rolls on members if rolling
+      const groupRoll = rollRandom ? Math.floor(Math.random()*20)+1 : 0;
       let groupName = name;
       let n = 2;
       while(combatants.find(x=>x.name===groupName && x.isGroup)){ groupName=`${name} (${n++})`; }
       const members = Array.from({length:count},(_,i)=>({
-        name:`${name} ${i+1}`, hp, hpMax:hp, conditions:[], dead:false
+        name:`${name} ${i+1}`, hp, hpMax:hp, conditions:[], dead:false,
+        initiative: rollRandom ? Math.floor(Math.random()*20)+1 : groupRoll
       }));
-      combatants.push({name:groupName, type:'monster', initiative:roll,
+      combatants.push({name:groupName, type:'monster', initiative:groupRoll,
         hp, hpMax:hp, ac, dex:10, conditions:[], isGroup:true, count, members, expanded:false});
     } else {
+      const roll = rollRandom ? Math.floor(Math.random()*20)+1 : 0;
       let finalName = name;
       let n = 2;
       while(combatants.find(x=>x.name===finalName)){ finalName=`${name} (${n++})`; }
@@ -1704,8 +1717,23 @@ function addInitBtnToMonCard(card){
     setTimeout(()=>{ rollInitBtn.textContent='🎲 Roll & Add'; rollInitBtn.style.background=''; }, 1800);
   });
 
+  const splitInitBtn = document.createElement('button');
+  splitInitBtn.className = 'abtn';
+  splitInitBtn.style.cssText = 'font-size:.62rem;border-color:var(--blue);color:var(--blue)';
+  splitInitBtn.textContent = '🎲 Roll Individual';
+  splitInitBtn.title = 'Roll a separate initiative for each monster — adds them as individual rows';
+  splitInitBtn.addEventListener('click', () => {
+    const {count} = getMonData();
+    if(count < 2){ pushToTracker(true, false); }
+    else { pushToTracker(true, true); }
+    splitInitBtn.textContent = `✓ ${count} individual rolls`;
+    splitInitBtn.style.background = 'rgba(26,42,74,.1)';
+    setTimeout(()=>{ splitInitBtn.textContent='🎲 Roll Individual'; splitInitBtn.style.background=''; }, 1800);
+  });
+
   btnRow.appendChild(initBtn);
   btnRow.appendChild(rollInitBtn);
+  btnRow.appendChild(splitInitBtn);
   card.appendChild(btnRow);
 }
 function addTreas(){mkCard('treas-list',[
@@ -2131,9 +2159,10 @@ function renderGroupRow(list,c){
 
   const btnsDiv=document.createElement('div');btnsDiv.className='init-btns';
   const upBtn=document.createElement('button');upBtn.className='ibtn';upBtn.textContent='▲';upBtn.addEventListener('click',e=>{e.stopPropagation();moveUp(c.origIdx);});
-  const splitBtn=document.createElement('button');splitBtn.className='ibtn';splitBtn.title='Split group into individual rows';splitBtn.textContent='⊕';splitBtn.addEventListener('click',e=>{e.stopPropagation();splitGroup(c.origIdx);});
+  const splitBtn=document.createElement('button');splitBtn.className='ibtn';splitBtn.title='Split into individual rows (keep shared initiative)';splitBtn.textContent='⊕';splitBtn.addEventListener('click',e=>{e.stopPropagation();splitGroup(c.origIdx);});
+  const splitInitBtnG=document.createElement('button');splitInitBtnG.className='ibtn';splitInitBtnG.title='Split and roll individual initiatives';splitInitBtnG.textContent='🎲⊕';splitInitBtnG.style.fontSize='.7rem';splitInitBtnG.addEventListener('click',e=>{e.stopPropagation();splitGroupWithInit(c.origIdx);});
   const rmBtn=document.createElement('button');rmBtn.className='ibtn';rmBtn.title='Remove group';rmBtn.textContent='✕';rmBtn.style.color='var(--red)';rmBtn.addEventListener('click',e=>{e.stopPropagation();removeCombatant(c.origIdx);});
-  btnsDiv.appendChild(upBtn);btnsDiv.appendChild(splitBtn);btnsDiv.appendChild(rmBtn);
+  btnsDiv.appendChild(upBtn);btnsDiv.appendChild(splitBtn);btnsDiv.appendChild(splitInitBtnG);btnsDiv.appendChild(rmBtn);
 
   header.appendChild(chevron);
   header.appendChild(initNum);
@@ -5309,7 +5338,7 @@ function applyGroupAoE(groupIdx, amt){
   renderInitList();
 }
 
-// Split group into individual combatants
+// Split group into individual combatants (shared initiative)
 function splitGroup(groupIdx){
   const g = combatants[groupIdx];
   if(!g||!g.members) return;
@@ -5324,6 +5353,25 @@ function splitGroup(groupIdx){
     dex: g.dex||10,
   }));
   combatants.splice(groupIdx, 1, ...newCombatants);
+  renderInitList(); updateInitSelects();
+}
+
+// Split group and roll a fresh d20 initiative for each member
+function splitGroupWithInit(groupIdx){
+  const g = combatants[groupIdx];
+  if(!g||!g.members) return;
+  const newCombatants = g.members.filter(m=>!m.dead).map(m=>({
+    name: m.name,
+    type: 'monster',
+    initiative: Math.floor(Math.random()*20)+1,
+    hp: m.hp,
+    hpMax: m.hpMax,
+    ac: g.ac,
+    conditions: m.conditions||[],
+    dex: g.dex||10,
+  }));
+  combatants.splice(groupIdx, 1, ...newCombatants);
+  combatants.sort((a,b)=>b.initiative-a.initiative);
   renderInitList(); updateInitSelects();
 }
 
