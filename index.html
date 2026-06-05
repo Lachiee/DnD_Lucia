@@ -491,6 +491,110 @@ canvas#web-canvas:active { cursor: grabbing; }
 /* ═══════ SECRET COUNTER ═══════ */
 #secret-counter.at-limit { color: var(--red); font-weight: 600; }
 
+
+/* ═══════════════════ GENERATORS ═══════════════════ */
+.gen-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+.gen-card {
+  background: rgba(180,130,60,.07);
+  border: 1px solid rgba(180,130,60,.3);
+  border-radius: 2px;
+  padding: .9rem 1rem;
+}
+.gen-card-title {
+  font-family: 'Cinzel', serif;
+  font-size: .78rem; font-weight: 600;
+  letter-spacing: .12em; text-transform: uppercase;
+  color: var(--red); margin-bottom: .3rem;
+}
+.gen-card-hint {
+  font-family: 'IM Fell English', serif;
+  font-style: italic; font-size: .8rem;
+  color: var(--ink-light); margin-bottom: .7rem;
+}
+.gen-result {
+  font-family: 'Crimson Text', serif;
+  font-size: 1.05rem; color: var(--ink);
+  line-height: 1.5; min-height: 2.5em;
+  background: rgba(255,255,255,.3);
+  border: 1px solid var(--parch-shadow);
+  border-radius: 2px; padding: .5rem .7rem;
+  margin-bottom: .6rem;
+  cursor: pointer;
+  transition: background .15s;
+}
+.gen-result:hover { background: rgba(255,255,255,.5); }
+.gen-result.fresh {
+  animation: genPop .25s ease;
+}
+@keyframes genPop {
+  from { transform: scale(.98); opacity: .7; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+.gen-controls { display: flex; gap: .4rem; flex-wrap: wrap; align-items: center; }
+.gen-btn {
+  background: var(--red);
+  color: #f8e8c0; border: none;
+  font-family: 'Cinzel', serif; font-size: .65rem;
+  letter-spacing: .1em; text-transform: uppercase;
+  padding: .38rem .85rem; cursor: pointer;
+  border-radius: 2px; transition: all .15s;
+}
+.gen-btn:hover { background: var(--red-bright); transform: translateY(-1px); }
+.gen-btn.secondary {
+  background: transparent; color: var(--ink-light);
+  border: 1px solid var(--parch-shadow);
+}
+.gen-btn.secondary:hover { background: rgba(180,130,60,.15); color: var(--ink); }
+.gen-select {
+  font-family: 'Crimson Text', serif; font-size: .92rem;
+  padding: .35rem .5rem; flex: 1; min-width: 80px;
+}
+.gen-history {
+  margin-top: .5rem;
+  max-height: 100px; overflow-y: auto;
+  border-top: 1px solid rgba(180,130,60,.2);
+  padding-top: .4rem;
+}
+.gen-history-item {
+  font-family: 'Crimson Text', serif; font-size: .82rem;
+  color: var(--ink-light); padding: .1rem 0;
+  border-bottom: 1px solid rgba(180,130,60,.1);
+  cursor: pointer;
+}
+.gen-history-item:hover { color: var(--ink); }
+.gen-full {
+  grid-column: 1 / -1;
+}
+.gen-npc-block {
+  background: rgba(255,255,255,.25);
+  border: 1px solid var(--parch-shadow);
+  border-radius: 2px; padding: .7rem .9rem;
+  margin-bottom: .6rem;
+}
+.gen-npc-name {
+  font-family: 'Cinzel', serif; font-size: 1rem;
+  font-weight: 700; color: var(--red); margin-bottom: .3rem;
+}
+.gen-npc-detail {
+  font-family: 'Crimson Text', serif; font-size: .95rem;
+  color: var(--ink); line-height: 1.5;
+}
+.gen-send-btn {
+  font-size: .6rem; padding: .2rem .5rem;
+  background: rgba(139,26,26,.1);
+  border: 1px solid rgba(139,26,26,.25);
+  color: var(--red); border-radius: 2px;
+  cursor: pointer; font-family: 'Cinzel', serif;
+  letter-spacing: .08em; text-transform: uppercase;
+  transition: background .15s; margin-top: .4rem;
+  display: inline-block;
+}
+.gen-send-btn:hover { background: rgba(139,26,26,.2); }
+
 </style>
 </head>
 <body>
@@ -529,6 +633,7 @@ canvas#web-canvas:active { cursor: grabbing; }
   <button class="tb" data-ac="tab-mdb">👾 Monster DB</button>
   <button class="tb" data-ac="tab-cond">🩹 Conditions</button>
   <button class="tb" data-ac="tab-web">🕸 Relationships</button>
+  <button class="tb" data-ac="tab-gen">🎲 Generators</button>
 </nav>
   <button class="tabs-arrow right" id="tabs-right" data-ac="fn-tabsRight">›</button>
 </div>
@@ -937,6 +1042,166 @@ canvas#web-canvas:active { cursor: grabbing; }
   </div>
 </div>
 
+<!-- ══ GENERATORS ══ -->
+<div id="tab-gen" class="pane">
+  <div class="sec">
+    <div class="stitle">🎲 Random Generators</div>
+    <p class="shint">One-click inspiration tools drawn from the Lazy GM's Resource Document. Click any result to copy it, or send it directly to your prep notes.</p>
+
+    <div class="gen-grid">
+
+      <!-- NPC GENERATOR -->
+      <div class="gen-card gen-full">
+        <div class="gen-card-title">Quick NPC</div>
+        <div class="gen-card-hint">A complete NPC in one click — name, appearance, occupation, trait, and what they want.</div>
+        <div class="gen-controls" style="margin-bottom:.6rem">
+          <select class="gen-select" id="npc-race-filter">
+            <option value="any">Any Race</option>
+            <option value="human">Human</option>
+            <option value="elf">Elf</option>
+            <option value="dwarf">Dwarf</option>
+            <option value="halfling">Halfling</option>
+            <option value="gnome">Gnome</option>
+            <option value="half-orc">Half-Orc</option>
+            <option value="tiefling">Tiefling</option>
+            <option value="dragonborn">Dragonborn</option>
+          </select>
+          <select class="gen-select" id="npc-gender-filter">
+            <option value="any">Any</option>
+            <option value="m">Male</option>
+            <option value="f">Female</option>
+            <option value="n">Neutral</option>
+          </select>
+          <button class="gen-btn" data-ac="fn-genNPC">🎲 Generate NPC</button>
+        </div>
+        <div class="gen-npc-block" id="npc-result" style="min-height:80px">
+          <div style="font-family:'IM Fell English',serif;font-style:italic;font-size:.88rem;color:var(--ink-light)">Click Generate NPC to create a quick NPC…</div>
+        </div>
+        <div style="display:flex;gap:.4rem;flex-wrap:wrap">
+          <button class="gen-send-btn" data-ac="fn-genNPCSend">→ Send to NPC List (Step 6)</button>
+          <button class="gen-send-btn" data-ac="fn-genNPCCopy">📋 Copy to Clipboard</button>
+        </div>
+        <div class="gen-history" id="npc-history"></div>
+      </div>
+
+      <!-- LOCATION GENERATOR -->
+      <div class="gen-card">
+        <div class="gen-card-title">Fantastic Location</div>
+        <div class="gen-card-hint">An evocative location name and three interactive aspects.</div>
+        <div class="gen-result" id="loc-result" title="Click to copy">Click to generate…</div>
+        <div class="gen-controls">
+          <select class="gen-select" id="loc-type-filter">
+            <option value="any">Any Type</option>
+            <option value="dungeon">Dungeon</option>
+            <option value="city">City / Urban</option>
+            <option value="wilderness">Wilderness</option>
+            <option value="arcane">Arcane</option>
+            <option value="underdark">Underdark</option>
+          </select>
+          <button class="gen-btn" data-ac="fn-genLoc">🎲 Generate</button>
+        </div>
+        <button class="gen-send-btn" data-ac="fn-genLocSend">→ Send to Locations (Step 5)</button>
+        <div class="gen-history" id="loc-history"></div>
+      </div>
+
+      <!-- ENCOUNTER SEED -->
+      <div class="gen-card">
+        <div class="gen-card-title">Encounter Seed</div>
+        <div class="gen-card-hint">A quick situation, complication, or twist for an encounter.</div>
+        <div class="gen-result" id="enc-result" title="Click to copy">Click to generate…</div>
+        <div class="gen-controls">
+          <select class="gen-select" id="enc-type-filter">
+            <option value="any">Any Type</option>
+            <option value="combat">Combat</option>
+            <option value="social">Social</option>
+            <option value="exploration">Exploration</option>
+            <option value="trap">Trap / Hazard</option>
+          </select>
+          <button class="gen-btn" data-ac="fn-genEnc">🎲 Generate</button>
+        </div>
+        <button class="gen-send-btn" data-ac="fn-genEncSend">→ Send to Scenes (Step 3)</button>
+        <div class="gen-history" id="enc-history"></div>
+      </div>
+
+      <!-- SECRET / CLUE GENERATOR -->
+      <div class="gen-card">
+        <div class="gen-card-title">Secret or Clue</div>
+        <div class="gen-card-hint">A piece of hidden information the characters might uncover.</div>
+        <div class="gen-result" id="sec-result" title="Click to copy">Click to generate…</div>
+        <div class="gen-controls">
+          <select class="gen-select" id="sec-type-filter">
+            <option value="any">Any Type</option>
+            <option value="villain">Villain / Enemy</option>
+            <option value="history">History / Lore</option>
+            <option value="npc">NPC Secret</option>
+            <option value="treasure">Treasure / Item</option>
+            <option value="location">Location Secret</option>
+          </select>
+          <button class="gen-btn" data-ac="fn-genSec">🎲 Generate</button>
+        </div>
+        <button class="gen-send-btn" data-ac="fn-genSecSend">→ Send to Secrets (Step 4)</button>
+        <div class="gen-history" id="sec-history"></div>
+      </div>
+
+      <!-- TOWN EVENT -->
+      <div class="gen-card">
+        <div class="gen-card-title">Town Event</div>
+        <div class="gen-card-hint">Something happening in town when the party arrives.</div>
+        <div class="gen-result" id="town-result" title="Click to copy">Click to generate…</div>
+        <div class="gen-controls">
+          <button class="gen-btn" data-ac="fn-genTown">🎲 Generate</button>
+        </div>
+        <button class="gen-send-btn" data-ac="fn-genTownSend">→ Send to Scenes (Step 3)</button>
+        <div class="gen-history" id="town-history"></div>
+      </div>
+
+      <!-- MAGIC ITEM -->
+      <div class="gen-card">
+        <div class="gen-card-title">Magic Item</div>
+        <div class="gen-card-hint">A random magic item appropriate for the party.</div>
+        <div class="gen-result" id="item-result" title="Click to copy">Click to generate…</div>
+        <div class="gen-controls">
+          <select class="gen-select" id="item-rarity">
+            <option value="any">Any Rarity</option>
+            <option value="common">Common</option>
+            <option value="uncommon">Uncommon</option>
+            <option value="rare">Rare</option>
+            <option value="very rare">Very Rare</option>
+            <option value="legendary">Legendary</option>
+          </select>
+          <button class="gen-btn" data-ac="fn-genItem">🎲 Generate</button>
+        </div>
+        <button class="gen-send-btn" data-ac="fn-genItemSend">→ Send to Treasure (Step 8)</button>
+        <div class="gen-history" id="item-history"></div>
+      </div>
+
+      <!-- TRAP / HAZARD -->
+      <div class="gen-card">
+        <div class="gen-card-title">Trap or Hazard</div>
+        <div class="gen-card-hint">A dungeon trap or environmental hazard with trigger and effect.</div>
+        <div class="gen-result" id="trap-result" title="Click to copy">Click to generate…</div>
+        <div class="gen-controls">
+          <button class="gen-btn" data-ac="fn-genTrap">🎲 Generate</button>
+        </div>
+        <div class="gen-history" id="trap-history"></div>
+      </div>
+
+      <!-- STRONG START SEED -->
+      <div class="gen-card">
+        <div class="gen-card-title">Strong Start Seed</div>
+        <div class="gen-card-hint">A spark for "something happens" — riff on it, don't use it literally.</div>
+        <div class="gen-result" id="start-result" title="Click to copy">Click to generate…</div>
+        <div class="gen-controls">
+          <button class="gen-btn" data-ac="fn-genStart">🎲 Generate</button>
+        </div>
+        <button class="gen-send-btn" data-ac="fn-genStartSend">→ Send to Strong Start (Step 2)</button>
+        <div class="gen-history" id="start-history"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
 <!-- ACTION BAR -->
 <div class="actbar">
   <div style="display:flex;gap:.55rem;flex-wrap:wrap">
@@ -1021,6 +1286,22 @@ document.addEventListener('click', function(e) {
     'fn-print': () => window.print(),
     'fn-clearAll': clearAll,
     'fn-addConseq': addConseq,
+    'fn-genNPC': genNPC,
+    'fn-genNPCSend': genNPCSend,
+    'fn-genNPCCopy': genNPCCopy,
+    'fn-genLoc': genLoc,
+    'fn-genLocSend': genLocSend,
+    'fn-genEnc': genEnc,
+    'fn-genEncSend': genEncSend,
+    'fn-genSec': genSec,
+    'fn-genSecSend': genSecSend,
+    'fn-genTown': genTown,
+    'fn-genTownSend': genTownSend,
+    'fn-genItem': genItem,
+    'fn-genItemSend': genItemSend,
+    'fn-genTrap': genTrap,
+    'fn-genStart': genStart,
+    'fn-genStartSend': genStartSend,
     'fn-addFork': addFork,
     'fn-loadCarryForward': loadCarryForward,
     'fn-closeParse': closeParseModal,
@@ -3187,6 +3468,672 @@ function carryForwardSecret(text, idx){
 // Also override addSecret to update counter
 const _origAddSecret = addSecret;
 // We'll hook into it via MutationObserver set up in initSecretCounter
+
+
+// ══════════════════════════════════════════════════════
+//  RANDOM GENERATORS
+//  Tables drawn from Lazy GM's Resource Document (CC BY 4.0)
+//  slyflourish.com/lazy_gm_resource_document.html
+// ══════════════════════════════════════════════════════
+
+// ── UTILITY ──
+function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+function pickN(arr,n){ const s=[...arr]; const out=[]; for(let i=0;i<n&&s.length;i++){const j=Math.floor(Math.random()*s.length);out.push(s.splice(j,1)[0]);} return out; }
+function d(n){ return Math.floor(Math.random()*n)+1; }
+
+function copyText(text){
+  navigator.clipboard.writeText(text).catch(()=>{
+    const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
+  });
+}
+
+function addToHistory(histId, text){
+  const hist = document.getElementById(histId);
+  if(!hist) return;
+  const item = document.createElement('div');
+  item.className = 'gen-history-item';
+  item.textContent = text.length>80 ? text.slice(0,80)+'…' : text;
+  item.title = text;
+  item.addEventListener('click', ()=>copyText(text));
+  hist.insertBefore(item, hist.firstChild);
+  while(hist.children.length > 5) hist.removeChild(hist.lastChild);
+}
+
+function setResult(elId, text){
+  const el = document.getElementById(elId);
+  if(!el) return;
+  el.textContent = text;
+  el.classList.remove('fresh');
+  void el.offsetWidth; // force reflow
+  el.classList.add('fresh');
+  el.onclick = ()=>copyText(text);
+}
+
+// ── NAME TABLES ──
+const NAMES = {
+  human: {
+    m: ['Aldric','Brynn','Caelan','Dax','Edric','Faolan','Gareth','Hadwin','Idris','Joren','Kellan','Lucian','Maren','Nolan','Osric','Peregrine','Quinn','Rowan','Soren','Tavish','Ulric','Vance','Wren','Xavier','Yoren','Zane'],
+    f: ['Aelith','Briar','Calla','Dena','Elara','Fiona','Gwen','Hilda','Isla','Jessa','Kira','Lyra','Mira','Nessa','Orla','Penna','Quinn','Rhea','Sera','Tara','Una','Vesper','Willa','Xara','Yara','Zola'],
+    n: ['Ash','Bay','Cael','Dale','Eden','Fern','Glen','Haven','Indigo','Jade','Kael','Lane','Marsh','North','Onyx','Pine','Reed','Sage','Thorn','Vale','West','Yew'],
+    surname: ['Ashford','Blackwood','Crane','Duskmantle','Embervale','Fairweather','Goldenrod','Hawthorne','Ironwood','Justcroft','Kettleworth','Lightwood','Moorhill','Nighthollow','Oakenshield','Pendleton','Quickwater','Ravenscroft','Silverstone','Thornwick','Underhill','Vance','Waterford','Yarrow'],
+  },
+  elf: {
+    m: ['Aelindor','Berrian','Carric','Darathas','Erevan','Filarion','Galinndan','Heian','Immeral','Jorildyn','Kaeldrak','Lucan','Mindartis','Nuvian','Orist','Paelias','Quarion','Riardon','Soveliss','Thamior','Urbem','Varis','Zinnadan'],
+    f: ['Adrie','Birel','Caelynn','Dara','Enna','Faral','Gennal','Hadarai','Ilanis','Jelenneth','Keyleth','Leshanna','Mialee','Naivara','Quillathe','Rania','Sariel','Thia','Urvel','Valanthe','Xanaphia','Yalanue','Zylvara'],
+    n: ['Aelith','Caer','Dae','Elin','Faen','Gaer','Iril','Laer','Mael','Nael','Orin','Pael','Raen','Sael','Taer','Vael','Xael'],
+    surname: ['Amakiir','Brightwood','Celebrant','Dawnwhisper','Evenwood','Galanodel','Holimion','Ilphelkiir','Liadon','Meliamne','Naïlo','Ostoroth','Siannodel','Trisimia','Xiloscient','Yambala'],
+  },
+  dwarf: {
+    m: ['Adrik','Baern','Brottor','Dain','Darrak','Delg','Eberk','Einkil','Fargrim','Gardain','Harbek','Kildrak','Morgran','Orsik','Oskar','Rangrim','Rurik','Taklinn','Thoradin','Thorin','Tordek','Traubon','Travok','Ulfgar','Veit','Vondal'],
+    f: ['Amber','Artin','Audhild','Bardryn','Dagnal','Diesa','Eldeth','Falkrunn','Finellen','Gunnloda','Gurdis','Helja','Hlin','Kathra','Kristryd','Ilde','Liftrasa','Mardred','Riswynn','Sannl','Torbera','Torgga','Vistra'],
+    n: ['Bram','Daen','Eld','Garn','Helm','Keld','Mord','Orn','Reld','Teld','Veld'],
+    surname: ['Balderk','Battlehammer','Boulderhold','Dankil','Fireforge','Frostbeard','Goblinbane','Hardcheese','Highpeak','Holderhek','Ironfist','Loderr','Lutgehr','Rumnaheim','Strakeln','Torunn','Ungart'],
+  },
+  halfling: {
+    m: ['Alton','Ander','Cade','Corrin','Eldon','Errich','Finnan','Garret','Lindal','Lyle','Merric','Milo','Osborn','Perrin','Reed','Roscoe','Wellby'],
+    f: ['Andry','Bree','Callie','Cora','Euphemia','Jillian','Kithri','Lavinia','Lidda','Merla','Nedda','Paela','Portia','Seraphina','Shaena','Trym','Vani','Verna','Wella'],
+    n: ['Cob','Del','Fen','Gill','Hay','Lob','Mel','Nob','Rob','Tob'],
+    surname: ['Brushgather','Goodbarrel','Greenbottle','High-hill','Hilltopple','Leagallow','Tealeaf','Thorngage','Tosscobble','Underbough'],
+  },
+  gnome: {
+    m: ['Alston','Alvyn','Boddynock','Brocc','Burgell','Dimble','Eldon','Erky','Fonkin','Frug','Gerbo','Gimble','Glim','Jebeddo','Kellen','Namfoodle','Orryn','Roondar','Seebo','Sindri','Warryn','Wrenn','Zook'],
+    f: ['Bimpnottin','Breena','Caramip','Carlin','Donella','Duvamil','Ella','Ellyjobell','Ellywick','Lilli','Loopmottin','Lorilla','Mardnab','Nissa','Nyx','Oda','Orla','Roywyn','Shamil','Tana','Waywocket','Zanna'],
+    n: ['Bim','Dim','Fim','Glim','Nim','Pim','Rim','Tim','Vim','Wim','Zim'],
+    surname: ['Beren','Daergel','Folkor','Garrick','Nackle','Murnig','Ningel','Raulnor','Scheppen','Turen','Zabble'],
+  },
+  'half-orc': {
+    m: ['Dench','Feng','Gell','Henk','Holg','Imsh','Keth','Krusk','Mhurren','Ront','Shump','Thokk'],
+    f: ['Baggi','Emen','Engong','Kansif','Myev','Neega','Ovak','Ownka','Shautha','Sutha','Vola','Volen','Yevelda'],
+    n: ['Grak','Hrak','Krak','Mrak','Nrak','Rak','Srak','Trak','Vrak','Wrak'],
+    surname: ['Bloodtusk','Breakbone','Doomhammer','Giantkin','Gnarlhide','Ironjaw','Manyarrows','Orcbane','Skullsmasher','Stonebones','Warcry','Wurmspeaker'],
+  },
+  tiefling: {
+    m: ['Akmenos','Amnon','Barakas','Damakos','Ekemon','Iados','Kairon','Leucis','Melech','Mordai','Morthos','Pelaios','Skamos','Therai'],
+    f: ['Akta','Anakis','Bryseis','Criella','Damaia','Ea','Kallista','Lerissa','Makaria','Nemeia','Orianna','Phelaia','Rieta'],
+    virtue: ['Art','Carrion','Chant','Creed','Despair','Excellence','Fear','Glory','Hope','Ideal','Infamy','Insight','Iscariot','Languish','Laughter','Malice','Music','Nowhere','Open','Pain','Poetry','Quest','Random','Reverence','Sorrow','Temerity','Torment','Travail','Uncertainty','Vengeance','Vice','Virtue','Weary','Windfall'],
+    surname: ['Charcoal','Embermane','Flamehair','Hellstep','Infernalis','Morningstar','Nightflame','Onyxblaze','Pitfire','Redclaw','Smokefang','Sultana'],
+  },
+  dragonborn: {
+    m: ['Arjhan','Balasar','Bharash','Donaar','Ghesh','Heskan','Kriv','Medrash','Mehen','Nadarr','Pandjed','Patrin','Rhogar','Shamash','Shedinn','Tarhun','Torinn'],
+    f: ['Akra','Biri','Dazzlewing','Farideh','Harann','Havilar','Jheri','Kava','Korinn','Mishann','Nala','Perra','Raiann','Sora','Surina','Thava','Uadjit'],
+    n: ['Dax','Fex','Hex','Jex','Kex','Lex','Mex','Nex','Rex','Vex'],
+    clan: ['Clethtinthiallor','Daardendrian','Delmirev','Drachedandion','Fenkenkabradon','Kepeshkmolik','Kerrhylon','Kimbatuul','Linxakasendalor','Myastan','Nemmonis','Norixius','Ophinshtalajiir','Prexijandilin','Shestendeliath','Turnuroth','Yarjerit'],
+  },
+};
+
+function genName(race, genderPref){
+  const r = race==='any' ? pick(['human','human','human','elf','dwarf','halfling','gnome','half-orc','tiefling','dragonborn']) : race;
+  const table = NAMES[r] || NAMES.human;
+  const g = genderPref==='any' ? pick(['m','f','n']) : genderPref;
+  const firstName = pick(table[g] || table.m || table.f);
+  const surnameKey = table.clan ? 'clan' : table.virtue ? (Math.random()<0.4?'virtue':'surname') : 'surname';
+  const surname = table[surnameKey] ? pick(table[surnameKey]) : '';
+  return { name: surname ? firstName+' '+surname : firstName, race: r.charAt(0).toUpperCase()+r.slice(1) };
+}
+
+// ── NPC TABLES ──
+const NPC_OCCUPATIONS = [
+  'Blacksmith','Innkeeper','Guard','Merchant','Herbalist','Sage','Fisherman','Farmer','Priest',
+  'Thief','Soldier','Scholar','Apothecary','Hunter','Miner','Cook','Courier','Dockworker',
+  'Beggar','Noble','Spy','Assassin','Bard','Cartographer','Alchemist','Gravedigger',
+  'Tax collector','Fence','Acolyte','Seamstress','Miller','Chandler','Glassblower','Scribe',
+  'Jailer','Bounty hunter','Fortune teller','Rat catcher','Undertaker','Midwife',
+];
+
+const NPC_APPEARANCES = [
+  'A livid scar across one cheek','Burns on both hands','Mismatched eyes','Constantly wringing hands',
+  'Never makes eye contact','Speaks only in whispers','Extremely tall, stooped to fit through doors',
+  'Fingers stained with ink','Missing two fingers on the left hand','Wears a hood indoors',
+  'Smells strongly of pipe smoke','Ostentatiously expensive clothing, worn and dirty',
+  'Blind in one eye, milky white','Nervous laugh after every sentence','Fidgets with a ring constantly',
+  'Never stops eating','Heavily tattooed forearms','A limp that worsens when nervous',
+  'Speaks three languages, switches mid-sentence','Extraordinarily beautiful, clearly knows it',
+  'Chews a toothpick endlessly','Has a tell: touches their ear when lying',
+  'Carries a lute but refuses to play','Always has dirt under their fingernails',
+  'A permanent look of mild disappointment','Wears medals from a forgotten war',
+  'One hand is mechanical — gears visible at the wrist','Laughs at their own jokes, alone',
+];
+
+const NPC_TRAITS = [
+  'Believes they are always the smartest person in the room','Compulsively generous to a fault',
+  'Harbours a secret shame they can never mention','Would do anything for a warm meal and a bed',
+  'Deeply superstitious — won\'t walk under ladders, fears black cats','Collects strange trinkets',
+  'Fiercely loyal to the first person who was kind to them','Has a code of honour no one else understands',
+  'Desperately lonely but pushes everyone away','Keeps meticulous records of perceived slights',
+  'Genuinely believes they are cursed','Speaks about themselves in the third person when nervous',
+  'Has strong opinions about the correct way to do everything','Refuses to sleep indoors',
+  'Obsessively tidy — cannot focus if something is out of place','Lies reflexively, even about trivial things',
+  'Has a complicated relationship with a dead parent','Dreams of escaping to the sea',
+  'Deeply religious but privately doubts everything','Gambles compulsively and always loses',
+];
+
+const NPC_WANTS = [
+  'To find a missing family member','To pay off a crushing debt before it ruins them',
+  'To expose a corrupt official without getting killed','To find proof of something everyone thinks is a myth',
+  'To retire somewhere no one knows their name','To be respected — properly, not feared',
+  'To get revenge on someone who wronged them years ago','To protect someone who doesn\'t know they\'re in danger',
+  'To sell something very valuable without anyone knowing what it is',
+  'To learn the truth about their own past','To quietly disappear from their current life',
+  'To find a cure for an illness afflicting someone they love',
+  'To complete a task their dead mentor left unfinished','To impress someone who doesn\'t notice them',
+  'To stop a deal they made years ago from coming due','To leave their faction without being hunted',
+  'To find somewhere safe for people who depend on them',
+  'To acquire a specific rare item, no questions asked',
+  'To be forgiven — by anyone, for anything','To find out who has been watching them',
+];
+
+const NPC_SECRETS = [
+  'Is working for someone the party would recognise','Was present at a famous crime or disaster',
+  'Has a second identity no one knows about','Owes a life debt to a very dangerous person',
+  'Knows the location of something valuable and hidden','Is being blackmailed',
+  'Has been replaced — this is not the real person','Is dying and has months left',
+  'Is secretly a member of a banned organisation','Has information that could start a war',
+  'Was once someone important under a different name','Witnessed something they were paid to forget',
+];
+
+let lastNPC = null;
+
+function genNPC(){
+  const race = document.getElementById('npc-race-filter').value;
+  const genderPref = document.getElementById('npc-gender-filter').value;
+  const {name, race: raceName} = genName(race, genderPref);
+  const occ = pick(NPC_OCCUPATIONS);
+  const app = pick(NPC_APPEARANCES);
+  const trait = pick(NPC_TRAITS);
+  const want = pick(NPC_WANTS);
+  const secret = Math.random()<0.5 ? pick(NPC_SECRETS) : null;
+
+  lastNPC = { name, race: raceName, occupation: occ, appearance: app, trait, want, secret };
+
+  const el = document.getElementById('npc-result');
+  el.innerHTML = `
+    <div class="gen-npc-name">${name}</div>
+    <div class="gen-npc-detail">
+      <strong>${raceName} ${occ}</strong><br>
+      <em>Appearance:</em> ${app}<br>
+      <em>Trait:</em> ${trait}<br>
+      <em>Wants:</em> ${want}
+      ${secret?`<br><em style="color:var(--red)">Secret:</em> ${secret}`:''}
+    </div>`;
+
+  const summary = `${name} (${raceName} ${occ}). ${app}. ${trait}. Wants: ${want}.${secret?' Secret: '+secret:''}`;
+  addToHistory('npc-history', summary);
+}
+
+function genNPCSend(){
+  if(!lastNPC){ genNPC(); }
+  const card = mkCard('npc-list',[
+    {cols:3,items:[{key:'np-name',label:'Name',placeholder:''},{key:'np-role',label:'Role',placeholder:''},{key:'np-fac',label:'Allegiance',placeholder:''}]},
+    {cols:2,items:[{key:'np-trait',label:'One Distinguishing Trait',placeholder:''},{key:'np-want',label:'What They Want',placeholder:''}]},
+    {cols:2,items:[{key:'np-goal',label:'Active Quest / Goal',placeholder:''},{key:'np-fic',label:'Based On (fiction)',placeholder:''}]},
+    {cols:1,items:[{key:'np-notes',label:'Notes / Secrets',type:'textarea',rows:1,placeholder:'',span:true}]}
+  ]);
+  if(card && lastNPC){
+    const set=(k,v)=>{const el=card.querySelector(`[data-key="${k}"]`);if(el)el.value=v;};
+    set('np-name', lastNPC.name);
+    set('np-role', lastNPC.race+' '+lastNPC.occupation);
+    set('np-trait', lastNPC.appearance+'. '+lastNPC.trait);
+    set('np-want', lastNPC.want);
+    if(lastNPC.secret) set('np-notes', 'Secret: '+lastNPC.secret);
+  }
+  // Switch to NPC tab
+  const btn = document.querySelector('[data-ac="tab-s6"]');
+  if(btn) sw('s6', btn);
+}
+
+function genNPCCopy(){
+  if(!lastNPC) return;
+  const text = `${lastNPC.name} (${lastNPC.race} ${lastNPC.occupation})\n${lastNPC.appearance}. ${lastNPC.trait}\nWants: ${lastNPC.want}${lastNPC.secret?'\nSecret: '+lastNPC.secret:''}`;
+  copyText(text);
+}
+
+// ── LOCATION TABLES ──
+const LOC_PREFIXES = {
+  any:       ['The Sunken','The Shattered','The Bleeding','The Forsaken','The Howling','The Ruined','The Forgotten','The Cursed','The Ancient','The Burning','The Frozen','The Hidden','The Crimson','The Black','The Gilded','The Weeping','The Hollow','The Silent','The Drowned','The Ashen'],
+  dungeon:   ['The Shattered','The Sunken','The Forgotten','The Cursed','The Black','The Hollow','The Silent','The Bleeding'],
+  city:      ['The Gilded','The Burning','The Hidden','The Crimson','The Weeping','The Old','The Merchant\'s','The Scholar\'s'],
+  wilderness:['The Howling','The Ancient','The Frozen','The Hidden','The Whispering','The Feral','The Tangled','The Drowned'],
+  arcane:    ['The Shimmering','The Pulsing','The Fractured','The Astral','The Warded','The Sealed','The Dreaming','The Unravelling'],
+  underdark: ['The Lightless','The Fungal','The Drowned','The Chittering','The Deep','The Blind','The Slumbering','The Webbed'],
+};
+const LOC_NOUNS = {
+  any:       ['Citadel','Spire','Vault','Hall','Sanctum','Chamber','Crypt','Tower','Pit','Library','Garden','Throne Room','Archives','Gate','Shrine','Tomb','Forge','Court','Cathedral','Keep'],
+  dungeon:   ['Crypt','Vault','Pit','Chamber','Tomb','Dungeon','Forge','Gate','Throne Room','Cistern'],
+  city:      ['Quarter','Market','Court','Square','Gate','Bridge','Harbour','Archive','Hall','Tower'],
+  wilderness:['Glen','Pass','Falls','Gorge','Ruins','Mire','Grove','Peak','Ford','Hollow'],
+  arcane:    ['Sanctum','Observatory','Nexus','Orrery','Labyrinth','Mirror Hall','Sphere','Library','Workshop','Void'],
+  underdark: ['Cavern','Grotto','Chasm','Colony','Lake','Maze','Den','Rift','Bastion','Web'],
+};
+const LOC_ASPECTS = [
+  'A pool of perfectly still water that reflects a different sky','Chains hanging from the ceiling, old bloodstains on the floor',
+  'A massive crack in the wall through which cold wind howls','Hundreds of candles that never seem to burn down',
+  'A throne made of weapons fused together by heat','A mosaic floor depicting a war no one has heard of',
+  'Giant stone doors carved with faces that seem to watch','A clockwork mechanism of unknown purpose, still turning',
+  'Shelves of jars containing things suspended in amber fluid','A circular pit descending beyond sight into darkness',
+  'Scorch marks radiating from a central point on the ceiling','Writing in three languages covering every surface',
+  'A mirror that shows the room as it was a hundred years ago','A massive scales, balanced perfectly, with no weights',
+  'A trapdoor with no visible mechanism to open it','Barricades clearly built from the inside in desperation',
+  'A half-eaten meal on a table, still warm','A column of floating stones rotating slowly around a void',
+  'Runes that glow faintly when spoken to','The smell of rain though there are no windows',
+  'A tree growing through the floor, petrified to stone','Footprints in dust that lead to — and not from — the centre',
+  'A tapestry depicting the party themselves','A thousand small holes in the walls, each sealed with wax',
+  'A door sized for something much larger than a human','Frost patterns on the walls despite the warmth',
+  'A fountain flowing with something that is not water','Bodies in armour, seated upright at a table',
+  'A child\'s toys arranged in a careful circle','An iron cage large enough for a dragon',
+];
+
+function genLoc(){
+  const type = document.getElementById('loc-type-filter').value;
+  const prefArr = LOC_PREFIXES[type] || LOC_PREFIXES.any;
+  const nounArr = LOC_NOUNS[type] || LOC_NOUNS.any;
+  const name = pick(prefArr)+' '+pick(nounArr);
+  const aspects = pickN(LOC_ASPECTS, 3);
+  const result = `${name}\n• ${aspects[0]}\n• ${aspects[1]}\n• ${aspects[2]}`;
+  setResult('loc-result', result);
+  addToHistory('loc-history', name+': '+aspects.join(' / '));
+  window._lastLoc = {name, aspects};
+}
+
+function genLocSend(){
+  if(!window._lastLoc) genLoc();
+  const l = window._lastLoc;
+  const card = mkCard('loc-list',[
+    {cols:3,items:[{key:'lo-name',label:'Name',placeholder:''},{key:'lo-type',label:'Type',placeholder:''},{key:'lo-scale',label:'Scale',placeholder:''}]},
+    {cols:1,items:[{key:'lo-desc',label:'Evocative Description',type:'textarea',rows:1,placeholder:'',span:true}]},
+    {cols:1,items:[{key:'lo-asp',label:'Fantastic Aspects',type:'textarea',rows:1,placeholder:'',span:true}]}
+  ]);
+  if(card){
+    const set=(k,v)=>{const el=card.querySelector(`[data-key="${k}"]`);if(el)el.value=v;};
+    set('lo-name', l.name);
+    set('lo-asp', l.aspects.map(a=>'• '+a).join('\n'));
+  }
+  const btn=document.querySelector('[data-ac="tab-s5"]');if(btn)sw('s5',btn);
+}
+
+// ── ENCOUNTER SEEDS ──
+const ENC_SEEDS = {
+  any: [
+    'The objective is present but so is an innocent caught in the middle — saving them complicates everything.',
+    'The enemy is outnumbered but holds a hostage and knows it.',
+    'A third party arrives midway through with their own agenda.',
+    'The environment itself is the primary danger — the combatants are secondary.',
+    'The enemy doesn\'t want to fight — but has been told the party does.',
+    'One side has information the other needs — violence means losing it.',
+    'Something valuable will be destroyed if the fight escalates.',
+    'The "enemy" is actually following orders from someone the party knows.',
+    'Victory is possible but will take longer than the party has.',
+    'The location gives one side a decisive advantage — unless the party changes the terrain.',
+    'Help is coming — for the enemy.',
+    'The party has been set up. The real threat is watching from a distance.',
+    'An ally is revealed to have been compromised.',
+    'The enemy knows the party\'s plan. Somehow.',
+    'There are more of them. Many more.',
+    'Winning this fight will make a powerful enemy elsewhere.',
+  ],
+  combat: [
+    'The enemy uses the environment: fire, flooding, or collapse is imminent.',
+    'The leader stays hidden until the party is weakened.',
+    'The weakest enemy is bait — killing them triggers a trap.',
+    'The enemy has reinforcements arriving in three rounds.',
+    'Someone the party cares about is in the line of fire.',
+    'The enemy will surrender if reduced to half — but they\'re lying.',
+    'The battlefield is tilted — literally — floor sloping toward a pit.',
+    'The enemy fights in darkness, has darkvision, the party doesn\'t.',
+  ],
+  social: [
+    'The NPC knows something they haven\'t decided to share yet.',
+    'The person being negotiated with wants the same thing the party wants — they just don\'t know it.',
+    'A third party is listening and will use whatever is said.',
+    'The NPC will help — but only if the party does something first.',
+    'The NPC is testing the party. Failing the test closes a door permanently.',
+    'Someone in the party has history with this NPC that changes the dynamic.',
+    'A lie told earlier in the campaign comes up here.',
+    'The NPC makes a reasonable offer. Refusing creates a long-term enemy.',
+  ],
+  exploration: [
+    'The path ahead splits — one leads forward, one looks like a trap but isn\'t.',
+    'Something has been disturbed recently. The party is not the first here.',
+    'A resource the party needs (light, air, time) is running out.',
+    'The map is wrong — deliberately.',
+    'Something valuable is visible but requires significant risk to reach.',
+    'A puzzle with three solutions — only two are safe.',
+    'The party finds evidence of what happened to the last group that came here.',
+    'A door that shouldn\'t be locked is locked. From the inside.',
+  ],
+  trap: [
+    'A floor mosaic — beautiful, but every third tile is different stone (pressure plates).',
+    'A door handle that casts shocking grasp on the first touch.',
+    'A room that slowly fills with water when the door closes.',
+    'A hallway of blades triggered by weight — the lightest party member must go first.',
+    'A chest that casts suggestion ("leave and tell no one") when opened.',
+    'Stairs that become a slide when weight exceeds a certain point.',
+    'A room with air that smells of almonds. Poison gas, already filling it.',
+    'A mirror that swaps the positions of whoever looks into it simultaneously.',
+    'A chandelier that drops when a specific word is spoken.',
+    'A false floor — a shallow layer of stone over a thirty-foot drop.',
+  ],
+};
+
+function genEnc(){
+  const type = document.getElementById('enc-type-filter').value;
+  const arr = ENC_SEEDS[type] || ENC_SEEDS.any;
+  const result = pick([...ENC_SEEDS.any, ...arr]);
+  setResult('enc-result', result);
+  addToHistory('enc-history', result);
+  window._lastEnc = result;
+}
+
+function genEncSend(){
+  if(!window._lastEnc) genEnc();
+  addScene();
+  const list=document.getElementById('scenes-list');
+  const card=list.lastElementChild;
+  if(card){const el=card.querySelector('[data-key="sc-notes"]');if(el)el.value=window._lastEnc;}
+  const btn=document.querySelector('[data-ac="tab-s3"]');if(btn)sw('s3',btn);
+}
+
+// ── SECRET / CLUE GENERATOR ──
+const SECRETS_GEN = {
+  any: [
+    'The villain is not the true power — they answer to someone the party has already met.',
+    'The location was the site of a massacre. The dead were never mourned.',
+    'An object the party carries is being tracked.',
+    'The map everyone uses is intentionally wrong in one critical area.',
+    'The organisation funding the party has a second agenda.',
+    'A trusted NPC has been replaced by a simulacrum.',
+    'The "ancient evil" was created by the same people who now fight against it.',
+    'The town has been giving people to something in the dark. Willingly.',
+    'One member of the party has a price on their head — placed by a friend.',
+    'The artifact is cursed in a way that takes months to manifest.',
+  ],
+  villain: [
+    'The villain was once a hero. The party\'s patron knows this.',
+    'The villain\'s true goal is mercy — killing the one thing that would otherwise destroy everything.',
+    'The villain has an heir. Stopping them doesn\'t stop the plan.',
+    'The villain is dying. They\'re trying to finish their work before they go.',
+    'The villain and the party share a common enemy — just different methods.',
+    'The villain has leverage over a key NPC the party trusts.',
+    'The villain\'s base of operations is hidden inside something the party has already visited.',
+  ],
+  history: [
+    'The kingdom was founded on a lie that is still being maintained today.',
+    'This place was holy ground before it was desecrated. What lived here is still here.',
+    'The great hero of the old war was a war criminal. The records were altered.',
+    'The \'ancient ruin\' was built less than fifty years ago. Someone wanted it to look old.',
+    'Two factions have been at war for generations over a misunderstanding.',
+    'The god this temple was built for doesn\'t exist. Something else answered the prayers.',
+  ],
+  npc: [
+    'The innkeeper marks travellers for a thieves\' guild operating through the town.',
+    'The guard captain is being blackmailed by the very criminals they\'re supposed to catch.',
+    'The helpful sage is selling information about the party to a third party.',
+    'The friendly merchant is the reason the town\'s last adventurers never came back.',
+    'The priest genuinely believes they serve good — and is genuinely wrong.',
+    'The beggar at the gate has seen everything and has been recording it all.',
+  ],
+  treasure: [
+    'The item is cursed — but only activates under a very specific condition.',
+    'The treasure was stolen. The original owner is still looking for it.',
+    'The item is a fake. The real one is somewhere else entirely.',
+    'Using the item leaves a magical trace visible to certain creatures.',
+    'The treasure has a twin — and whoever holds the twin knows when this one is used.',
+    'The item was sealed away for a reason. Breaking the seal released something.',
+  ],
+  location: [
+    'The dungeon was not built by its current inhabitants — they moved in after the builders vanished.',
+    'There is a chamber that doesn\'t appear on any map — because the original cartographer was killed before they could include it.',
+    'The safe path through is only safe because something lets travellers through. It has reasons.',
+    'The location is a prison. The thing inside is not the monster everyone thinks it is.',
+    'Water runs uphill here. The natural laws here are wrong in ways not yet understood.',
+    'The location appears abandoned but something lives in the walls.',
+  ],
+};
+
+function genSec(){
+  const type = document.getElementById('sec-type-filter').value;
+  const arr = SECRETS_GEN[type] || SECRETS_GEN.any;
+  const pool = type==='any' ? Object.values(SECRETS_GEN).flat() : [...SECRETS_GEN.any,...arr];
+  const result = pick(pool);
+  setResult('sec-result', result);
+  addToHistory('sec-history', result);
+  window._lastSec = result;
+}
+
+function genSecSend(){
+  if(!window._lastSec) genSec();
+  addSecret();
+  const list=document.getElementById('secrets-list');
+  const card=list.lastElementChild;
+  if(card){const el=card.querySelector('[data-key="sec"]');if(el)el.value=window._lastSec;}
+  updateSecretCounter();
+  const btn=document.querySelector('[data-ac="tab-s4"]');if(btn)sw('s4',btn);
+}
+
+// ── TOWN EVENTS ──
+const TOWN_EVENTS = [
+  'A merchant caravan has arrived from a city known for trouble — the guards look nervous.',
+  'A local festival is underway. Everyone is drunk. Crime is spiking.',
+  'A fire started last night in the warehouse district. Arson is suspected.',
+  'A body was found in the well. The town is panicking about the water supply.',
+  'Two noble families are in a public dispute. Everyone has taken sides.',
+  'A travelling circus has arrived. People keep disappearing after visiting.',
+  'A child has been missing for three days. The parents are offering everything they have.',
+  'The militia is mobilising. No one will say why.',
+  'A preacher has arrived predicting the end of the world. They have evidence.',
+  'The market prices have tripled overnight. The grain supply has been cut off.',
+  'A famous criminal has been captured and is being held pending trial.',
+  'Something has been stealing livestock — taken whole, not killed.',
+  'A stranger is offering gold for information about ruins to the north.',
+  'A ship has run aground in the harbour. The crew won\'t come ashore.',
+  'An election is happening. Candidates are turning up injured.',
+  'Refugees are arriving from the east. A lot of them. They won\'t say what they\'re fleeing.',
+  'A cure for a local illness has appeared overnight — origin unknown.',
+  'The local lord hasn\'t been seen in two weeks. Advisors are saying they\'re travelling.',
+  'A duel has been called and the whole town has stopped to watch.',
+  'Strange lights were seen over the forest last night. Half the town has theories.',
+  'A guild is on strike. Essential services have stopped.',
+  'Graffiti appeared overnight that names a prominent citizen as a murderer.',
+  'A wanted poster has gone up — the face is one the party recognises.',
+  'The local healer died suddenly. People who needed medicine are getting desperate.',
+  'A trial is underway for a crime the whole town believes the accused didn\'t commit.',
+];
+
+function genTown(){
+  const result = pick(TOWN_EVENTS);
+  setResult('town-result', result);
+  addToHistory('town-history', result);
+  window._lastTown = result;
+}
+
+function genTownSend(){
+  if(!window._lastTown) genTown();
+  addScene();
+  const list=document.getElementById('scenes-list');
+  const card=list.lastElementChild;
+  if(card){
+    const nm=card.querySelector('[data-key="sc-name"]');if(nm)nm.value='Town Event';
+    const nt=card.querySelector('[data-key="sc-notes"]');if(nt)nt.value=window._lastTown;
+  }
+  const btn=document.querySelector('[data-ac="tab-s3"]');if(btn)sw('s3',btn);
+}
+
+// ── MAGIC ITEMS ──
+const MAGIC_ITEMS = {
+  common: [
+    'Cloak of Billowing — the cloak billows dramatically whenever you move, regardless of wind.',
+    'Pot of Awakening — a clay pot. Plants grown in it become awakened after 30 days.',
+    'Hat of Vermin — pull a tiny harmless creature from it (bat, frog, or rat) once per day.',
+    'Instrument of Illusions — while playing it, minor illusions form around you.',
+    'Rope of Mending — cut pieces reconnect if held together for 1 minute.',
+    'Smoldering Armor — wisps of smoke rise from your armor, granting no other effect.',
+    'Wand of Pyrotechnics — as an action, create dazzling pyrotechnics (no damage).',
+    'Shield of Expression — the face on this shield changes to reflect your emotional state.',
+    'Talking Doll — a stuffed doll with a phrase stored in it, speaks when squeezed.',
+    'Moon-Touched Sword — sheds moonlight (as torchlight) in darkness.',
+  ],
+  uncommon: [
+    'Bag of Tricks (Gray) — pull a random beast (up to CR 1/4) from the bag three times per day.',
+    'Boots of Elvenkind — advantage on Dexterity (Stealth) checks relying on moving silently.',
+    'Brooch of Shielding — resistance to force damage, immunity to Magic Missile.',
+    'Cloak of Protection — +1 to AC and saving throws.',
+    'Eyes of Minute Seeing — advantage on Investigation checks within 1 foot. Darkvision 30ft.',
+    'Gauntlets of Ogre Power — Strength becomes 19 if lower.',
+    'Headband of Intellect — Intelligence becomes 19 if lower.',
+    'Lantern of Revealing — reveals invisible creatures and objects within 30ft.',
+    'Periapt of Health — advantage on saves vs disease, immunity to the poisoned condition.',
+    'Sending Stones (pair) — cast Sending once per day between the paired stones.',
+    'Stone of Good Luck — +1 to ability checks and saving throws while carried.',
+    'Wind Fan — cast Gust of Wind (save DC 13) once. 20% chance it won\'t work again.',
+  ],
+  rare: [
+    'Amulet of the Planes — attempt to cast Plane Shift (DC 15 Int, or land somewhere random).',
+    'Belt of Hill Giant Strength — Strength becomes 21.',
+    'Boots of Speed — double speed; attackers have disadvantage. 10 min/day.',
+    'Bracers of Defense — +2 to AC when not wearing armor or using a shield.',
+    'Cloak of Displacement — attackers have disadvantage until you take damage each turn.',
+    'Helm of Telepathy — detect thoughts at will; suggestion once per day.',
+    'Necklace of Fireballs — 1d6+3 beads, each casts Fireball (save DC 15).',
+    'Ring of Evasion — 3 charges, use a reaction to succeed on a failed Dex save.',
+    'Ring of Feather Falling — fall at 60 ft/round, take no falling damage.',
+    'Rope of Entanglement — command word causes it to entangle (DC 15 Str to escape).',
+    'Staff of Charming — 10 charges: Charm Person, Comprehend Languages, Speak with Animals.',
+    'Sword of Life Stealing — on crit vs a creature (not undead/construct), gain 10 temp HP.',
+  ],
+  'very rare': [
+    'Amulet of the Planes — functions reliably (DC 15 Int to pick destination).',
+    'Carpet of Flying — 4 sizes, moves at 80ft, carries up to 400/800lb.',
+    'Cloak of Invisibility — invisible while wearing and hood up. 2 hr/day.',
+    'Crystal Ball — scrying focus; see creatures or places (DC 17 Wis).',
+    'Dancing Sword — bonus action to launch; flies 30ft, attacks for 4 rounds.',
+    'Helm of Brilliance — 10 diamonds, 20 rubies, 30 fire opals, 40 opals. Various effects.',
+    'Manual of Golems — follow instructions to create a specific golem.',
+    'Ring of Regeneration — regain 1d6 HP every 10 minutes. Regrows lost limbs in 1d6+1 days.',
+    'Ring of Shooting Stars — 6 charges: Faerie Fire, Ball Lightning (4d8), Shooting Stars (1d6×4).',
+    'Spellguard Shield — advantage on saves vs spells; spell attack rolls against you have disadvantage.',
+    'Staff of Power — 20 charges; Cone of Cold, Fireball, Globe of Invulnerability, etc.',
+    'Sword of Sharpness — on a roll of 20, target loses a limb (or 6d8 extra slashing). Objects take max damage.',
+  ],
+  legendary: [
+    'Apparatus of Kwalish — a mechanical lobster-shaped vehicle. Fully submersible.',
+    'Armor of Invulnerability — resistance to non-magical damage; immune 10 min/day.',
+    'Belt of Cloud Giant Strength — Strength becomes 27.',
+    'Cloak of Invisibility (Legendary) — no time limit. Doesn\'t impede spellcasting.',
+    'Cubic Gate — six sides, each attuned to a different plane. Three charges.',
+    'Deck of Many Things — draw a card, face the consequences. Many are catastrophic.',
+    'Hammer of Thunderbolts — bonus to attack/damage vs giants; stun on a 20; kills a giant on 20.',
+    'Holy Avenger — +3, deals 2d10 radiant on hit; aura of protection 10ft.',
+    'Iron Flask — capture extraplanar beings. Release as a controlled servant.',
+    'Ring of Three Wishes — cast Wish three times. Then it becomes a mundane ring.',
+    'Sphere of Annihilation — a 2-ft sphere of nothingness. Destroys everything it touches.',
+    'Staff of the Magi — 50 charges; Arcane Lock, Detect Magic, Enlarge/Reduce, Fireball, Fly, etc.',
+  ],
+};
+
+function genItem(){
+  const rarity = document.getElementById('item-rarity').value;
+  const r = rarity==='any' ? pick(['common','common','uncommon','uncommon','rare','rare','very rare','legendary']) : rarity;
+  const arr = MAGIC_ITEMS[r] || MAGIC_ITEMS.uncommon;
+  const result = `[${r.toUpperCase()}] ${pick(arr)}`;
+  setResult('item-result', result);
+  addToHistory('item-history', result);
+  window._lastItem = result;
+}
+
+function genItemSend(){
+  if(!window._lastItem) genItem();
+  const card = mkCard('treas-list',[
+    {cols:4,items:[{key:'tr-name',label:'Item / Reward',placeholder:''},{key:'tr-type',label:'Type',placeholder:'Magic'},{key:'tr-meth',label:'Method',placeholder:'Random'},{key:'tr-for',label:'Best For',placeholder:'Any'}]},
+    {cols:1,items:[{key:'tr-desc',label:'Description / Lore',type:'textarea',rows:1,placeholder:'',span:true}]}
+  ]);
+  if(card && window._lastItem){
+    const parts = window._lastItem.split('] ');
+    const name = parts[1] ? parts[1].split(' —')[0] : window._lastItem;
+    const desc = parts[1] || '';
+    const nm=card.querySelector('[data-key="tr-name"]');if(nm)nm.value=name;
+    const dc=card.querySelector('[data-key="tr-desc"]');if(dc)dc.value=desc;
+    const tp=card.querySelector('[data-key="tr-type"]');if(tp)tp.value='Magic Item';
+    const mt=card.querySelector('[data-key="tr-meth"]');if(mt)mt.value='Random';
+  }
+  const btn=document.querySelector('[data-ac="tab-s8"]');if(btn)sw('s8',btn);
+}
+
+// ── TRAPS ──
+const TRAPS = [
+  'Poison Dart Trap — triggered by pressure plate. Dart fires from hidden hole in wall. +8 to hit; 2d10 piercing + 2d10 poison; DC14 Con or poisoned 1 hour.',
+  'Pit Trap — hinged floor panel, camouflaged. DC15 Perception (passive) to notice. 2d6 bludgeoning per 10ft fallen.',
+  'Rolling Boulder — motion triggers boulder from alcove above. Dex save DC15 or 6d10 bludgeoning and knocked prone.',
+  'Alarm Bell — thin wire across the path connected to a bell. DC12 Perception. Wakes and alerts all creatures within 300ft.',
+  'Collapsing Ceiling — weight plate triggers ceiling drop. DC14 Dex save or 6d6 bludgeoning, restrained under rubble (DC17 Str to escape).',
+  'Blade Pendulum — scything blades drop when tripwire cut. DC14 Dex save or 3d8 slashing.',
+  'Locking Room — door seals once party is inside; room fills with water. 30ft × 30ft room, water rises 1ft per round. DC20 Str to force door.',
+  'Magical Glyph — Glyph of Warding on a door or chest. Fireball (8d6 fire, DC15 Dex) or Blindness/Deafness (DC15 Con).',
+  'False Step — certain step on a staircase depresses 1 inch and releases a jet of steam. DC12 Dex or 2d6 fire; all other creatures in 10ft aware of the trap location.',
+  'Sleep Gas — breaking a clay seal releases colourless gas. DC14 Con save or fall unconscious 8 hours (1 hour on success). Dissipates in 1 minute.',
+  'Mimic Door — the door is a mimic. Adhesive triggers on touch. +8 to hit; 2d8+5 bludgeoning. Will try to consume one creature before fleeing.',
+  'Teleportation Circle — steps on the circle teleport the creature to a locked cell elsewhere in the dungeon.',
+  'Net Launcher — hidden mechanism fires weighted net. DC13 Dex or restrained (DC17 Str or DC15 Slashing to escape).',
+  'Ooze Vat — disturbing the wrong object upends a vat, releasing a grey ooze from a chute in the ceiling.',
+  'Symbol of Discord — magical glyph. Creatures that read it must make DC16 Cha save or attack the nearest creature for 1 minute.',
+];
+
+function genTrap(){
+  const result = pick(TRAPS);
+  setResult('trap-result', result);
+  addToHistory('trap-history', result);
+}
+
+// ── STRONG STARTS ──
+const STRONG_STARTS = [
+  'The party is ambushed mid-rest. Their camp is on fire. One of them is already missing.',
+  'A dying messenger reaches them with the last words: "It\'s already too late. Don\'t go to—" and then nothing.',
+  'They wake up somewhere they don\'t recognise, armed but with no memory of the last six hours.',
+  'A chase is already in progress — they are either the chasers or the chased. Decide which.',
+  'The person they were supposed to meet is dead when they arrive. Recently. The killer is still in the building.',
+  'An explosion. Close. Buildings collapsing. In the chaos, someone presses a package into their hands and runs.',
+  'They\'re mid-trial. Someone is accusing one of them of a crime. The judge is about to deliver a verdict.',
+  'A voice in all their heads simultaneously: a plea for help, a location, then silence.',
+  'They\'re being paid to guard something. The thing they\'re guarding is gone. They were on watch.',
+  'The city gates are closing. A herald announces the name of someone the party knows as a traitor.',
+  'A figure they recognise — someone they believed dead — passes them in the street without recognition.',
+  'They arrive at their destination to find it already occupied by another group with the same instructions.',
+  'Mid-conversation, the NPC they\'re meeting stops speaking, writes a single word, and hands it over: "RUN."',
+  'A child approaches and hands them a note from a name they know. The note contains the details of their current plan. All of it.',
+  'The festival in town turns violent without warning. In the chaos a specific face appears — someone who should be in prison.',
+  'The ship they are on hits something. There\'s no rock on any chart at this location.',
+  'They find a journal. The last entry describes this exact moment.',
+  'A faction they helped last session sends word: everything they helped build has been undone overnight.',
+  'A magical alarm they set has triggered. Something came for the thing they were protecting.',
+  'Someone slides a key under their door. No note. The key has a crest on it they recognise — from a dream.',
+];
+
+function genStart(){
+  const result = pick(STRONG_STARTS);
+  setResult('start-result', result);
+  addToHistory('start-history', result);
+  window._lastStart = result;
+}
+
+function genStartSend(){
+  if(!window._lastStart) genStart();
+  const el = document.getElementById('strong-start');
+  if(el){
+    if(el.value.trim()) el.value += '\n\n[Generated]: '+window._lastStart;
+    else el.value = window._lastStart;
+  }
+  const btn=document.querySelector('[data-ac="tab-s2"]');if(btn)sw('s2',btn);
+}
+
+// ── WIRE RESULT CLICKS TO COPY ──
+['loc-result','enc-result','sec-result','town-result','item-result','trap-result','start-result'].forEach(id=>{
+  document.addEventListener('click', e=>{
+    if(e.target.id===id && e.target.textContent && e.target.textContent!=='Click to generate…'){
+      copyText(e.target.textContent);
+      const orig = e.target.style.background;
+      e.target.style.background='rgba(184,134,11,.25)';
+      setTimeout(()=>e.target.style.background=orig, 400);
+    }
+  });
+});
 
 </script>
 </body>
