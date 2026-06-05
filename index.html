@@ -30,14 +30,78 @@ body{background:var(--bg);background-image:radial-gradient(ellipse at 20% 20%,#2
 .meta{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin-bottom:1.5rem;padding:.9rem 1.1rem;background:rgba(180,130,60,.1);border:1px solid var(--parch-shadow);border-radius:2px}
 
 /* TABS */
-.tabs{display:flex;gap:0;margin-bottom:0;border-bottom:2px solid var(--parch-shadow);overflow-x:auto;scrollbar-width:thin;scrollbar-color:var(--parch-shadow) transparent;flex-wrap:nowrap;padding-bottom:2px}
-.tabs::-webkit-scrollbar{height:4px}
-.tabs::-webkit-scrollbar-track{background:transparent}
-.tabs::-webkit-scrollbar-thumb{background:var(--parch-shadow);border-radius:2px}
-.tabs-wrap{position:relative;margin-bottom:1.8rem}
-.tabs-arrow{display:none;position:absolute;top:0;bottom:0;width:32px;align-items:center;justify-content:center;background:linear-gradient(90deg,var(--parch) 60%,transparent);cursor:pointer;z-index:2;border:none;font-size:.9rem;color:var(--ink-light)}
-.tabs-arrow.right{right:0;background:linear-gradient(270deg,var(--parch) 60%,transparent)}
-@media(max-width:700px){.tabs-arrow{display:flex}}
+/* ── GROUPED TABS ── */
+.tab-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-bottom: 2rem;
+  border: 1px solid var(--parch-shadow);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.tab-group {
+  display: flex;
+  align-items: stretch;
+  border-bottom: 1px solid var(--parch-shadow);
+}
+.tab-group:last-child { border-bottom: none; }
+.tab-group-label {
+  font-family: 'Cinzel', serif;
+  font-size: .58rem;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+  background: rgba(180,130,60,.12);
+  border-right: 1px solid var(--parch-shadow);
+  padding: .5rem .7rem;
+  display: flex;
+  align-items: center;
+  min-width: 72px;
+  writing-mode: horizontal-tb;
+  white-space: nowrap;
+  font-weight: 600;
+}
+.tab-group-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  flex: 1;
+}
+.tb {
+  background: none;
+  border: none;
+  border-right: 1px solid rgba(180,130,60,.2);
+  border-bottom: 2px solid transparent;
+  padding: .5rem .85rem;
+  font-family: 'Cinzel', serif;
+  font-size: .65rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all .15s;
+  flex-shrink: 0;
+}
+.tb:last-child { border-right: none; }
+.tb:hover { background: rgba(180,130,60,.1); color: var(--ink); }
+.tb.active {
+  color: var(--red);
+  background: rgba(139,26,26,.07);
+  border-bottom-color: var(--red);
+  font-weight: 600;
+}
+@media (max-width: 600px) {
+  .tab-group { flex-direction: column; }
+  .tab-group-label {
+    writing-mode: horizontal-tb;
+    border-right: none;
+    border-bottom: 1px solid var(--parch-shadow);
+    min-width: unset;
+  }
+  .tb { font-size: .6rem; padding: .45rem .6rem; }
+}
 .tb{background:none;border:none;border-bottom:3px solid transparent;padding:.5rem .85rem;font-family:'Cinzel',serif;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-light);cursor:pointer;white-space:nowrap;transition:all .2s;margin-bottom:-2px}
 .tb:hover{color:var(--red)}
 .tb.active{color:var(--red);border-bottom-color:var(--red);font-weight:600}
@@ -615,27 +679,38 @@ canvas#web-canvas:active { cursor: grabbing; }
 </div>
 
 <!-- TABS -->
-<div class="tabs-wrap" id="tabs-wrap">
-  <button class="tabs-arrow left" id="tabs-left" data-ac="fn-tabsLeft">‹</button>
-  <nav class="tabs" id="tabs-nav">
-  <button class="tb active" data-ac="tab-s1">① Characters</button>
-  <button class="tb" data-ac="tab-s2">② Strong Start</button>
-  <button class="tb" data-ac="tab-s3">③ Scenes</button>
-  <button class="tb" data-ac="tab-s4">④ Secrets</button>
-  <button class="tb" data-ac="tab-s5">⑤ Locations</button>
-  <button class="tb" data-ac="tab-s6">⑥ NPCs</button>
-  <button class="tb" data-ac="tab-s7">⑦ Monsters</button>
-  <button class="tb" data-ac="tab-s8">⑧ Treasure</button>
-  <button class="tb" data-ac="tab-init">⚔ Initiative</button>
-  <button class="tb" data-ac="tab-camp">📜 Campaign</button>
-  <button class="tb" data-ac="tab-post">✦ Post-Session</button>
-  <button class="tb" data-ac="tab-hist">📚 History</button>
-  <button class="tb" data-ac="tab-mdb">👾 Monster DB</button>
-  <button class="tb" data-ac="tab-cond">🩹 Conditions</button>
-  <button class="tb" data-ac="tab-web">🕸 Relationships</button>
-  <button class="tb" data-ac="tab-gen">🎲 Generators</button>
-</nav>
-  <button class="tabs-arrow right" id="tabs-right" data-ac="fn-tabsRight">›</button>
+<div class="tab-groups" id="tab-groups">
+  <div class="tab-group">
+    <div class="tab-group-label">Prep Steps</div>
+    <div class="tab-group-row">
+      <button class="tb active" data-ac="tab-s1">① Characters</button>
+      <button class="tb" data-ac="tab-s2">② Strong Start</button>
+      <button class="tb" data-ac="tab-s3">③ Scenes</button>
+      <button class="tb" data-ac="tab-s4">④ Secrets</button>
+      <button class="tb" data-ac="tab-s5">⑤ Locations</button>
+      <button class="tb" data-ac="tab-s6">⑥ NPCs</button>
+      <button class="tb" data-ac="tab-s7">⑦ Monsters</button>
+      <button class="tb" data-ac="tab-s8">⑧ Treasure</button>
+    </div>
+  </div>
+  <div class="tab-group">
+    <div class="tab-group-label">At The Table</div>
+    <div class="tab-group-row">
+      <button class="tb" data-ac="tab-init">⚔ Initiative</button>
+      <button class="tb" data-ac="tab-mdb">👾 Monsters</button>
+      <button class="tb" data-ac="tab-cond">🩹 Conditions</button>
+      <button class="tb" data-ac="tab-gen">🎲 Generators</button>
+    </div>
+  </div>
+  <div class="tab-group">
+    <div class="tab-group-label">Campaign</div>
+    <div class="tab-group-row">
+      <button class="tb" data-ac="tab-camp">📜 Campaign</button>
+      <button class="tb" data-ac="tab-web">🕸 Relationships</button>
+      <button class="tb" data-ac="tab-post">✦ Post-Session</button>
+      <button class="tb" data-ac="tab-hist">📚 History</button>
+    </div>
+  </div>
 </div>
 
 <!-- ══ S1: CHARACTERS ══ -->
@@ -1306,8 +1381,8 @@ document.addEventListener('click', function(e) {
     'fn-loadCarryForward': loadCarryForward,
     'fn-closeParse': closeParseModal,
     'fn-parseAndLoad': parseAndLoad,
-    'fn-tabsLeft': () => scrollTabs(-120),
-    'fn-tabsRight': () => scrollTabs(120),
+    'fn-tabsLeft': () => {},
+    'fn-tabsRight': () => {},
     'fn-webAddNode': webAddNodeDispatch,
     'fn-webAddRel': webAddRelDispatch,
     'fn-webDeleteNode': webDeleteNodeDispatch,
@@ -2073,8 +2148,7 @@ window.addEventListener('DOMContentLoaded',()=>{
     if(!webCanvas || !webCtx){ setTimeout(webInit, 50); }
     else { webSyncPCs(); }  // re-sync every time tab is opened
   });
-  const tabsNav = document.getElementById('tabs-nav');
-  if(tabsNav){ tabsNav.addEventListener('scroll', updateTabArrows); setTimeout(updateTabArrows,100); }
+  // tab scroll arrows removed — using grouped layout now
 });
 
 async function autoLoadCharacters(){
@@ -2116,23 +2190,7 @@ async function autoLoadCharacters(){
   }
 }
 
-// ══════════════════════════════════════════════════════
-//  TABS SCROLL
-// ══════════════════════════════════════════════════════
-function scrollTabs(delta){
-  const nav = document.getElementById('tabs-nav');
-  if(nav) nav.scrollBy({left: delta, behavior: 'smooth'});
-}
-
-// Update arrow visibility
-function updateTabArrows(){
-  const nav = document.getElementById('tabs-nav');
-  const left = document.getElementById('tabs-left');
-  const right = document.getElementById('tabs-right');
-  if(!nav||!left||!right) return;
-  left.style.display = nav.scrollLeft > 10 ? 'flex' : 'none';
-  right.style.display = nav.scrollLeft < nav.scrollWidth - nav.clientWidth - 10 ? 'flex' : 'none';
-}
+// scrollTabs / updateTabArrows removed — using grouped tab layout
 
 // ══════════════════════════════════════════════════════
 //  MONSTER DATABASE (D&D 5e SRD)
