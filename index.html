@@ -338,6 +338,125 @@ textarea.tall{min-height:90px}
   font-size: .8rem; color: var(--blue);
 }
 
+
+/* ═══════════════════ CONDITIONS ═══════════════════ */
+.cond-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: .7rem;
+}
+.cond-card {
+  background: rgba(180,130,60,.07);
+  border: 1px solid rgba(180,130,60,.3);
+  border-left: 4px solid var(--red);
+  border-radius: 0 2px 2px 0;
+  padding: .7rem .9rem;
+  cursor: pointer;
+  transition: background .15s;
+}
+.cond-card:hover { background: rgba(180,130,60,.15); }
+.cond-card.open { background: rgba(139,26,26,.07); border-left-color: var(--gold); }
+.cond-card-name {
+  font-family: 'Cinzel', serif;
+  font-size: .82rem; font-weight: 600;
+  color: var(--red); letter-spacing: .08em;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.cond-card-name .cond-icon { font-size: 1rem; }
+.cond-card-summary {
+  font-family: 'IM Fell English', serif;
+  font-style: italic; font-size: .8rem;
+  color: var(--ink-light); margin-top: .2rem;
+}
+.cond-card-detail {
+  display: none; margin-top: .6rem;
+  padding-top: .6rem;
+  border-top: 1px solid rgba(180,130,60,.25);
+}
+.cond-card.open .cond-card-detail { display: block; }
+.cond-card-detail ul {
+  padding-left: 1.1rem;
+  font-family: 'Crimson Text', serif;
+  font-size: .95rem; line-height: 1.6; color: var(--ink);
+}
+.cond-card-detail li { margin-bottom: .2rem; }
+.cond-apply-bar {
+  margin-top: .7rem; display: flex; gap: .4rem; align-items: center; flex-wrap: wrap;
+}
+
+/* ═══════════════════ RELATIONSHIP WEB ═══════════════════ */
+.web-container {
+  background: rgba(26,10,4,.04);
+  border: 1px solid var(--parch-shadow);
+  border-radius: 3px;
+  overflow: hidden;
+  position: relative;
+}
+.web-toolbar {
+  display: flex; gap: .6rem; align-items: center; flex-wrap: wrap;
+  padding: .7rem .9rem;
+  background: rgba(139,26,26,.08);
+  border-bottom: 1px solid rgba(180,130,60,.25);
+}
+.web-toolbar-title {
+  font-family: 'Cinzel', serif; font-size: .75rem;
+  font-weight: 600; color: var(--red); letter-spacing: .1em;
+  text-transform: uppercase; margin-right: .3rem;
+}
+canvas#web-canvas {
+  display: block; width: 100%; cursor: grab;
+  background: rgba(244,232,193,.25);
+}
+canvas#web-canvas:active { cursor: grabbing; }
+.web-node-panel {
+  position: absolute; top: .7rem; right: .7rem;
+  background: var(--parch);
+  background-image: linear-gradient(160deg,#f8eecc,#eed9a0);
+  border: 1px solid var(--parch-shadow);
+  box-shadow: 0 2px 12px rgba(0,0,0,.25);
+  border-radius: 3px; padding: .9rem 1.1rem;
+  min-width: 220px; max-width: 280px;
+  display: none;
+  animation: fi .2s ease;
+}
+.web-node-panel.open { display: block; }
+.web-node-panel-name {
+  font-family: 'Cinzel', serif; font-size: .88rem;
+  font-weight: 700; color: var(--red); margin-bottom: .5rem;
+}
+.web-node-panel-type {
+  font-family: 'IM Fell English', serif; font-style: italic;
+  font-size: .8rem; color: var(--ink-light); margin-bottom: .6rem;
+}
+.web-rel-list { max-height: 160px; overflow-y: auto; margin-bottom: .6rem; }
+.web-rel-item {
+  display: flex; align-items: center; gap: .4rem;
+  font-family: 'Crimson Text', serif; font-size: .88rem;
+  color: var(--ink); padding: .2rem 0;
+  border-bottom: 1px solid rgba(180,130,60,.15);
+}
+.web-rel-dot {
+  width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+}
+.web-add-rel {
+  display: grid; grid-template-columns: 1fr 1fr; gap: .4rem; margin-top: .5rem;
+}
+.web-legend {
+  padding: .5rem .9rem;
+  border-top: 1px solid rgba(180,130,60,.2);
+  display: flex; gap: 1rem; flex-wrap: wrap;
+}
+.web-legend-item {
+  display: flex; align-items: center; gap: .35rem;
+  font-family: 'Crimson Text', serif; font-size: .82rem; color: var(--ink-light);
+}
+.web-legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+.web-hint {
+  font-family: 'IM Fell English', serif; font-style: italic;
+  font-size: .8rem; color: var(--ink-light); opacity: .7;
+  padding: .4rem .9rem; border-top: 1px solid rgba(180,130,60,.15);
+}
+
 </style>
 </head>
 <body>
@@ -374,6 +493,8 @@ textarea.tall{min-height:90px}
   <button class="tb" data-ac="tab-post">✦ Post-Session</button>
   <button class="tb" data-ac="tab-hist">📚 History</button>
   <button class="tb" data-ac="tab-mdb">👾 Monster DB</button>
+  <button class="tb" data-ac="tab-cond">🩹 Conditions</button>
+  <button class="tb" data-ac="tab-web">🕸 Relationships</button>
 </nav>
   <button class="tabs-arrow right" id="tabs-right" data-ac="fn-tabsRight">›</button>
 </div>
@@ -645,6 +766,89 @@ textarea.tall{min-height:90px}
   </div>
 </div>
 
+<!-- ══ CONDITIONS ══ -->
+<div id="tab-cond" class="pane">
+  <div class="sec">
+    <div class="stitle">🩹 Condition Reference</div>
+    <p class="shint">All 15 D&amp;D 5e conditions with full mechanical effects. Click to expand. Use "Apply to Initiative" to add a condition to a combatant mid-combat.</p>
+    <div class="cond-grid" id="cond-grid"></div>
+  </div>
+</div>
+
+<!-- ══ RELATIONSHIP WEB ══ -->
+<div id="tab-web" class="pane">
+  <div class="sec">
+    <div class="stitle">🕸 Relationship Web</div>
+    <p class="shint">Drag nodes to arrange. Click a node to see its connections and add relationships. Player characters load automatically from your GitHub sheets.</p>
+
+    <div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:.8rem;align-items:end">
+      <div style="flex:1;min-width:160px">
+        <label>Add Person / Faction / Place</label>
+        <input type="text" id="web-new-name" placeholder="e.g. Albus, Thieves Guild, Waterdeep">
+      </div>
+      <div>
+        <label>Type</label>
+        <select id="web-new-type">
+          <option value="npc">NPC</option>
+          <option value="faction">Faction</option>
+          <option value="location">Location</option>
+          <option value="concept">Concept / Secret</option>
+        </select>
+      </div>
+      <button class="abtn" data-ac="fn-webAddNode" style="align-self:end">+ Add Node</button>
+      <button class="abtn" data-ac="fn-webReset" style="align-self:end;color:var(--red)">Reset Web</button>
+      <button class="abtn" data-ac="fn-webSave" style="align-self:end;border-color:var(--green);color:var(--green)">💾 Save Web</button>
+    </div>
+
+    <div class="web-container">
+      <canvas id="web-canvas" height="520"></canvas>
+      <div class="web-node-panel" id="web-node-panel">
+        <div class="web-node-panel-name" id="wnp-name"></div>
+        <div class="web-node-panel-type" id="wnp-type"></div>
+        <div class="web-rel-list" id="wnp-rels"></div>
+        <div style="font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-light);margin-bottom:.3rem">Add Relationship</div>
+        <div class="web-add-rel">
+          <div>
+            <label>To</label>
+            <select id="wnp-rel-target" style="font-size:.85rem"></select>
+          </div>
+          <div>
+            <label>Type</label>
+            <select id="wnp-rel-type" style="font-size:.85rem">
+              <option value="ally">Ally</option>
+              <option value="enemy">Enemy</option>
+              <option value="neutral">Neutral</option>
+              <option value="romantic">Romantic</option>
+              <option value="family">Family</option>
+              <option value="rivalry">Rivalry</option>
+              <option value="secret">Secret</option>
+              <option value="debt">Owes Debt</option>
+              <option value="member">Member Of</option>
+            </select>
+          </div>
+        </div>
+        <div style="margin-top:.4rem">
+          <label>Note (optional)</label>
+          <input type="text" id="wnp-rel-note" placeholder="e.g. 20 years of grief" style="font-size:.88rem">
+        </div>
+        <div style="display:flex;gap:.4rem;margin-top:.5rem;flex-wrap:wrap">
+          <button class="abtn" data-ac="fn-webAddRel" style="font-size:.62rem">+ Add Link</button>
+          <button class="abtn" data-ac="fn-webDeleteNode" style="font-size:.62rem;color:var(--red)">🗑 Delete Node</button>
+          <button class="abtn" data-ac="fn-webClosePanel" style="font-size:.62rem">Close</button>
+        </div>
+      </div>
+    </div>
+    <div class="web-legend">
+      <span class="web-legend-item"><span class="web-legend-dot" style="background:#8b1a1a"></span>PC</span>
+      <span class="web-legend-item"><span class="web-legend-dot" style="background:#1a2a4a"></span>NPC</span>
+      <span class="web-legend-item"><span class="web-legend-dot" style="background:#1a4a2e"></span>Faction</span>
+      <span class="web-legend-item"><span class="web-legend-dot" style="background:#5a3a12"></span>Location</span>
+      <span class="web-legend-item"><span class="web-legend-dot" style="background:#4a1a4a"></span>Concept</span>
+    </div>
+    <div class="web-hint">Drag nodes · Click to edit connections · Web saves automatically</div>
+  </div>
+</div>
+
 <!-- ACTION BAR -->
 <div class="actbar">
   <div style="display:flex;gap:.55rem;flex-wrap:wrap">
@@ -733,6 +937,12 @@ document.addEventListener('click', function(e) {
     'fn-parseAndLoad': parseAndLoad,
     'fn-tabsLeft': () => scrollTabs(-120),
     'fn-tabsRight': () => scrollTabs(120),
+    'fn-webAddNode': webAddNodeDispatch,
+    'fn-webAddRel': webAddRelDispatch,
+    'fn-webDeleteNode': webDeleteNodeDispatch,
+    'fn-webClosePanel': webClosePanelDispatch,
+    'fn-webReset': webResetDispatch,
+    'fn-webSave': webSaveDispatch,
     'fn-filterMonsters': filterMonsters,
   };
   if (fnMap[ac]) fnMap[ac](e);
@@ -924,6 +1134,8 @@ function renderChar(c){
   if(chevEl) chevEl.classList.add('open');
   // Wrap spell names with tooltip triggers
   wrapSpellsInElement(div);
+  // Sync to relationship web
+  if(typeof webSyncPCs === 'function') webSyncPCs();
 }
 
 function toggleCS(id){
@@ -1478,6 +1690,11 @@ window.addEventListener('DOMContentLoaded',()=>{
   filterMonsters();
   initSpellUI();
   setTimeout(()=>wrapSpellsInElement(document.body), 600);
+  renderConditions();
+  // Init web when its tab is first clicked
+  document.querySelector('[data-ac="tab-web"]').addEventListener('click', ()=>{
+    if(!webCanvas){ setTimeout(webInit, 50); }
+  });
   const tabsNav = document.getElementById('tabs-nav');
   if(tabsNav){ tabsNav.addEventListener('scroll', updateTabArrows); setTimeout(updateTabArrows,100); }
 });
@@ -2097,6 +2314,598 @@ function wrapSpellsInElement(el){
     }
   });
 }
+
+
+// ══════════════════════════════════════════════════════
+//  CONDITIONS REFERENCE
+// ══════════════════════════════════════════════════════
+const CONDITIONS = [
+  {
+    name: 'Blinded', icon: '👁',
+    summary: 'Cannot see; attacks against you have advantage.',
+    effects: [
+      'A blinded creature can\'t see and automatically fails any ability check that requires sight.',
+      'Attack rolls against the creature have advantage.',
+      'The creature\'s attack rolls have disadvantage.'
+    ]
+  },
+  {
+    name: 'Charmed', icon: '💕',
+    summary: 'Cannot attack the charmer; charmer has advantage on social checks.',
+    effects: [
+      'A charmed creature can\'t attack the charmer or target the charmer with harmful abilities or magical effects.',
+      'The charmer has advantage on any ability check to interact socially with the creature.'
+    ]
+  },
+  {
+    name: 'Deafened', icon: '👂',
+    summary: 'Cannot hear; automatically fails hearing-based checks.',
+    effects: [
+      'A deafened creature can\'t hear and automatically fails any ability check that requires hearing.'
+    ]
+  },
+  {
+    name: 'Exhaustion', icon: '😴',
+    summary: 'Tiered condition — 6 levels, each worse than the last.',
+    effects: [
+      'Level 1: Disadvantage on ability checks.',
+      'Level 2: Speed halved.',
+      'Level 3: Disadvantage on attack rolls and saving throws.',
+      'Level 4: Hit point maximum halved.',
+      'Level 5: Speed reduced to 0.',
+      'Level 6: Death.',
+      'Finishing a long rest reduces exhaustion level by 1 (with food and water).'
+    ]
+  },
+  {
+    name: 'Frightened', icon: '😨',
+    summary: 'Disadvantage while source is visible; can\'t move closer to it.',
+    effects: [
+      'A frightened creature has disadvantage on ability checks and attack rolls while the source of its fear is within line of sight.',
+      'The creature can\'t willingly move closer to the source of its fear.'
+    ]
+  },
+  {
+    name: 'Grappled', icon: '🤼',
+    summary: 'Speed becomes 0; ends if grappler is incapacitated or moved away.',
+    effects: [
+      'A grappled creature\'s speed becomes 0, and it can\'t benefit from any bonus to its speed.',
+      'The condition ends if the grappler is incapacitated.',
+      'The condition also ends if an effect removes the grappled creature from the reach of the grappler or grappling effect.',
+      'Escape: use your action, make a Strength (Athletics) or Dexterity (Acrobatics) check contested by the grappler\'s Strength (Athletics).'
+    ]
+  },
+  {
+    name: 'Incapacitated', icon: '🚫',
+    summary: 'Cannot take actions or reactions.',
+    effects: [
+      'An incapacitated creature can\'t take actions or reactions.',
+      'Note: many other conditions (Paralyzed, Stunned, Unconscious) include this condition.'
+    ]
+  },
+  {
+    name: 'Invisible', icon: '👻',
+    summary: 'Cannot be seen; attacks against you have disadvantage.',
+    effects: [
+      'An invisible creature is impossible to see without the aid of magic or a special sense.',
+      'For the purpose of hiding, the creature is heavily obscured.',
+      'The creature\'s location can be detected by any noise it makes or any tracks it leaves.',
+      'Attack rolls against the creature have disadvantage, and the creature\'s attack rolls have advantage.'
+    ]
+  },
+  {
+    name: 'Paralyzed', icon: '⚡',
+    summary: 'Incapacitated, can\'t move or speak; attacks from within 5 ft are critical hits.',
+    effects: [
+      'A paralyzed creature is incapacitated and can\'t move or speak.',
+      'The creature automatically fails Strength and Dexterity saving throws.',
+      'Attack rolls against the creature have advantage.',
+      'Any attack that hits the creature is a critical hit if the attacker is within 5 feet of the creature.'
+    ]
+  },
+  {
+    name: 'Petrified', icon: '🪨',
+    summary: 'Turned to stone; incapacitated, immune to poison/disease, resistant to all damage.',
+    effects: [
+      'A petrified creature is transformed, along with any nonmagical object it is wearing or carrying, into a solid inanimate substance (usually stone).',
+      'Its weight increases by a factor of ten, and it ceases aging.',
+      'The creature is incapacitated, can\'t move or speak, and is unaware of its surroundings.',
+      'Attack rolls against the creature have advantage.',
+      'The creature automatically fails Strength and Dexterity saving throws.',
+      'The creature has resistance to all damage.',
+      'The creature is immune to poison and disease, although a poison or disease already in its system is suspended, not neutralized.'
+    ]
+  },
+  {
+    name: 'Poisoned', icon: '☠',
+    summary: 'Disadvantage on attack rolls and ability checks.',
+    effects: [
+      'A poisoned creature has disadvantage on attack rolls and ability checks.'
+    ]
+  },
+  {
+    name: 'Prone', icon: '⬇',
+    summary: 'Disadvantage on attacks; melee attacks against you have advantage, ranged have disadvantage.',
+    effects: [
+      'A prone creature\'s only movement option is to crawl, unless it stands up and thereby ends the condition.',
+      'The creature has disadvantage on attack rolls.',
+      'An attack roll against the creature has advantage if the attacker is within 5 feet of the creature. Otherwise, the attack roll has disadvantage.',
+      'Standing up costs half your movement speed.'
+    ]
+  },
+  {
+    name: 'Restrained', icon: '⛓',
+    summary: 'Speed 0; disadvantage on attacks and Dex saves; attacks against you have advantage.',
+    effects: [
+      'A restrained creature\'s speed becomes 0, and it can\'t benefit from any bonus to its speed.',
+      'Attack rolls against the creature have advantage, and the creature\'s attack rolls have disadvantage.',
+      'The creature has disadvantage on Dexterity saving throws.'
+    ]
+  },
+  {
+    name: 'Stunned', icon: '💫',
+    summary: 'Incapacitated; auto-fails Str/Dex saves; attacks against you have advantage.',
+    effects: [
+      'A stunned creature is incapacitated, can\'t move, and can speak only falteringly.',
+      'The creature automatically fails Strength and Dexterity saving throws.',
+      'Attack rolls against the creature have advantage.'
+    ]
+  },
+  {
+    name: 'Unconscious', icon: '💤',
+    summary: 'Incapacitated, prone; attacks from within 5 ft are critical hits.',
+    effects: [
+      'An unconscious creature is incapacitated, can\'t move or speak, and is unaware of its surroundings.',
+      'The creature drops whatever it\'s holding and falls prone.',
+      'The creature automatically fails Strength and Dexterity saving throws.',
+      'Attack rolls against the creature have advantage.',
+      'Any attack that hits the creature is a critical hit if the attacker is within 5 feet of the creature.'
+    ]
+  }
+];
+
+function renderConditions(){
+  const grid = document.getElementById('cond-grid');
+  if(!grid) return;
+  grid.innerHTML = '';
+  CONDITIONS.forEach((cond, i) => {
+    const card = document.createElement('div');
+    card.className = 'cond-card';
+    card.innerHTML = `
+      <div class="cond-card-name">
+        <span>${cond.name}</span>
+        <span class="cond-icon">${cond.icon}</span>
+      </div>
+      <div class="cond-card-summary">${cond.summary}</div>
+      <div class="cond-card-detail" id="cond-detail-${i}">
+        <ul>${cond.effects.map(e=>`<li>${e}</li>`).join('')}</ul>
+        <div class="cond-apply-bar">
+          <span style="font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-light)">Apply to:</span>
+          <select id="cond-apply-sel-${i}" style="font-size:.82rem;padding:.2rem .4rem;min-width:100px">
+            <option value="">— combatant —</option>
+          </select>
+          <button class="abtn" style="font-size:.6rem;padding:.2rem .55rem" data-cond-apply="${i}">Apply</button>
+        </div>
+      </div>`;
+    card.addEventListener('click', e => {
+      if(e.target.closest('[data-cond-apply]') || e.target.closest('select')) return;
+      card.classList.toggle('open');
+      // Populate combatant select when opened
+      if(card.classList.contains('open')){
+        const sel = document.getElementById('cond-apply-sel-'+i);
+        sel.innerHTML = '<option value="">— combatant —</option>';
+        combatants.forEach((cb, ci) => {
+          const opt = document.createElement('option');
+          opt.value = ci; opt.textContent = cb.name;
+          sel.appendChild(opt);
+        });
+      }
+    });
+    const applyBtn = card.querySelector('[data-cond-apply]');
+    if(applyBtn) applyBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      const sel = document.getElementById('cond-apply-sel-'+i);
+      const idx = parseInt(sel.value);
+      if(isNaN(idx)) return;
+      if(!combatants[idx].conditions.includes(cond.name)){
+        combatants[idx].conditions.push(cond.name);
+        renderInitList();
+      }
+      // Flash feedback
+      applyBtn.textContent = '✓';
+      setTimeout(()=>applyBtn.textContent='Apply', 1200);
+    });
+    grid.appendChild(card);
+  });
+}
+
+// ══════════════════════════════════════════════════════
+//  RELATIONSHIP WEB  (canvas-based force graph)
+// ══════════════════════════════════════════════════════
+const WEB_COLORS = {
+  pc:       '#8b1a1a',
+  npc:      '#1a2a4a',
+  faction:  '#1a4a2e',
+  location: '#5a3a12',
+  concept:  '#4a1a4a'
+};
+
+const REL_COLORS = {
+  ally:     '#1a4a2e',
+  enemy:    '#8b1a1a',
+  neutral:  '#7a5c2e',
+  romantic: '#8b1a4a',
+  family:   '#1a3a6a',
+  rivalry:  '#c0392b',
+  secret:   '#4a1a4a',
+  debt:     '#5a3a12',
+  member:   '#1a4a3a'
+};
+
+let webNodes = [];
+let webEdges = [];
+let webDragging = null;
+let webDragOffX = 0, webDragOffY = 0;
+let webSelectedNode = null;
+let webCanvas, webCtx;
+let webAnimFrame = null;
+
+function webInit(){
+  webCanvas = document.getElementById('web-canvas');
+  if(!webCanvas) return;
+  webCtx = webCanvas.getContext('2d');
+
+  // Size canvas
+  webResizeCanvas();
+  window.addEventListener('resize', webResizeCanvas);
+
+  // Load saved web
+  webLoad();
+
+  // If no nodes yet, seed with Warryn
+  if(webNodes.length === 0){
+    webAddNodeData('Warryn', 'pc');
+    webAddNodeData('Albus', 'npc');
+    webAddNodeData('Warryn\'s Wife', 'npc');
+    webAddEdge('Warryn', 'Albus', 'enemy', '20 years of grief — the man who took everything');
+    webAddEdge('Warryn', 'Warryn\'s Wife', 'romantic', 'Lost — left with Albus 20 years ago');
+    webAddEdge('Albus', 'Warryn\'s Wife', 'romantic', 'Stole her from Warryn');
+  }
+
+  // Pull in loaded PCs
+  webSyncPCs();
+
+  // Mouse / touch events
+  webCanvas.addEventListener('mousedown', webOnMouseDown);
+  webCanvas.addEventListener('mousemove', webOnMouseMove);
+  webCanvas.addEventListener('mouseup',   webOnMouseUp);
+  webCanvas.addEventListener('click',     webOnClick);
+  webCanvas.addEventListener('touchstart', webOnTouchStart, {passive:false});
+  webCanvas.addEventListener('touchmove',  webOnTouchMove,  {passive:false});
+  webCanvas.addEventListener('touchend',   webOnTouchEnd);
+
+  webRender();
+}
+
+function webResizeCanvas(){
+  if(!webCanvas) return;
+  const rect = webCanvas.parentElement.getBoundingClientRect();
+  webCanvas.width = rect.width || 800;
+  webCanvas.height = 520;
+}
+
+function webSyncPCs(){
+  loadedChars.forEach(ch => {
+    const existing = webNodes.find(n=>n.name===ch.name);
+    if(!existing) webAddNodeData(ch.name, 'pc');
+    else existing.type = 'pc';
+  });
+  webUpdateNodePanel();
+  webUpdateRelTarget();
+}
+
+function webAddNodeData(name, type){
+  if(webNodes.find(n=>n.name===name)) return;
+  const cx = webCanvas ? webCanvas.width/2 : 400;
+  const cy = webCanvas ? webCanvas.height/2 : 260;
+  const angle = Math.random()*Math.PI*2;
+  const r = 80 + Math.random()*160;
+  webNodes.push({
+    name, type,
+    x: cx + Math.cos(angle)*r,
+    y: cy + Math.sin(angle)*r,
+    vx: 0, vy: 0, r: 28
+  });
+}
+
+function webAddEdge(from, to, type, note=''){
+  const already = webEdges.find(e=>(e.from===from&&e.to===to)||(e.from===to&&e.to===from));
+  if(already){ already.type=type; already.note=note; return; }
+  webEdges.push({from, to, type, note});
+}
+
+function webGetNode(name){ return webNodes.find(n=>n.name===name); }
+
+function webNodeAt(x, y){
+  return webNodes.find(n => Math.hypot(n.x-x, n.y-y) <= n.r);
+}
+
+// ── MOUSE EVENTS ──
+function webOnMouseDown(e){
+  const {x,y} = webXY(e);
+  const node = webNodeAt(x,y);
+  if(node){ webDragging=node; webDragOffX=x-node.x; webDragOffY=y-node.y; webCanvas.style.cursor='grabbing'; }
+}
+function webOnMouseMove(e){
+  if(!webDragging) return;
+  const {x,y} = webXY(e);
+  webDragging.x = x - webDragOffX;
+  webDragging.y = y - webDragOffY;
+}
+function webOnMouseUp(){ webDragging=null; webCanvas.style.cursor='grab'; webSave(); }
+function webOnClick(e){
+  const {x,y} = webXY(e);
+  const node = webNodeAt(x,y);
+  if(node) webSelectNode(node);
+  else webClosePanel();
+}
+function webXY(e){
+  const rect = webCanvas.getBoundingClientRect();
+  const scaleX = webCanvas.width / rect.width;
+  const scaleY = webCanvas.height / rect.height;
+  return { x:(e.clientX-rect.left)*scaleX, y:(e.clientY-rect.top)*scaleY };
+}
+
+// ── TOUCH EVENTS ──
+function webOnTouchStart(e){ e.preventDefault(); const t=e.touches[0]; webOnMouseDown({clientX:t.clientX,clientY:t.clientY}); }
+function webOnTouchMove(e){ e.preventDefault(); const t=e.touches[0]; webOnMouseMove({clientX:t.clientX,clientY:t.clientY}); }
+function webOnTouchEnd(e){ webOnMouseUp(); }
+
+// ── NODE PANEL ──
+function webSelectNode(node){
+  webSelectedNode = node;
+  const panel = document.getElementById('web-node-panel');
+  document.getElementById('wnp-name').textContent = node.name;
+  document.getElementById('wnp-type').textContent = node.type.charAt(0).toUpperCase()+node.type.slice(1);
+  // List relationships
+  const relList = document.getElementById('wnp-rels');
+  const rels = webEdges.filter(e=>e.from===node.name||e.to===node.name);
+  if(rels.length===0){
+    relList.innerHTML = '<div style="font-family:\'IM Fell English\',serif;font-style:italic;font-size:.8rem;color:var(--ink-light)">No connections yet.</div>';
+  } else {
+    relList.innerHTML = rels.map(e=>{
+      const other = e.from===node.name ? e.to : e.from;
+      const col = REL_COLORS[e.type]||'#7a5c2e';
+      return `<div class="web-rel-item">
+        <span class="web-rel-dot" style="background:${col}"></span>
+        <span><strong>${e.type}</strong> → ${other}${e.note?` <em style="font-size:.78rem;color:var(--ink-light)"> · ${e.note}</em>`:''}</span>
+        <button style="margin-left:auto;background:none;border:none;color:var(--parch-shadow);cursor:pointer;font-size:.75rem" data-del-edge="${e.from}||${e.to}">✕</button>
+      </div>`;
+    }).join('');
+    relList.querySelectorAll('[data-del-edge]').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const [f,t]=btn.dataset.delEdge.split('||');
+        webEdges=webEdges.filter(e=>!(e.from===f&&e.to===t)&&!(e.from===t&&e.to===f));
+        webSelectNode(node); webSave();
+      });
+    });
+  }
+  webUpdateRelTarget();
+  panel.classList.add('open');
+}
+
+function webClosePanel(){
+  const panel = document.getElementById('web-node-panel');
+  if(panel) panel.classList.remove('open');
+  webSelectedNode = null;
+}
+
+function webUpdateRelTarget(){
+  const sel = document.getElementById('wnp-rel-target');
+  if(!sel) return;
+  const cur = sel.value;
+  sel.innerHTML = '<option value="">— select node —</option>';
+  webNodes.filter(n=>!webSelectedNode||n.name!==webSelectedNode.name).forEach(n=>{
+    const opt=document.createElement('option');opt.value=n.name;opt.textContent=n.name;sel.appendChild(opt);
+  });
+  if(cur) sel.value=cur;
+}
+
+function webUpdateNodePanel(){
+  if(webSelectedNode) webSelectNode(webSelectedNode);
+}
+
+// ── RENDER ──
+function webRender(){
+  if(!webCtx || !webCanvas) return;
+  const W=webCanvas.width, H=webCanvas.height;
+  webCtx.clearRect(0,0,W,H);
+
+  // Faint grid
+  webCtx.strokeStyle='rgba(180,130,60,.08)';
+  webCtx.lineWidth=1;
+  for(let x=0;x<W;x+=40){ webCtx.beginPath();webCtx.moveTo(x,0);webCtx.lineTo(x,H);webCtx.stroke(); }
+  for(let y=0;y<H;y+=40){ webCtx.beginPath();webCtx.moveTo(0,y);webCtx.lineTo(W,y);webCtx.stroke(); }
+
+  // Gentle repulsion to avoid overlap
+  for(let i=0;i<webNodes.length;i++){
+    for(let j=i+1;j<webNodes.length;j++){
+      const a=webNodes[i],b=webNodes[j];
+      const dx=b.x-a.x, dy=b.y-a.y;
+      const dist=Math.max(Math.hypot(dx,dy),1);
+      const minDist=a.r+b.r+20;
+      if(dist<minDist&&a!==webDragging&&b!==webDragging){
+        const force=(minDist-dist)/minDist*0.5;
+        a.x-=dx/dist*force*4; a.y-=dy/dist*force*4;
+        b.x+=dx/dist*force*4; b.y+=dy/dist*force*4;
+      }
+      // Keep in bounds
+      [a,b].forEach(n=>{
+        n.x=Math.max(n.r+4,Math.min(W-n.r-4,n.x));
+        n.y=Math.max(n.r+4,Math.min(H-n.r-4,n.y));
+      });
+    }
+  }
+
+  // Draw edges
+  webEdges.forEach(edge=>{
+    const fromN=webGetNode(edge.from), toN=webGetNode(edge.to);
+    if(!fromN||!toN) return;
+    const col = REL_COLORS[edge.type]||'#7a5c2e';
+    webCtx.save();
+    webCtx.strokeStyle=col;
+    webCtx.lineWidth=edge.type==='enemy'||edge.type==='rivalry'?2.5:1.8;
+    if(edge.type==='secret'){ webCtx.setLineDash([6,4]); }
+    else if(edge.type==='debt'){ webCtx.setLineDash([3,3]); }
+    else { webCtx.setLineDash([]); }
+    webCtx.globalAlpha=0.7;
+    webCtx.beginPath();
+    webCtx.moveTo(fromN.x,fromN.y);
+    webCtx.lineTo(toN.x,toN.y);
+    webCtx.stroke();
+
+    // Edge label
+    const mx=(fromN.x+toN.x)/2, my=(fromN.y+toN.y)/2;
+    webCtx.setLineDash([]);
+    webCtx.globalAlpha=1;
+    webCtx.fillStyle=col;
+    webCtx.font='bold 9px Cinzel, serif';
+    webCtx.textAlign='center';
+    webCtx.textBaseline='middle';
+    const label=edge.type.toUpperCase();
+    const lw=webCtx.measureText(label).width;
+    webCtx.fillStyle='rgba(244,232,193,.85)';
+    webCtx.fillRect(mx-lw/2-3,my-7,lw+6,14);
+    webCtx.fillStyle=col;
+    webCtx.fillText(label,mx,my);
+    webCtx.restore();
+  });
+
+  // Draw nodes
+  webNodes.forEach(node=>{
+    const col=WEB_COLORS[node.type]||'#7a5c2e';
+    const isSelected=webSelectedNode&&webSelectedNode.name===node.name;
+    webCtx.save();
+
+    // Shadow
+    webCtx.shadowColor='rgba(0,0,0,.25)';
+    webCtx.shadowBlur=8;
+
+    // Circle
+    webCtx.beginPath();
+    webCtx.arc(node.x,node.y,node.r,0,Math.PI*2);
+    webCtx.fillStyle=isSelected?'rgba(244,232,193,.95)':'rgba(244,232,193,.88)';
+    webCtx.fill();
+    webCtx.strokeStyle=col;
+    webCtx.lineWidth=isSelected?3.5:2;
+    webCtx.stroke();
+
+    webCtx.shadowBlur=0;
+
+    // Type dot
+    webCtx.beginPath();
+    webCtx.arc(node.x+node.r-6,node.y-node.r+6,5,0,Math.PI*2);
+    webCtx.fillStyle=col;
+    webCtx.fill();
+
+    // Name text — wrap if needed
+    webCtx.fillStyle='#2c1a0e';
+    webCtx.textAlign='center';
+    webCtx.textBaseline='middle';
+    const words=node.name.split(' ');
+    const maxW=node.r*1.6;
+    let lines=[],line='';
+    words.forEach(w=>{
+      const test=line?line+' '+w:w;
+      webCtx.font='bold 10px Crimson Text, serif';
+      if(webCtx.measureText(test).width>maxW&&line){ lines.push(line);line=w; }
+      else line=test;
+    });
+    if(line)lines.push(line);
+    const lineH=13, startY=node.y-(lines.length-1)*lineH/2;
+    lines.forEach((l,li)=>{
+      webCtx.font='bold 10px Crimson Text, serif';
+      webCtx.fillText(l,node.x,startY+li*lineH);
+    });
+
+    webCtx.restore();
+  });
+
+  webAnimFrame = requestAnimationFrame(webRender);
+}
+
+// ── PUBLIC ACTIONS (called from dispatch) ──
+function webAddNode(){
+  const nameEl=document.getElementById('web-new-name');
+  const typeEl=document.getElementById('web-new-type');
+  const name=nameEl.value.trim();
+  if(!name)return;
+  webAddNodeData(name,typeEl.value);
+  nameEl.value='';
+  webUpdateRelTarget();
+  webSave();
+}
+
+function webAddRel(){
+  if(!webSelectedNode)return;
+  const target=document.getElementById('wnp-rel-target').value;
+  const type=document.getElementById('wnp-rel-type').value;
+  const note=document.getElementById('wnp-rel-note').value.trim();
+  if(!target)return;
+  webAddEdge(webSelectedNode.name, target, type, note);
+  document.getElementById('wnp-rel-note').value='';
+  webSelectNode(webSelectedNode);
+  webSave();
+}
+
+function webDeleteNode(){
+  if(!webSelectedNode)return;
+  if(!confirm(`Delete "${webSelectedNode.name}" and all its connections?`))return;
+  webEdges=webEdges.filter(e=>e.from!==webSelectedNode.name&&e.to!==webSelectedNode.name);
+  webNodes=webNodes.filter(n=>n.name!==webSelectedNode.name);
+  webClosePanel();
+  webSave();
+}
+
+function webResetFn(){
+  if(!confirm('Reset the entire relationship web? This cannot be undone.'))return;
+  webNodes=[];webEdges=[];webSelectedNode=null;
+  webClosePanel();
+  localStorage.removeItem('lazy-dm-web');
+  // Re-seed
+  webAddNodeData('Warryn','pc');
+  webAddNodeData('Albus','npc');
+  webAddNodeData("Warryn's Wife",'npc');
+  webAddEdge('Warryn','Albus','enemy','The man who took everything');
+  webAddEdge('Warryn',"Warryn's Wife",'romantic','Lost — left with Albus');
+  webSyncPCs();
+}
+
+// ── SAVE / LOAD ──
+function webSave(){
+  localStorage.setItem('lazy-dm-web', JSON.stringify({
+    nodes: webNodes.map(n=>({name:n.name,type:n.type,x:n.x,y:n.y})),
+    edges: webEdges
+  }));
+}
+
+function webLoad(){
+  const raw=localStorage.getItem('lazy-dm-web');
+  if(!raw)return;
+  try{
+    const data=JSON.parse(raw);
+    if(data.nodes) webNodes=data.nodes.map(n=>({...n,vx:0,vy:0,r:28}));
+    if(data.edges) webEdges=data.edges;
+  }catch(e){ console.warn('Web load error',e); }
+}
+
+// ── DISPATCH WRAPPERS ──
+function webAddNodeDispatch(){ webAddNode(); }
+function webAddRelDispatch(){ webAddRel(); }
+function webDeleteNodeDispatch(){ webDeleteNode(); }
+function webClosePanelDispatch(){ webClosePanel(); }
+function webResetDispatch(){ webResetFn(); }
+function webSaveDispatch(){ webSave(); const s=document.getElementById('sst');s.classList.add('vis');setTimeout(()=>s.classList.remove('vis'),1500); }
 
 </script>
 </body>
