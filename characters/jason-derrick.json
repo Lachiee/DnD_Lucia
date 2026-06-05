@@ -1,0 +1,90 @@
+{
+  "name": "Derrick Willow Aleoi Yusaf Nate Erickson",
+  "player": "Derrick",
+  "size": "Small",
+  "race": "Rock Gnome",
+  "type": "humanoid",
+  "class": "Druid",
+  "subclass": "Circle of the Land (likely)",
+  "alignment": "Neutral Good",
+  "level": 2,
+  "ac": 10,
+  "hp": 27,
+  "hp_max": 27,
+  "hp_current": 27,
+  "hit_dice": "2d8",
+  "speed": "25 ft.",
+  "stats": [8, 7, 13, 17, 15, 12],
+  "saves": ["Int +5", "Wis +4"],
+  "skills": ["Medicine +4", "Religion +5", "Persuasion +3", "Arcana +3", "History +3", "Investigation +3", "Nature +3", "Animal Handling +2", "Insight +2", "Perception +2", "Survival +2", "Performance +1", "Deception +1"],
+  "languages": ["Common", "Gnomish", "Goblin", "Druidic (secret)"],
+  "proficiency": 2,
+  "passive_perception": 12,
+  "background": "Plaintiff (Legalese trait)",
+  "inspiration": false,
+  "equipment": [
+    "Hide armor",
+    "Wooden quarterstaff",
+    "Herbalism kit",
+    "Fine clothes",
+    "70 gp"
+  ],
+  "spells": ["Cure Wounds", "Entangle", "Grease", "Healing Word", "Mending (cantrip)", "Shape Water (cantrip)", "Moonbeam"],
+  "spellcasting": [
+    {
+      "name": "Druid Spellcasting (Wisdom)",
+      "desc": "Spell save DC 12; spell attack +4. 3 first-level spell slots. Cantrips: Mending, Shape Water. Prepared (4): Cure Wounds, Entangle, Grease (from Artificer Initiate), Healing Word."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Quarterstaff",
+      "desc": "Melee Weapon Attack: +0 to hit, reach 5 ft., one target. Hit: 3 (1d6-1) bludgeoning, or 2 (1d4-1) one-handed."
+    },
+    {
+      "name": "Cast a Spell",
+      "desc": "Spell save DC 12; spell attack +4. Slots: 3 (1st). Prepared: Cure Wounds, Entangle, Grease, Healing Word. Cantrips: Mending, Shape Water."
+    }
+  ],
+  "class_features": [
+    {
+      "name": "Druidic",
+      "desc": "Knows the secret language of druids. Can leave hidden messages understood only by other druids."
+    },
+    {
+      "name": "Wild Shape",
+      "desc": "Transform into a beast with CR 1/4 or lower (no flying or swimming speed). 2 uses per short/long rest. Duration: 1 hour."
+    },
+    {
+      "name": "Artificer Initiate (Feat)",
+      "desc": "Knows Mending cantrip. Can cast Grease once per long rest without a spell slot. Gains proficiency with one artisan tool."
+    }
+  ],
+  "traits": [
+    {
+      "name": "Gnome Cunning",
+      "desc": "Advantage on Intelligence, Wisdom, and Charisma saving throws against magic."
+    },
+    {
+      "name": "Artificer's Lore",
+      "desc": "Double proficiency on History checks related to magic items, alchemical objects, or technological devices."
+    },
+    {
+      "name": "Legalese (Background)",
+      "desc": "Advantage on checks to interpret, negotiate, or exploit legal and contractual text. Took law as an elective — can talk the talk but doesn't fully understand it."
+    },
+    {
+      "name": "Personality",
+      "desc": "Traits: Gambling addict. Experimentalist — tests foreign materials for medicinal purpose. Ideals: Will do anything to advance medical knowledge; the needs of the many outweigh the few. Flaws: Cannot read facial expressions or interpret emotions from body language. Thirst for experimentation regularly breaks moral boundaries — never misses a medical opportunity."
+    }
+  ],
+  "goals": [
+    "Become one of the greatest healers of his time",
+    "Gather foreign ingredients and medical knowledge from across the world",
+    "Return home to open a profitable medical centre",
+    "Feed his gambling addiction",
+    "Acquire money"
+  ],
+  "backstory": "A relatively young Rock Gnome who graduated from a prestigious local institution with ambitions of becoming the greatest healer of his generation. He studied law as an elective — enough to sound convincing but not enough to fully understand it.\n\nHe left home to adventure and explore foreign lands, seeking medical knowledge from beyond his home village's borders. His method is experimentation — testing unknown materials to discover their medicinal properties, a habit that frequently crosses moral lines.\n\nHis long-term plan: gather enough knowledge and ingredients, return home, and open a medical centre. The profit would fund his gambling addiction. He has befriended Blaine — details of that relationship are still being worked out.\n\nHe needs new robes.",
+  "notes": "Focus hooks on: gambling and money opportunities, mysterious or exotic ingredients he could experiment with. Has befriended Blaine — work out what assistance Blaine might provide. Needs new robes as an in-world goal. His AC (10) is dangerously low — he is extremely fragile in melee. His value is in healing (Cure Wounds, Healing Word) and control (Entangle, Grease). Low Str and Dex means his quarterstaff is essentially useless."
+}

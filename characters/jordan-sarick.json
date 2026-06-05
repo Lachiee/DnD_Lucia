@@ -1,0 +1,85 @@
+{
+  "name": "Sarick Quillbonk Xobar Stoutboots Jetor Squiggledust",
+  "player": "Sarick",
+  "size": "Small",
+  "race": "Rock Gnome",
+  "type": "humanoid",
+  "class": "Barbarian",
+  "subclass": "Path of the Berserker",
+  "alignment": "Neutral Good",
+  "level": 2,
+  "ac": 12,
+  "hp": 30,
+  "hp_max": 30,
+  "hp_current": 30,
+  "hit_dice": "2d12",
+  "speed": "25 ft.",
+  "stats": [14, 9, 13, 11, 13, 13],
+  "saves": ["Str +4", "Con +3"],
+  "skills": ["Animal Handling +3", "Intimidation +3", "Survival +3", "Athletics +2", "Insight +1", "Medicine +1", "Perception +1", "Deception +1", "Performance +1", "Persuasion +1"],
+  "languages": ["Common", "Gnomish"],
+  "proficiency": 2,
+  "passive_perception": 11,
+  "background": "Giant Foundling",
+  "inspiration": false,
+  "equipment": [
+    "Greataxe",
+    "Chain shirt",
+    "Explorer's pack",
+    "10 gp"
+  ],
+  "spells": [],
+  "spellcasting": [],
+  "actions": [
+    {
+      "name": "Greataxe",
+      "desc": "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 8 (1d12+2) slashing. While raging: 10 (1d12+4) slashing."
+    },
+    {
+      "name": "Reckless Attack",
+      "desc": "On his first attack of the turn, Sarick can choose to attack with advantage on all Strength melee attacks this turn. Until his next turn, attack rolls against him also have advantage."
+    }
+  ],
+  "class_features": [
+    {
+      "name": "Rage (2/long rest)",
+      "desc": "Bonus action to enter rage. While raging: advantage on Str checks and Str saves; +2 damage on Str-based melee weapon attacks; resistance to bludgeoning, piercing, and slashing damage. Ends if Sarick hasn't attacked or taken damage since his last turn, or if he falls unconscious."
+    },
+    {
+      "name": "Reckless Attack",
+      "desc": "On his first attack each turn, can choose to gain advantage on all Str-based melee attacks this turn. Attack rolls against him have advantage until his next turn."
+    },
+    {
+      "name": "Danger Sense",
+      "desc": "Advantage on Dexterity saving throws against effects he can see — including traps and spells. Doesn't apply while blinded, deafened, or incapacitated."
+    },
+    {
+      "name": "Unarmored Defense",
+      "desc": "While not wearing armor, AC = 10 + Dex mod (-1) + Con mod (+1) = 10. Currently wearing chain shirt (AC 13 + Dex, capped: 12 shown)."
+    },
+    {
+      "name": "Frenzy (Path of the Berserker — Level 3)",
+      "desc": "NOT YET UNLOCKED (available at level 3). When Sarick rages, he can choose to frenzy. For the duration he can make a single melee weapon attack as a bonus action each turn after the first. When the rage ends he suffers one level of exhaustion."
+    }
+  ],
+  "traits": [
+    {
+      "name": "Rock Gnome",
+      "desc": "Darkvision 60 ft. Gnome Cunning: advantage on Int/Wis/Cha saving throws against magic. Artificer's Lore: double proficiency on History checks about magic, tech, or alchemy. Tinker: construct tiny clockwork devices."
+    },
+    {
+      "name": "Giant Foundling (Background)",
+      "desc": "Raised among giants or their culture. Provides skill proficiencies listed above."
+    },
+    {
+      "name": "Personality",
+      "desc": "Trait: Curious and inquisitive. Bond: Easily distracted. He is an angry dude."
+    }
+  ],
+  "goals": [
+    "Collect interesting rocks",
+    "Fight things"
+  ],
+  "backstory": "A Rock Gnome barbarian raised in or around giant culture. Curious and easily distracted, but deeply angry underneath. Simple wants: rocks and combat. What fuels the anger is left to discover at the table.",
+  "notes": "Simple character with a big axe and a short temper. Key combat loop: Rage (bonus action) → Reckless Attack (advantage on greataxe) → deal significant damage while taking resistance to physical damage. Watch for Reckless Attack being used carelessly — it gives enemies advantage on him too. Frenzy unlocks at level 3 but comes with exhaustion cost — worth flagging when they level up. AC 12 is low; he relies on HP (30 is solid for level 2) and damage resistance while raging to survive. Gnome Cunning is surprisingly strong for a Barbarian — good saves vs magic."
+}

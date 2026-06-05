@@ -1,0 +1,104 @@
+{
+  "name": "Dorrik \"Rockpocket\"",
+  "player": "Dorrik",
+  "size": "Small",
+  "race": "Rock Gnome",
+  "type": "humanoid",
+  "class": "Paladin",
+  "subclass": "Oath of Devotion",
+  "alignment": "Chaotic Good",
+  "level": 2,
+  "ac": 19,
+  "hp": 34,
+  "hp_max": 34,
+  "hp_current": 34,
+  "hit_dice": "2d10",
+  "speed": "25 ft.",
+  "stats": [12, 8, 17, 15, 17, 9],
+  "saves": ["Str +1", "Dex -1", "Con +3", "Int +2", "Wis +5", "Cha +1"],
+  "skills": ["History +4", "Insight +5", "Survival +5", "Religion +4", "Athletics +1", "Perception +3", "Medicine +3", "Animal Handling +3", "Investigation +2", "Nature +2"],
+  "languages": ["Common", "Gnomish"],
+  "proficiency": 2,
+  "passive_perception": 13,
+  "background": "Fisher",
+  "inspiration": false,
+  "equipment": [
+    "Chain mail",
+    "Shield",
+    "Morningstar",
+    "Cook's Utensils",
+    "Basic Fishing Gear",
+    "Priest's Pack",
+    "10 gp"
+  ],
+  "spells": ["Divine Favor", "Shield of Faith", "Command"],
+  "spellcasting": [
+    {
+      "name": "Paladin Spellcasting (Charisma)",
+      "desc": "Spell save DC 9; spell attack +1. 2 first-level spell slots. Prepared spells: Divine Favor, Shield of Faith, Command."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Morningstar",
+      "desc": "Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 5 (1d8+1) bludgeoning."
+    },
+    {
+      "name": "Lay on Hands",
+      "desc": "Heal HP from a pool of 10 HP total. Spend 5 HP to cure a disease or neutralise a poison."
+    },
+    {
+      "name": "Cast a Spell",
+      "desc": "Spell save DC 9; spell attack +1. Slots: 2 (1st). Prepared: Divine Favor, Shield of Faith, Command."
+    }
+  ],
+  "class_features": [
+    {
+      "name": "Divine Sense",
+      "desc": "Sense celestials, fiends, and undead within 60 ft (not behind total cover) until end of next turn. Uses: 1 + Cha mod per long rest."
+    },
+    {
+      "name": "Lay on Hands",
+      "desc": "Pool of 10 HP. Restore HP as an action, or spend 5 HP to cure a disease or neutralise a poison. Replenishes on long rest."
+    },
+    {
+      "name": "Fighting Style — Defense",
+      "desc": "+1 AC while wearing armor. Already included in AC total."
+    },
+    {
+      "name": "Divine Smite",
+      "desc": "When Dorrik hits with a melee weapon attack, he may expend a spell slot to deal radiant damage: 2d8 for a 1st-level slot (+1d8 per slot level above 1st, max +5d8). +1d8 extra against undead or fiends."
+    },
+    {
+      "name": "Oath of Devotion — DM NOTE",
+      "desc": "Oath of Devotion is a rigid oath. Dorrik holds everyone — including himself — to the same strict standards of good. Watch for situations that might tempt him to break it. Breaking the oath makes him an Oathbreaker Paladin."
+    }
+  ],
+  "traits": [
+    {
+      "name": "Chef (Feat)",
+      "desc": "+1 Con (included). Proficiency with Cook's Utensils. Replenishing Meal: during a short rest, up to 4+PB creatures spending Hit Dice heal +1d8. Bolstering Treats: create PB treats per day, each granting PB temporary HP (lasts 8 hours)."
+    },
+    {
+      "name": "Rock Gnome",
+      "desc": "Darkvision 60 ft. Gnome Cunning: advantage on Int/Wis/Cha saving throws against magic. Artificer's Lore: double proficiency on History checks about magic, tech, or alchemy. Tinker: construct tiny clockwork devices."
+    },
+    {
+      "name": "Harvest the Water (Fisher Background)",
+      "desc": "Advantage on fishing checks. Can sustain a modest lifestyle by fishing alone and feed up to 10 people per day when near water."
+    },
+    {
+      "name": "Personality",
+      "desc": "Trait: My friends are my crew — we sink or float together. Ideal: Daring — the richest bounty goes to the bold. Bond: The gods saved me in a storm; I owe them my life. Flaw: A hard life makes empathy difficult."
+    }
+  ],
+  "goals": [
+    "Protect his companions like his crew",
+    "Honour the paladin who died saving him",
+    "Help Rock Gnome villages threatened by kobolds",
+    "Collect loot",
+    "Fish whenever possible"
+  ],
+  "backstory": "Dorrik grew up in Pebble-Push, a village squeezed between a large cave and the ocean, connected by a river running through an underground lake. His family were the village's front-line defenders against constant kobold raids, and Dorrik was destined to carry the family shield. He had a natural talent for cooking and fishing from childhood.\n\nWhen travelling paladins passed through, Dorrik fed them fresh fish in exchange for stories of the outside world. That night a massive kobold assault hit the village. Dorrik fought but nearly died — he was saved by the paladins, though one of them died protecting him. The attack was repelled and the kobold leader killed. The paladins left Dorrik a book on their faith and told him he was always welcome.\n\nYears later, Dorrik was out on a fishing charter when a freak storm struck. He saw a light in the clouds and believed it was a divine sign. He guided his crew to safety following it. When they returned to shore and made their way home, they found Pebble-Push in flames — the kobolds had planned the attack for when the village was weakest. Dorrik's childhood home burned. They were forced to flee.\n\nDorrik sought out the paladins' church and swore his Oath of Devotion. He became well known at the coven — one of the only Rock Gnome paladins, and beloved in the kitchen. When dwarf soldiers came through heading to retake Pebble-Push from the kobolds who had occupied it, Dorrik joined them. They wiped out the kobolds and Dorrik finally avenged his village. He then continued with the dwarves toward another Rock Gnome settlement, determined to use his strength to protect his kind.",
+  "notes": "Watch his Oath of Devotion — it is one of the strictest oaths, holding himself and everyone around him to rigid standards of good. Breaking the oath risks becoming an Oathbreaker. He is one of the only Rock Gnome paladins and is known for cooking. His spell save DC (9) and spell attack (+1) are low due to poor Charisma — his main value is as a melee frontliner with healing support."
+}
