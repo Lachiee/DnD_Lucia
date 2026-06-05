@@ -2794,6 +2794,7 @@ function addMonsterToStep7(m){
     setK('mn-name',m.name); setK('mn-cr',m.cr); setK('mn-hp',m.hp); setK('mn-ac',m.ac); setK('mn-n','1');
     setK('mn-tac', m.actions ? m.actions.split(',')[0] : '');
   }
+  if(card) addInitBtnToMonCard(card);
   const btn = document.querySelector('[data-ac="tab-s7"]');
   if(btn){ sw('s7', btn); }
 }
