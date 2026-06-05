@@ -693,6 +693,62 @@ canvas#web-canvas:active { cursor: grabbing; }
   margin-top: .2rem;
 }
 
+
+/* ═══════════════════ INITIATIVE GROUPS ═══════════════════ */
+.init-group {
+  border: 1px solid var(--parch-shadow);
+  border-left: 4px solid var(--red);
+  border-radius: 0 2px 2px 0;
+  margin-bottom: 2px;
+  overflow: hidden;
+  background: rgba(139,26,26,.04);
+}
+.init-group.active-turn { background: rgba(139,26,26,.12); border-left-color: var(--gold); }
+.init-group.dead { opacity: .4; }
+.init-group-header {
+  display: grid;
+  grid-template-columns: 16px 44px 36px 1fr 70px auto auto;
+  gap: .4rem;
+  align-items: center;
+  padding: .5rem .9rem;
+  transition: background .15s;
+}
+.init-group-header:hover { background: rgba(180,130,60,.1); }
+.init-group-chev {
+  font-size: .75rem;
+  color: var(--red);
+  transition: transform .15s;
+  user-select: none;
+}
+.init-group-members {
+  border-top: 1px solid rgba(180,130,60,.2);
+  background: rgba(244,232,193,.3);
+  padding: .4rem .6rem .4rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: .3rem;
+}
+.init-group-member {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .3rem .5rem;
+  background: rgba(255,255,255,.2);
+  border-radius: 2px;
+  border: 1px solid rgba(180,130,60,.2);
+  font-size: .9rem;
+}
+.init-group-member.dead {
+  opacity: .4;
+  text-decoration: line-through;
+}
+.init-member-name {
+  font-family: 'Crimson Text', serif;
+  font-size: .92rem;
+  color: var(--ink);
+  min-width: 80px;
+}
+
 </style>
 </head>
 <body>
@@ -986,6 +1042,7 @@ canvas#web-canvas:active { cursor: grabbing; }
         <div><label>Type</label><select id="new-type"><option value="pc">🧙 PC</option><option value="monster">👹 Monster</option><option value="npc">🧑 NPC</option></select></div>
         <div><label>Initiative</label><input type="number" id="new-init" placeholder="roll or enter"></div>
         <div><label>HP</label><input type="number" id="new-hp" placeholder="max hp"></div>
+        <div><label>Count</label><input type="number" id="new-count" placeholder="1" min="1" max="20" style="width:55px"></div>
         <div><label>AC</label><input type="number" id="new-ac" placeholder="ac"></div>
         <button class="btnp" data-ac="fn-addCombatant" style="padding:.55rem .8rem;font-size:.63rem;white-space:nowrap;align-self:end">+ Add</button>
       </div>
@@ -1983,44 +2040,154 @@ function renderInitList(){
   const sorted=[...combatants].map((c,i)=>({...c,origIdx:i})).sort((a,b)=>b.initiative-a.initiative);
   list.innerHTML='';
   sorted.forEach((c)=>{
-    const isDead=c.hp<=0;
-    const isActive=c.origIdx===currentTurn;
-    const typeIcon=c.type==='pc'?'🧙':c.type==='monster'?'👹':'🧑';
-    const row=document.createElement('div');
-    row.className='init-row'+(isActive?' active-turn':'')+(isDead?' dead':'');
-
-    const numDiv=document.createElement('div');numDiv.className='init-num';numDiv.textContent=c.initiative||'?';
-    const typeDiv=document.createElement('div');typeDiv.className='init-type';typeDiv.textContent=typeIcon;
-    const nameDiv=document.createElement('div');nameDiv.className='init-name';nameDiv.textContent=c.name;
-
-    const hpCell=document.createElement('div');hpCell.className='init-hp-cell';
-    const hpInput=document.createElement('input');hpInput.type='number';hpInput.value=c.hp;hpInput.min=0;hpInput.style.width='52px';
-    hpInput.addEventListener('change',()=>updateHP(c.origIdx,hpInput.value));
-    const hpMax=document.createElement('span');hpMax.className='init-hp-max';hpMax.textContent='/'+( c.hpMax||'?');
-    hpCell.appendChild(hpInput);hpCell.appendChild(hpMax);
-
-    const acDiv=document.createElement('div');acDiv.className='init-ac';acDiv.textContent='🛡 '+(c.ac||'?');
-
-    const condDiv=document.createElement('div');condDiv.className='cond-cell';
-    (c.conditions||[]).forEach(cn=>{
-      const pip=document.createElement('span');pip.className='cond-pip';pip.title='Click to remove';pip.textContent=cn.slice(0,3);
-      pip.addEventListener('click',()=>{removeCond(c.origIdx,cn);});
-      condDiv.appendChild(pip);
-    });
-
-    const btnsDiv=document.createElement('div');btnsDiv.className='init-btns';
-    const upBtn=document.createElement('button');upBtn.className='ibtn';upBtn.title='Move up';upBtn.textContent='▲';upBtn.addEventListener('click',()=>moveUp(c.origIdx));
-    const killBtn=document.createElement('button');killBtn.className='ibtn';killBtn.title='Kill/KO';killBtn.textContent='☠';killBtn.style.color='var(--red)';killBtn.addEventListener('click',()=>killCombatant(c.origIdx));
-    const rmBtn=document.createElement('button');rmBtn.className='ibtn';rmBtn.title='Remove';rmBtn.textContent='✕';rmBtn.addEventListener('click',()=>removeCombatant(c.origIdx));
-    btnsDiv.appendChild(upBtn);btnsDiv.appendChild(killBtn);btnsDiv.appendChild(rmBtn);
-
-    row.appendChild(numDiv);row.appendChild(typeDiv);row.appendChild(nameDiv);row.appendChild(hpCell);row.appendChild(acDiv);row.appendChild(condDiv);row.appendChild(btnsDiv);
-    list.appendChild(row);
+    if(c.isGroup){
+      renderGroupRow(list,c);
+    } else {
+      renderSingleRow(list,c);
+    }
   });
   document.getElementById('round-label').textContent=`Round ${round}`;
   if(currentTurn>=0&&currentTurn<combatants.length){
     document.getElementById('turn-label').textContent=combatants[currentTurn].name+"'s Turn";
   }
+}
+
+function renderSingleRow(list,c){
+  const isDead=c.hp<=0;
+  const isActive=c.origIdx===currentTurn;
+  const typeIcon=c.type==='pc'?'🧙':c.type==='monster'?'👹':'🧑';
+  const row=document.createElement('div');
+  row.className='init-row'+(isActive?' active-turn':'')+(isDead?' dead':'');
+
+  const numDiv=document.createElement('div');numDiv.className='init-num';numDiv.textContent=c.initiative||'?';
+  const typeDiv=document.createElement('div');typeDiv.className='init-type';typeDiv.textContent=typeIcon;
+  const nameDiv=document.createElement('div');nameDiv.className='init-name';nameDiv.textContent=c.name;
+
+  const hpCell=document.createElement('div');hpCell.className='init-hp-cell';
+  const hpInput=document.createElement('input');hpInput.type='number';hpInput.value=c.hp;hpInput.min=0;hpInput.style.width='52px';
+  hpInput.addEventListener('change',()=>updateHP(c.origIdx,hpInput.value));
+  const hpMax=document.createElement('span');hpMax.className='init-hp-max';hpMax.textContent='/'+(c.hpMax||'?');
+  hpCell.appendChild(hpInput);hpCell.appendChild(hpMax);
+
+  const acDiv=document.createElement('div');acDiv.className='init-ac';acDiv.textContent='🛡 '+(c.ac||'?');
+
+  const condDiv=document.createElement('div');condDiv.className='cond-cell';
+  (c.conditions||[]).forEach(cn=>{
+    const pip=document.createElement('span');pip.className='cond-pip';pip.title='Click to remove';pip.textContent=cn.slice(0,3);
+    pip.addEventListener('click',()=>{removeCond(c.origIdx,cn);});
+    condDiv.appendChild(pip);
+  });
+
+  const btnsDiv=document.createElement('div');btnsDiv.className='init-btns';
+  const upBtn=document.createElement('button');upBtn.className='ibtn';upBtn.title='Move up';upBtn.textContent='▲';upBtn.addEventListener('click',()=>moveUp(c.origIdx));
+  const killBtn=document.createElement('button');killBtn.className='ibtn';killBtn.title='Kill/KO';killBtn.textContent='☠';killBtn.style.color='var(--red)';killBtn.addEventListener('click',()=>killCombatant(c.origIdx));
+  const rmBtn=document.createElement('button');rmBtn.className='ibtn';rmBtn.title='Remove';rmBtn.textContent='✕';rmBtn.addEventListener('click',()=>removeCombatant(c.origIdx));
+  btnsDiv.appendChild(upBtn);btnsDiv.appendChild(killBtn);btnsDiv.appendChild(rmBtn);
+
+  row.appendChild(numDiv);row.appendChild(typeDiv);row.appendChild(nameDiv);row.appendChild(hpCell);row.appendChild(acDiv);row.appendChild(condDiv);row.appendChild(btnsDiv);
+  list.appendChild(row);
+}
+
+function renderGroupRow(list,c){
+  const isActive=c.origIdx===currentTurn;
+  const aliveCount=(c.members||[]).filter(m=>!m.dead).length;
+  const totalCount=(c.members||[]).length;
+  const allDead=aliveCount===0;
+
+  // ── Group header row ──
+  const groupWrap=document.createElement('div');
+  groupWrap.className='init-group'+(isActive?' active-turn':'')+(allDead?' dead':'');
+
+  const header=document.createElement('div');
+  header.className='init-group-header';
+  header.style.cursor='pointer';
+  header.title='Click to expand/collapse members';
+
+  const chevron=document.createElement('span');
+  chevron.className='init-group-chev';
+  chevron.textContent=c.expanded?'▾':'▸';
+
+  const initNum=document.createElement('div');initNum.className='init-num';initNum.textContent=c.initiative||'?';
+
+  const icon=document.createElement('div');icon.className='init-type';icon.textContent='👹';
+
+  const nameEl=document.createElement('div');nameEl.className='init-name';
+  nameEl.innerHTML=`<strong>${c.name}</strong> <span style="font-family:'Cinzel',serif;font-size:.65rem;color:var(--red);letter-spacing:.08em">×${aliveCount}/${totalCount}</span>`;
+
+  const acEl=document.createElement('div');acEl.className='init-ac';acEl.textContent='🛡 '+(c.ac||'?');
+
+  // Group damage bar
+  const dmgCell=document.createElement('div');dmgCell.style.cssText='display:flex;gap:.3rem;align-items:center;flex-wrap:wrap';
+  const dmgInput=document.createElement('input');dmgInput.type='number';dmgInput.placeholder='dmg';dmgInput.style.cssText='width:52px;font-size:.85rem;padding:.2rem .3rem';
+  dmgInput.title='Enter damage amount';
+  const dmgBtn=document.createElement('button');dmgBtn.className='ibtn';dmgBtn.title='Apply damage to one member (lowest HP first)';dmgBtn.textContent='💥';
+  dmgBtn.style.cssText='font-size:.85rem;color:var(--red)';
+  dmgBtn.addEventListener('click',e=>{e.stopPropagation();applyGroupDamage(c.origIdx,parseInt(dmgInput.value)||0);dmgInput.value='';});
+  const aoeBtn=document.createElement('button');aoeBtn.className='ibtn';aoeBtn.title='Apply damage to ALL members (AoE)';aoeBtn.style.cssText='font-size:.75rem;color:var(--red)';aoeBtn.textContent='AoE';
+  aoeBtn.addEventListener('click',e=>{e.stopPropagation();applyGroupAoE(c.origIdx,parseInt(dmgInput.value)||0);dmgInput.value='';});
+  dmgCell.appendChild(dmgInput);dmgCell.appendChild(dmgBtn);dmgCell.appendChild(aoeBtn);
+
+  const btnsDiv=document.createElement('div');btnsDiv.className='init-btns';
+  const upBtn=document.createElement('button');upBtn.className='ibtn';upBtn.textContent='▲';upBtn.addEventListener('click',e=>{e.stopPropagation();moveUp(c.origIdx);});
+  const splitBtn=document.createElement('button');splitBtn.className='ibtn';splitBtn.title='Split group into individual rows';splitBtn.textContent='⊕';splitBtn.addEventListener('click',e=>{e.stopPropagation();splitGroup(c.origIdx);});
+  const rmBtn=document.createElement('button');rmBtn.className='ibtn';rmBtn.title='Remove group';rmBtn.textContent='✕';rmBtn.style.color='var(--red)';rmBtn.addEventListener('click',e=>{e.stopPropagation();removeCombatant(c.origIdx);});
+  btnsDiv.appendChild(upBtn);btnsDiv.appendChild(splitBtn);btnsDiv.appendChild(rmBtn);
+
+  header.appendChild(chevron);
+  header.appendChild(initNum);
+  header.appendChild(icon);
+  header.appendChild(nameEl);
+  header.appendChild(acEl);
+  header.appendChild(dmgCell);
+  header.appendChild(btnsDiv);
+  header.addEventListener('click',()=>toggleGroup(c.origIdx));
+  groupWrap.appendChild(header);
+
+  // ── Member rows (shown when expanded) ──
+  if(c.expanded){
+    const membersDiv=document.createElement('div');
+    membersDiv.className='init-group-members';
+    (c.members||[]).forEach((m,mi)=>{
+      const mRow=document.createElement('div');
+      mRow.className='init-group-member'+(m.dead?' dead':'');
+
+      const mName=document.createElement('span');mName.className='init-member-name';mName.textContent=m.name;
+
+      const mHpWrap=document.createElement('span');mHpWrap.className='init-hp-cell';
+      const mHpIn=document.createElement('input');mHpIn.type='number';mHpIn.value=m.hp;mHpIn.min=0;mHpIn.style.width='48px';
+      mHpIn.addEventListener('change',()=>updateMemberHP(c.origIdx,mi,mHpIn.value));
+      const mHpMax=document.createElement('span');mHpMax.className='init-hp-max';mHpMax.textContent='/'+m.hpMax;
+      mHpWrap.appendChild(mHpIn);mHpWrap.appendChild(mHpMax);
+
+      // HP bar
+      const pct=Math.max(0,Math.min(100,Math.round((m.hp/m.hpMax)*100)));
+      const barColor=pct>50?'var(--green)':pct>25?'var(--gold)':'var(--red)';
+      const bar=document.createElement('div');
+      bar.style.cssText=`flex:1;height:6px;background:rgba(180,130,60,.2);border-radius:3px;overflow:hidden;min-width:40px`;
+      const fill=document.createElement('div');fill.style.cssText=`height:100%;width:${pct}%;background:${barColor};transition:width .3s`;
+      bar.appendChild(fill);
+
+      const condPips=document.createElement('span');condPips.style.cssText='display:flex;gap:.2rem;flex-wrap:wrap';
+      (m.conditions||[]).forEach(cn=>{
+        const pip=document.createElement('span');pip.className='cond-pip';pip.textContent=cn.slice(0,3);pip.title='Click to remove';
+        pip.addEventListener('click',()=>removeMemberCond(c.origIdx,mi,cn));
+        condPips.appendChild(pip);
+      });
+
+      const mBtns=document.createElement('span');mBtns.style.cssText='display:flex;gap:.15rem;margin-left:auto';
+      const mKill=document.createElement('button');mKill.className='ibtn';mKill.textContent='☠';mKill.title='Kill this member';mKill.style.color='var(--red)';
+      mKill.addEventListener('click',()=>killMember(c.origIdx,mi));
+      const mRm=document.createElement('button');mRm.className='ibtn';mRm.textContent='✕';mRm.title='Remove this member';
+      mRm.addEventListener('click',()=>removeMember(c.origIdx,mi));
+      mBtns.appendChild(mKill);mBtns.appendChild(mRm);
+
+      mRow.appendChild(mName);mRow.appendChild(mHpWrap);mRow.appendChild(bar);mRow.appendChild(condPips);mRow.appendChild(mBtns);
+      membersDiv.appendChild(mRow);
+    });
+    groupWrap.appendChild(membersDiv);
+  }
+
+  list.appendChild(groupWrap);
 }
 
 function addCombatant(){
@@ -2030,11 +2197,26 @@ function addCombatant(){
   const hp=parseInt(document.getElementById('new-hp').value)||10;
   const ac=parseInt(document.getElementById('new-ac').value)||10;
   const type=document.getElementById('new-type').value;
-  combatants.push({name,type,initiative:init,hp,hpMax:hp,ac,conditions:[]});
+  const count=Math.max(1,parseInt(document.getElementById('new-count').value)||1);
+
+  if(count > 1 && type === 'monster'){
+    // Create a group
+    const members = Array.from({length:count},(_,i)=>({
+      name:`${name} ${i+1}`, hp, hpMax:hp, conditions:[], dead:false
+    }));
+    combatants.push({name, type, initiative:init, hp, hpMax:hp, ac,
+      conditions:[], isGroup:true, count, members, expanded:false});
+  } else {
+    for(let i=0;i<count;i++){
+      const label = count>1 ? `${name} ${i+1}` : name;
+      combatants.push({name:label,type,initiative:init,hp,hpMax:hp,ac,conditions:[]});
+    }
+  }
   document.getElementById('new-name').value='';
   document.getElementById('new-init').value='';
   document.getElementById('new-hp').value='';
   document.getElementById('new-ac').value='';
+  document.getElementById('new-count').value='';
   renderInitList();updateInitSelects();
 }
 
@@ -5048,6 +5230,167 @@ function genForkCopy(){
   if(!lastFork) return;
   const f = lastFork;
   copyText(`FORK: ${f.q}\n\nPath A: ${f.a}\nPath B: ${f.b}\n\nWhat changes: ${f.change}`);
+}
+
+
+// ══════════════════════════════════════════════════════
+//  GROUP MANAGEMENT FUNCTIONS
+// ══════════════════════════════════════════════════════
+function toggleGroup(idx){
+  combatants[idx].expanded = !combatants[idx].expanded;
+  renderInitList();
+}
+
+function updateMemberHP(groupIdx, memberIdx, val){
+  const g = combatants[groupIdx];
+  if(!g||!g.members) return;
+  const hp = Math.max(0, parseInt(val)||0);
+  g.members[memberIdx].hp = hp;
+  g.members[memberIdx].dead = hp <= 0;
+  // Update group summary HP (average of alive members)
+  const alive = g.members.filter(m=>!m.dead);
+  g.hp = alive.length > 0 ? Math.round(alive.reduce((s,m)=>s+m.hp,0)/alive.length) : 0;
+  renderInitList();
+}
+
+function killMember(groupIdx, memberIdx){
+  const g = combatants[groupIdx];
+  if(!g||!g.members) return;
+  g.members[memberIdx].hp = 0;
+  g.members[memberIdx].dead = true;
+  const alive = g.members.filter(m=>!m.dead);
+  g.hp = alive.length > 0 ? Math.round(alive.reduce((s,m)=>s+m.hp,0)/alive.length) : 0;
+  renderInitList();
+}
+
+function removeMember(groupIdx, memberIdx){
+  const g = combatants[groupIdx];
+  if(!g||!g.members) return;
+  g.members.splice(memberIdx, 1);
+  g.count = g.members.length;
+  if(g.members.length === 0){ removeCombatant(groupIdx); return; }
+  renderInitList();
+}
+
+function removeMemberCond(groupIdx, memberIdx, cond){
+  const g = combatants[groupIdx];
+  if(!g||!g.members) return;
+  g.members[memberIdx].conditions = (g.members[memberIdx].conditions||[]).filter(c=>c!==cond);
+  renderInitList();
+}
+
+// Apply damage to the member with the highest current HP (single target)
+function applyGroupDamage(groupIdx, amt){
+  if(!amt) return;
+  const g = combatants[groupIdx];
+  if(!g||!g.members) return;
+  const alive = g.members.filter(m=>!m.dead);
+  if(alive.length===0) return;
+  // Hit the one with most HP
+  const target = alive.reduce((a,b)=>a.hp>=b.hp?a:b);
+  target.hp = Math.max(0, target.hp - amt);
+  if(target.hp <= 0) target.dead = true;
+  const stillAlive = g.members.filter(m=>!m.dead);
+  g.hp = stillAlive.length > 0 ? Math.round(stillAlive.reduce((s,m)=>s+m.hp,0)/stillAlive.length) : 0;
+  renderInitList();
+}
+
+// Apply damage to ALL members (AoE)
+function applyGroupAoE(groupIdx, amt){
+  if(!amt) return;
+  const g = combatants[groupIdx];
+  if(!g||!g.members) return;
+  g.members.forEach(m=>{ if(!m.dead){ m.hp=Math.max(0,m.hp-amt); if(m.hp<=0)m.dead=true; }});
+  const alive = g.members.filter(m=>!m.dead);
+  g.hp = alive.length > 0 ? Math.round(alive.reduce((s,m)=>s+m.hp,0)/alive.length) : 0;
+  renderInitList();
+}
+
+// Split group into individual combatants
+function splitGroup(groupIdx){
+  const g = combatants[groupIdx];
+  if(!g||!g.members) return;
+  const newCombatants = g.members.filter(m=>!m.dead).map(m=>({
+    name: m.name,
+    type: 'monster',
+    initiative: g.initiative,
+    hp: m.hp,
+    hpMax: m.hpMax,
+    ac: g.ac,
+    conditions: m.conditions||[],
+    dex: g.dex||10,
+  }));
+  combatants.splice(groupIdx, 1, ...newCombatants);
+  renderInitList(); updateInitSelects();
+}
+
+// Also update the monster-from-step7 adder to use groups
+const _origAddMonsterToInit = addMonsterToInit;
+function addMonsterToInit(m){
+  // called from monster DB — check if count implies group
+  if(combatants.find(c=>c.name===m.name)){
+    let n=2; while(combatants.find(c=>c.name===m.name+' '+n)) n++;
+    m = {...m, name: m.name+' '+n};
+  }
+  combatants.push({name:m.name,type:'monster',initiative:0,hp:m.hp,hpMax:m.hp,ac:m.ac,dex:m.dex||10,conditions:[]});
+  renderInitList(); updateInitSelects();
+  const btn = document.querySelector('[data-ac="tab-init"]');
+  if(btn){ sw('init', btn); }
+}
+
+// Update killCombatant to handle groups
+const _origKillCombatant = killCombatant;
+function killCombatant(idx){
+  if(combatants[idx]&&combatants[idx].isGroup){
+    combatants[idx].members.forEach(m=>{m.hp=0;m.dead=true;});
+    combatants[idx].hp=0;
+  } else {
+    combatants[idx].hp=0;
+  }
+  renderInitList();
+}
+
+// Update updateInitSelects to list groups as single entry
+const _origUpdateInitSelects = updateInitSelects;
+function updateInitSelects(){
+  ['dmg-target','cond-target'].forEach(id=>{
+    const sel=document.getElementById(id);if(!sel)return;
+    const cur=sel.value;sel.innerHTML='<option value="">— select —</option>';
+    combatants.forEach((c,i)=>{
+      const opt=document.createElement('option');opt.value=i;
+      opt.textContent=c.isGroup?`${c.name} ×${c.members.filter(m=>!m.dead).length} (group)`:c.name;
+      sel.appendChild(opt);
+    });
+    sel.value=cur;
+  });
+}
+
+// Add condition to group applies to all alive members
+const _origAddCond = addCond;
+function addCond(){
+  const idx=parseInt(document.getElementById('cond-target').value);
+  const cond=document.getElementById('cond-pick').value;
+  if(isNaN(idx)||!cond)return;
+  const c=combatants[idx];
+  if(c.isGroup){
+    (c.members||[]).forEach(m=>{ if(!m.dead&&!(m.conditions||[]).includes(cond)){
+      if(!m.conditions)m.conditions=[];m.conditions.push(cond);
+    }});
+  } else {
+    if(!c.conditions.includes(cond))c.conditions.push(cond);
+  }
+  renderInitList();
+}
+
+// rollAllInit handles groups
+const _origRollAllInit = rollAllInit;
+function rollAllInit(){
+  combatants.forEach(c=>{
+    const dexMod=Math.floor(((c.dex||10)-10)/2);
+    c.initiative=Math.floor(Math.random()*20)+1+dexMod;
+  });
+  combatants.sort((a,b)=>b.initiative-a.initiative);
+  currentTurn=0;renderInitList();updateInitSelects();
 }
 
 </script>
