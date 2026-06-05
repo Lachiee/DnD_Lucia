@@ -1693,7 +1693,8 @@ window.addEventListener('DOMContentLoaded',()=>{
   renderConditions();
   // Init web when its tab is first clicked
   document.querySelector('[data-ac="tab-web"]').addEventListener('click', ()=>{
-    if(!webCanvas){ setTimeout(webInit, 50); }
+    if(!webCanvas || !webCtx){ setTimeout(webInit, 50); }
+    else { webSyncPCs(); }  // re-sync every time tab is opened
   });
   const tabsNav = document.getElementById('tabs-nav');
   if(tabsNav){ tabsNav.addEventListener('scroll', updateTabArrows); setTimeout(updateTabArrows,100); }
@@ -2584,6 +2585,8 @@ function webInit(){
   webCanvas.addEventListener('touchmove',  webOnTouchMove,  {passive:false});
   webCanvas.addEventListener('touchend',   webOnTouchEnd);
 
+  // Sync any already-loaded PCs into the web AFTER loading saved state
+  webSyncPCs();
   webRender();
 }
 
@@ -2595,13 +2598,16 @@ function webResizeCanvas(){
 }
 
 function webSyncPCs(){
+  if(!webCanvas) return; // Canvas not ready yet — will be called again in webInit
+  let changed = false;
   loadedChars.forEach(ch => {
     const existing = webNodes.find(n=>n.name===ch.name);
-    if(!existing) webAddNodeData(ch.name, 'pc');
+    if(!existing){ webAddNodeData(ch.name, 'pc'); changed = true; }
     else existing.type = 'pc';
   });
   webUpdateNodePanel();
   webUpdateRelTarget();
+  if(changed) webSave();
 }
 
 function webAddNodeData(name, type){
