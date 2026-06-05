@@ -659,6 +659,40 @@ canvas#web-canvas:active { cursor: grabbing; }
 }
 .gen-send-btn:hover { background: rgba(139,26,26,.2); }
 
+
+/* ═══════ BENCHMARK CALCULATOR ═══════ */
+.bench-calculator {
+  background: rgba(139,26,26,.06);
+  border: 1px solid rgba(139,26,26,.2);
+  border-radius: 2px;
+  padding: .9rem 1.1rem;
+  margin-bottom: 1rem;
+}
+.bench-inputs {
+  display: flex;
+  gap: .8rem;
+  align-items: end;
+  flex-wrap: wrap;
+  margin-bottom: .7rem;
+}
+.bench-result {
+  font-family: 'Cinzel', serif;
+  font-size: .88rem;
+  color: var(--red);
+  font-weight: 600;
+  min-height: 1.4em;
+  letter-spacing: .03em;
+}
+.bench-result .bench-sub {
+  font-family: 'IM Fell English', serif;
+  font-style: italic;
+  font-size: .82rem;
+  color: var(--ink-light);
+  font-weight: 400;
+  display: block;
+  margin-top: .2rem;
+}
+
 </style>
 </head>
 <body>
@@ -857,7 +891,30 @@ canvas#web-canvas:active { cursor: grabbing; }
   <div class="sec">
     <div class="stitle"><span class="sbadge">Step 7</span>Choose Relevant Monsters</div>
     <p class="shint">List separately from encounters so you can drop them anywhere based on pacing. Note the lazy encounter benchmark.</p>
-    <div><label>Lazy Encounter Benchmark</label><input type="text" id="enc-bench" placeholder="e.g. Party 4 × Lvl 5 → benchmark CR = 40 total (deadly)"></div>
+    <div class="bench-calculator">
+      <div class="bench-top">
+        <div class="stitle" style="margin-bottom:.4rem">Lazy Encounter Benchmark</div>
+        <p class="shint" style="margin-bottom:.8rem">An encounter may be deadly if total monster CR exceeds the benchmark. <strong>Levels 1–4:</strong> sum of character levels ÷ 4. <strong>Levels 5–10:</strong> ÷ 2. <strong>Levels 11–16:</strong> × ¾. <strong>Level 17+:</strong> = full sum of levels.</p>
+        <div class="bench-inputs">
+          <div>
+            <label>Number of Characters</label>
+            <input type="number" id="bench-count" value="4" min="1" max="10" style="width:70px">
+          </div>
+          <div>
+            <label>Average Level</label>
+            <input type="number" id="bench-level" value="4" min="1" max="20" style="width:70px">
+          </div>
+          <div style="align-self:end">
+            <button class="abtn" data-ac="fn-calcBench" style="border-color:var(--red);color:var(--red)">Calculate</button>
+          </div>
+        </div>
+        <div id="bench-result" class="bench-result"></div>
+      </div>
+      <div style="margin-top:.8rem">
+        <label>Notes</label>
+        <input type="text" id="enc-bench" placeholder="e.g. 4 × level 4 party → benchmark CR 4 total before deadly">
+      </div>
+    </div>
     <div style="margin-top:.8rem" class="cl" id="mon-list"></div>
     <button class="abtn" data-ac="fn-addMon">+ Add Monster</button>
   </div>
@@ -1279,14 +1336,33 @@ canvas#web-canvas:active { cursor: grabbing; }
 
 <!-- ACTION BAR -->
 <div class="actbar">
-  <div style="display:flex;gap:.55rem;flex-wrap:wrap">
+  <div style="display:flex;gap:.55rem;flex-wrap:wrap;align-items:center">
     <button class="btnp" data-ac="fn-saveAll">✦ Save Session</button>
-    <button class="btns" data-ac="fn-loadSave">Load Saved</button>
+    <button class="btns" data-ac="fn-loadSave">↺ Load Browser Save</button>
     <button class="btnp" data-ac="fn-exportSession" style="background:var(--blue)">⇩ Export JSON</button>
+    <button class="btns" data-ac="fn-loadSessionFile" style="border-color:var(--blue);color:var(--blue)">📂 Load Session File</button>
+    <button class="btns" data-ac="fn-loadSessionURL">🔗 Load Session URL</button>
     <button class="btns" data-ac="fn-print">Print</button>
     <button class="btns" data-ac="fn-clearAll" style="color:var(--red)">Clear All</button>
+    <input type="file" id="session-file-input" accept=".json" style="display:none">
   </div>
   <span class="sst" id="sst">✓ Saved</span>
+</div>
+
+<!-- SESSION URL MODAL -->
+<div class="modal-bg" id="session-url-modal">
+  <div class="modal">
+    <button class="modal-close" id="session-url-close">✕</button>
+    <div class="modal-title">Load Session from URL</div>
+    <div class="modal-sub">Paste the raw GitHub URL of any exported session JSON file to load it directly into the prep tool.</div>
+    <label>Session JSON URL</label>
+    <input type="text" id="session-url-input" placeholder="https://raw.githubusercontent.com/Lachiee/DnD_Lucia/main/sessions/session-07.json" style="margin-bottom:.8rem">
+    <div style="display:flex;gap:.5rem;margin-top:.5rem">
+      <button class="btnp" data-ac="fn-loadSessionURLConfirm">Load Session</button>
+      <button class="btns" data-ac="fn-closeSessionURLModal">Cancel</button>
+    </div>
+    <div class="gh-status" id="session-url-status" style="margin-top:.5rem"></div>
+  </div>
 </div>
 
 </div></div><!-- /ti /tome -->
@@ -1362,6 +1438,10 @@ document.addEventListener('click', function(e) {
     'fn-exportSession': exportSession,
     'fn-print': () => window.print(),
     'fn-clearAll': clearAll,
+    'fn-loadSessionFile': () => document.getElementById('session-file-input').click(),
+    'fn-loadSessionURL': openSessionURLModal,
+    'fn-loadSessionURLConfirm': loadSessionFromURL,
+    'fn-closeSessionURLModal': closeSessionURLModal,
     'fn-addConseq': addConseq,
     'fn-genNPC': genNPC,
     'fn-genNPCSend': genNPCSend,
@@ -1380,6 +1460,7 @@ document.addEventListener('click', function(e) {
     'fn-genStart': genStart,
     'fn-genStartSend': genStartSend,
     'fn-addFork': addFork,
+    'fn-calcBench': calcBenchmark,
     'fn-loadCarryForward': loadCarryForward,
     'fn-closeParse': closeParseModal,
     'fn-parseAndLoad': parseAndLoad,
@@ -4193,6 +4274,390 @@ function genStartSend(){
       setTimeout(()=>e.target.style.background=orig, 400);
     }
   });
+});
+
+
+// ══════════════════════════════════════════════════════
+//  DIRECT SESSION LOADING
+// ══════════════════════════════════════════════════════
+function openSessionURLModal(){
+  document.getElementById('session-url-modal').classList.add('open');
+  document.getElementById('session-url-input').focus();
+}
+function closeSessionURLModal(){
+  document.getElementById('session-url-modal').classList.remove('open');
+  document.getElementById('session-url-status').textContent = '';
+}
+
+async function loadSessionFromURL(){
+  const url = document.getElementById('session-url-input').value.trim();
+  const status = document.getElementById('session-url-status');
+  if(!url){ status.className='gh-status err'; status.textContent='Enter a URL.'; return; }
+  status.className='gh-status ld'; status.textContent='⟳ Fetching…';
+  try{
+    const fetchUrl = url.replace('github.com','raw.githubusercontent.com').replace('/blob/','/');
+    const res = await fetch(fetchUrl);
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    const data = await res.json();
+    if(!confirm(`Load session "${data['campaign-name']||'Unknown'} · ${data['session-num']||'?'}" from ${data['session-date']||'unknown date'}? This will overwrite your current prep.`)) return;
+    applyData(data);
+    status.className='gh-status ok'; status.textContent='✓ Session loaded!';
+    setTimeout(closeSessionURLModal, 1200);
+    const s=document.getElementById('sst'); s.textContent='✓ Session loaded'; s.classList.add('vis'); setTimeout(()=>s.classList.remove('vis'),3000);
+  }catch(e){
+    status.className='gh-status err'; status.textContent='✗ '+e.message;
+  }
+}
+
+function loadSessionFromFile(file){
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try{
+      const data = JSON.parse(e.target.result);
+      const campaign = data['campaign-name']||'Unknown';
+      const session = data['session-num']||'?';
+      if(!confirm(`Load session "${campaign} · ${session}"? This will overwrite your current prep.`)) return;
+      applyData(data);
+      const s=document.getElementById('sst'); s.textContent='✓ Session loaded'; s.classList.add('vis'); setTimeout(()=>s.classList.remove('vis'),3000);
+    }catch(e){ alert('Invalid session JSON file: '+e.message); }
+  };
+  reader.readAsText(file);
+}
+
+// Wire up the session file input
+document.addEventListener('DOMContentLoaded', ()=>{
+  const sfi = document.getElementById('session-file-input');
+  if(sfi) sfi.addEventListener('change', ()=>{ loadSessionFromFile(sfi.files[0]); sfi.value=''; });
+  // Close modal on background click
+  const modal = document.getElementById('session-url-modal');
+  if(modal) modal.addEventListener('click', e=>{ if(e.target===modal) closeSessionURLModal(); });
+  const closeBtn = document.getElementById('session-url-close');
+  if(closeBtn) closeBtn.addEventListener('click', closeSessionURLModal);
+  // Enter key in URL input
+  const urlInp = document.getElementById('session-url-input');
+  if(urlInp) urlInp.addEventListener('keydown', e=>{ if(e.key==='Enter') loadSessionFromURL(); });
+});
+
+
+// ══════════════════════════════════════════════════════
+//  EXTENDED GENERATOR TABLES
+//  Merged into existing pools on load
+// ══════════════════════════════════════════════════════
+
+// ── EXTRA NPC OCCUPATIONS ──
+NPC_OCCUPATIONS.push(
+  'Archivist','Barber-surgeon','Beggar-king','Bone carver','Brewer',
+  'Clockmaker','Debt collector','Executioner','Falconer','Fence',
+  'Ferryman','Fisherwoman','Flagellant','Fletcher','Forger',
+  'Ghost-layer','Gladiator','Grave robber','Guild enforcer','Herbalist',
+  'Horse trader','Inquisitor','Jester','Lamplighter','Leper',
+  'Lorekeeper','Mapmaker','Midwife','Mountebank','Necromancer\'s assistant',
+  'Orphan runner','Peddler','Pit fighter','Plague doctor','Poisoner',
+  'Porter','Rat catcher','Relic hunter','Roadwarden','Runecarver',
+  'Sailor','Sellsword','Shaman','Shipwright','Siege engineer',
+  'Slaver','Smelter','Smuggler','Soothsayer','Spymaster',
+  'Stablehand','Street performer','Tattooist','Tax collector','Tinkerer',
+  'Tomb robber','Torturer','Town crier','Weaponsmith','Witch finder'
+);
+
+// ── EXTRA NPC APPEARANCES ──
+NPC_APPEARANCES.push(
+  'Constantly checking over their shoulder','Wears someone else\'s signet ring',
+  'Speaks very formally, as if reciting from memory','One hand is always gloved',
+  'Has a clockwork eye that whirs when they focus','Smells of burnt herbs',
+  'Braids a different coloured thread into their hair each day',
+  'Moves without making any sound — unsettlingly quiet',
+  'Has perfect posture and judges everyone who doesn\'t','Whistles while thinking',
+  'A port-wine birthmark covers half their neck','Always carries a small mirror',
+  'Speaks in a regional accent they\'re trying to hide','Covered in old ritual tattoos',
+  'Has an unnaturally long fourth finger on their right hand',
+  'Their shadow sometimes moves a moment too late','Always overdressed for the situation',
+  'Has no fingernails — removed or never grew','Squints at everything as if suspicious',
+  'Drinks from a silver flask constantly, offers it to no one',
+  'Their teeth are filed to slight points','Refuses to sit with their back to the door',
+  'Has a habit of finishing other people\'s sentences',
+  'Wears a locket they touch whenever frightened'
+);
+
+// ── EXTRA NPC TRAITS ──
+NPC_TRAITS.push(
+  'Has memorised the layout of every building they\'ve ever been in',
+  'Treats everyone as a potential customer','Will not make a decision without sleeping on it',
+  'Deeply afraid of silence — fills it constantly with noise or talk',
+  'Keeps a detailed journal and writes in it when stressed',
+  'Speaks only through a third party when they can — they hate direct confrontation',
+  'Believes they are being tested by the gods at all times',
+  'Has a photographic memory and remembers every insult verbatim',
+  'Extraordinarily kind to animals; considerably less so to people',
+  'Has a second, very different personality when drunk',
+  'Does not believe in coincidence — everything is a sign',
+  'Compulsively rearranges objects in any room they stay in',
+  'Never asks a question — only makes statements that invite correction',
+  'Has a talent for mimicry that makes people profoundly uncomfortable',
+  'Will sacrifice anything — genuinely, without hesitation — for their cause',
+  'Carries an enormous and possibly unjustified grudge from years ago',
+  'Makes promises easily and breaks them without remorse',
+  'Acts as if they know something about you that you haven\'t told them'
+);
+
+// ── EXTRA NPC WANTS ──
+NPC_WANTS.push(
+  'To be the one who finally solves a problem everyone has given up on',
+  'To track down a specific artefact before it falls into the wrong hands',
+  'To prove that someone everyone respects is actually corrupt',
+  'To find a place where no one knows who they are',
+  'To understand why they survived when everyone around them didn\'t',
+  'To bring down a specific institution they believe is rotten from within',
+  'To outlive everyone who ever doubted them',
+  'To find meaning after losing the thing that gave their life purpose',
+  'To build something that will survive them',
+  'To settle in one place and never move again',
+  'To steal back something that was taken from their family',
+  'To be believed — about something important that no one takes seriously',
+  'To make enough money to free someone from a debt or contract',
+  'To finish what someone they loved started before they died',
+  'To get revenge, but only if they can do it without becoming the thing they hate',
+  'To find out whether something they\'ve believed their whole life is actually true'
+);
+
+// ── EXTRA LOCATION ASPECTS ──
+LOC_ASPECTS.push(
+  'Walls that weep oil instead of water','A dial on the wall with no label and twelve positions',
+  'The remains of a barricade built from the inside — something was being kept in',
+  'A perfect circle of ash on the floor, 10 feet across, with no source',
+  'Bookshelves where every title has been scratched out','A door that opens onto a brick wall',
+  'A child\'s handprints on the ceiling','Manacles bolted to the wall with no key in sight',
+  'A map of this very room, but with rooms that don\'t exist on it',
+  'A pile of the same letter, written in different handwriting, never finished',
+  'A long table set for a feast, everything perfectly placed but years old',
+  'Claw marks that start on the floor and continue up the wall and across the ceiling',
+  'A mirror that shows the room empty of people, regardless of who stands before it',
+  'A well that, when spoken into, speaks back in a different voice',
+  'Dozens of hourglasses, all stopped at the same time',
+  'A throne facing a wall, not a room','Candles that burn black instead of white',
+  'A locked box chained to the floor with no visible seam or lock',
+  'Musical notation carved into the stone — following it reveals a hidden door',
+  'A pool of water perfectly still despite the wind from an unknown source',
+  'Weapons of every type, hung carefully on the walls, all slightly too large for humans',
+  'A door that is always warm to the touch regardless of the temperature',
+  'Graffiti in dozens of different languages, all saying the same thing',
+  'A pendulum with no clock attached, swinging despite no mechanism',
+  'Rows of empty pedestals, each with a plaque describing an item that isn\'t there'
+);
+
+// ── EXTRA ENCOUNTER SEEDS ──
+ENC_SEEDS.any.push(
+  'The enemy isn\'t hostile — they\'re desperate. Violence is a last resort they\'ve already decided on.',
+  'The party has wandered into the middle of someone else\'s negotiation.',
+  'The objective has changed while they were getting here.',
+  'One of the "enemies" recognises a party member and won\'t attack them.',
+  'The thing they came to fight is already dead. Something else killed it. Recently.',
+  'The enemy has already won — they\'re just keeping the party occupied.',
+  'A previous decision the party made has complicated this encounter.',
+  'Someone on the enemy side is sending signals that they want to switch sides.',
+  'The civilians in the area are making everything ten times harder.',
+  'The enemy will not stop unless the party addresses the cause, not the symptom.',
+  'The terrain is the real enemy — combatants on both sides know it.',
+  'There are two groups who both believe they\'re fighting the party. They\'re not coordinating.',
+  'The most dangerous creature here is pretending to be harmless.',
+  'The party is on a clock — something else will happen if this takes too long.',
+  'Someone the party cares about made a choice that caused this situation.',
+  'The enemy leader is the only thing keeping the others from doing something far worse.'
+);
+ENC_SEEDS.combat.push(
+  'The enemy has one thing that makes them immune to the party\'s best tactic.',
+  'The arena shifts mid-fight — a wall collapses, water rises, fire spreads.',
+  'One enemy is protecting something they\'d rather die than reveal.',
+  'The most dangerous enemy isn\'t attacking — they\'re watching and learning.',
+  'Someone calls for parley when the enemy is winning.',
+  'A neutral third party wades in and starts attacking everyone.'
+);
+ENC_SEEDS.social.push(
+  'Both sides think they\'re being reasonable. They\'re not even close.',
+  'The NPC will say yes — but needs the party to first say something they\'ll regret.',
+  'The real decision-maker isn\'t in the room.',
+  'The NPC is testing the party\'s loyalty, not their competence.',
+  'Whatever the party decides here gets back to someone else before tomorrow.',
+  'The NPC is telling the truth. It\'s just not the whole truth.'
+);
+
+// ── EXTRA SECRETS ──
+Object.values(SECRETS_GEN).forEach(arr => {
+  // Shared pool extras
+});
+SECRETS_GEN.any.push(
+  'A powerful figure everyone respects built their reputation on someone else\'s work.',
+  'The war didn\'t end because of the treaty — it ended because both sides ran out of something.',
+  'Something widely believed to be destroyed was actually hidden.',
+  'The current crisis was manufactured to distract from a different, larger problem.',
+  'An important ritual or tradition has been performed incorrectly for generations.',
+  'The "monster" the town fears is responsible for why the town still exists.',
+  'Two factions that appear to be enemies are controlled by the same person.',
+  'A dead god\'s power is still active. Someone is using it without knowing the source.',
+  'The party\'s patron knows more about their mission than they\'ve been told.',
+  'Something the party did in a previous session had a consequence they haven\'t discovered yet.'
+);
+SECRETS_GEN.villain.push(
+  'The villain\'s plan has already succeeded — what the party is fighting is a distraction.',
+  'The villain knows the party is coming. They\'ve prepared something specific for each member.',
+  'The villain is working against someone worse. From the villain\'s perspective, they\'re the hero.',
+  'The villain has a legitimate grievance. The method is wrong; the complaint is not.'
+);
+SECRETS_GEN.npc.push(
+  'The friendly guide knows exactly where the danger is — they\'re leading the party toward it.',
+  'The person asking for help created the problem they need help solving.',
+  'The NPC everyone trusts is the only person who benefits from the current crisis.',
+  'A dead NPC the party knew is still alive. They chose to disappear.',
+  'The NPC has been compelled — magically or otherwise — and can\'t say so directly.'
+);
+
+// ── EXTRA TOWN EVENTS ──
+TOWN_EVENTS.push(
+  'A travelling merchant is selling something that belongs to someone in town.',
+  'The well ran dry overnight. The timing is too convenient.',
+  'Three people have had the same dream on the same night. They\'ve found each other.',
+  'A bounty has been posted for someone the party knows.',
+  'An old law has suddenly been enforced for the first time in decades.',
+  'A ship arrived with no crew and no cargo — just a single passenger who won\'t speak.',
+  'Someone has confessed to a crime that everyone knows they didn\'t commit.',
+  'The local constable has gone missing. Their office is undisturbed.',
+  'Two merchants are claiming ownership of the same building with identical deeds.',
+  'A child is selling information. The information is accurate.',
+  'Something valuable was stolen from the temple — the priests aren\'t reporting it.',
+  'A travelling friar is offering to absolve sins for coin. People are lining up.',
+  'The annual tax came due and the collector didn\'t arrive.',
+  'A new religion appeared overnight. It already has followers.',
+  'Someone has been feeding the town\'s ravens. The ravens are beginning to talk.'
+);
+
+// ── EXTRA STRONG STARTS ──
+STRONG_STARTS.push(
+  'A bell rings — the kind only rung for specific emergencies — and the wrong number of times.',
+  'They find a door marked with their names. It wasn\'t there yesterday.',
+  'A stranger dies in front of them, presses something into the nearest hand, and whispers a name.',
+  'The road ahead is blocked. The road behind is now gone.',
+  'It starts raining, but only in one street. In that street it has never stopped raining.',
+  'Every clock in the city stops at the same moment.',
+  'A child approaches and hands them a document. The document is a deed — to the building they\'re standing in.',
+  'They\'ve been hired to protect something. It\'s already missing.',
+  'An old ally contacts them through a method that should be impossible — that ally is dead.',
+  'A creature walks into town and sits down. It appears to be waiting. For them.',
+  'The sky changes colour for thirty seconds. Everyone saw it. No one will talk about it.',
+  'They wake up with a collective memory of a night they don\'t remember living.',
+  'A wanted poster goes up with a sketch of one of them — but younger, and under a different name.',
+  'The contract they signed has a clause they didn\'t notice before. It\'s now relevant.',
+  'The person they were meant to meet sent a letter cancelling — the letter is in handwriting they don\'t recognise.',
+  'Someone has paid off all their debts. There\'s no note. No name. No explanation.',
+  'A door in a familiar building leads somewhere it shouldn\'t.',
+  'The item they need is in the one place they said they\'d never go back to.',
+  'A message arrives addressed to all of them. The message is a single question: "Do you remember me?"',
+  'An army is camped outside the city. They flew in overnight. Nobody knows whose.'
+);
+
+// ── EXTRA TRAPS ──
+TRAPS.push(
+  'Ink Sprayer — stepping on a hidden pressure plate douses one creature in bright ink. They glow for 1 hour and cannot hide or benefit from invisibility. Harmless, but reveals their position perfectly.',
+  'Reverse Gravity Panel — a 10×10 section of ceiling is enchanted with localised reverse gravity. Creatures crossing it must make DC14 Str or float to the ceiling (taking 1d6 bludgeoning) and be restrained until they pass a DC14 Str check as an action.',
+  'Shrinking Corridor — walls slowly close. DC12 Perception to notice the grooves. Fully closed in 3 rounds. DC17 Str to stop. DC14 Dex to squeeze through before it shuts. 3d6 bludgeoning if caught.',
+  'Memory Fog — a nearly invisible mist. DC15 Perception. Creatures breathing it must DC13 Int save or forget the last 10 minutes. They appear fine until someone asks them something that reveals the gap.',
+  'Siren Tile — a specific tile emits a silent magical shriek audible only to undead and fiends within 1 mile, alerting them to intruders. Players have no way to know it triggered.',
+  'Freezing Lock — touching the door handle triggers a frost burst. DC11 Dex save or the hand is frozen to the handle (restrained) until DC14 Str check. The door remains unlocked.',
+  'Pressure-Plate Portcullis — triggers when the last party member passes the threshold, dropping a portcullis behind them and splitting the party. DC18 Str to lift. The mechanism is on the other side.',
+  'False Treasure — a convincing chest. Opening triggers Symbol of Hopelessness (DC17 Wis or the creature surrenders for 1 minute). The chest is empty. The real treasure is elsewhere in the room.',
+  'Echo Chamber — a room that records and replays the last thing said in it, on a 10-minute loop. Could reveal previous intruders\' final words, or betray the party\'s own plans to followers.',
+  'Mud Pit — floor appears solid (DC15 Perception). First creature to cross sinks to knee-depth (speed halved). Second creature in the same turn sinks waist-deep (restrained). DC14 Str to pull free as action.'
+);
+
+// ── EXTRA MAGIC ITEMS ──
+MAGIC_ITEMS.uncommon.push(
+  'Cloak of the Manta Ray — while in water, you have a swim speed of 60 ft and can breathe underwater. Underwater, you\'re nearly invisible (advantage on Stealth in water).',
+  'Dust of Disappearance — throw the dust (as an action) and up to 6 creatures within 10 ft turn invisible for 2d4 minutes. Even Detect Magic can\'t find them. One pouch.',
+  'Goggles of Night — darkvision 60 ft. Disadvantage on attack rolls and Perception checks in bright sunlight.',
+  'Immovable Rod — press the button, rod is fixed in place, immovable by up to 8,000 lbs of force. Another button press releases it. Object, not a weapon.',
+  'Ring of Jumping — cast Jump on yourself at will.',
+  'Slippers of Spider Climbing — climb any surface (even upside down) at full speed, hands free.',
+  'Wand of Magic Detection — 3 charges, detect magic as an action. Regains 1d3 charges at dawn.'
+);
+MAGIC_ITEMS.rare.push(
+  'Amulet of Proof Against Detection and Location — can\'t be targeted by divination magic or detected by magic.',
+  'Arrow of Slaying — on hit vs target type, DC17 Con or take 6d10 extra piercing (half on success). Single use.',
+  'Bag of Holding — holds 500 lb, up to 64 cubic ft. Weighs 15 lb regardless of contents. Ripping it destroys it.',
+  'Cape of the Mountebank — cast Dimension Door once per day.',
+  'Elven Chain — +1 AC chain shirt. Not heavy. Proficient even without armour proficiency.',
+  'Flame Tongue — a sword you can ignite as a bonus action (command word). +2d6 fire on hit; sheds bright light 40ft.',
+  'Handy Haversack — like bag of holding but three compartments; desired item always comes to hand first.',
+  'Horn of Blasting — cone 30ft, 5d6 thunder, DC15 Con or deafened 1 min. Glass within 30ft shatters. 20% chance it explodes on use (5d6 to user).',
+  'Ring of Spell Storing — stores up to 5 levels of spells; bearer can cast them.',
+  'Wand of Paralysis — 7 charges, DC15 Con or paralyzed 1 minute. Regains 1d6+1 at dawn.'
+);
+MAGIC_ITEMS.legendary.push(
+  'Apparatus of the Crab — a mechanical lobster-shaped vehicle. Pilot from inside. Fully submersible.',
+  'Belt of Giant Strength (Storm) — Strength becomes 29.',
+  'Cloak of Arachnida — spider climb; immunity to web; cast Web once per day; resistance to poison.',
+  'Crystal Ball of True Seeing — scry + truesight through the image.',
+  'Hammer of Thunderbolts — +1d6 thunder on hit; DC17 Con or stunned; kills a giant outright on a 20 (DC20 Con).',
+  'Luck Blade — +1 weapon, +1 to saves; wish once (if you have the charge); reroll once per day.',
+  'Robe of the Archmagi — +2 AC, +2 spell save DC, +2 spell attack; advantage on saves vs spells.',
+  'Sword of Answering — one of nine blades. +3, cast counterspell as reaction once per day.',
+  'Talisman of Pure Good / Ultimate Evil — holy/unholy power. Destroys certain creature types outright. 7 charges.'
+);
+
+
+// ══════════════════════════════════════════════════════
+//  LAZY ENCOUNTER BENCHMARK CALCULATOR
+//  Formula: slyflourish.com/the_lazy_encounter_benchmark.html
+//  Levels 1-4:  sum ÷ 4
+//  Levels 5-10: sum ÷ 2
+//  Levels 11-16: sum × 3/4
+//  Levels 17+:  sum × 1
+// ══════════════════════════════════════════════════════
+function calcBenchmark(){
+  const count = parseInt(document.getElementById('bench-count').value) || 4;
+  const level = parseInt(document.getElementById('bench-level').value) || 1;
+  const resultEl = document.getElementById('bench-result');
+  const noteEl = document.getElementById('enc-bench');
+
+  const sumLevels = count * level;
+  let divisor, tierLabel;
+  if(level <= 4){
+    divisor = 4; tierLabel = 'Levels 1–4: sum ÷ 4';
+  } else if(level <= 10){
+    divisor = 2; tierLabel = 'Levels 5–10: sum ÷ 2';
+  } else if(level <= 16){
+    divisor = 4/3; tierLabel = 'Levels 11–16: sum × ¾';
+  } else {
+    divisor = 1; tierLabel = 'Levels 17+: full sum of levels';
+  }
+
+  const benchmark = Math.round(sumLevels / divisor * 10) / 10;
+  const singleMax = level <= 4 ? level : Math.round(level * 1.5 * 10) / 10;
+
+  resultEl.innerHTML = `
+    Benchmark: <span style="font-size:1.1rem">CR ${benchmark} total</span> before deadly
+    · Single monster max: CR ${singleMax}
+    <span class="bench-sub">${count} characters × level ${level} = sum ${sumLevels} · ${tierLabel}</span>
+  `;
+
+  // Auto-fill the notes field
+  if(noteEl) noteEl.value = `${count} × Lvl ${level} party → deadly above CR ${benchmark} total · single monster max CR ${singleMax}`;
+}
+
+// Auto-calc when party level field changes
+document.addEventListener('change', e => {
+  if(e.target && (e.target.id==='bench-count'||e.target.id==='bench-level')){
+    calcBenchmark();
+  }
+});
+document.addEventListener('input', e => {
+  if(e.target && (e.target.id==='bench-count'||e.target.id==='bench-level')){
+    calcBenchmark();
+  }
+});
+
+// Run on boot with defaults
+window.addEventListener('DOMContentLoaded', ()=>{
+  setTimeout(calcBenchmark, 300);
 });
 
 </script>
