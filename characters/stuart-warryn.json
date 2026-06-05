@@ -7,65 +7,96 @@
   "class": "Warlock",
   "subclass": "Pact of the Tome (Patron: Loopholes & Spoken Intent)",
   "alignment": "Chaotic Neutral",
-  "level": 2,
+  "level": 4,
   "ac": 13,
   "hp": 22,
   "hp_max": 22,
   "hp_current": 22,
-  "hit_dice": "2d8",
+  "hit_dice": "4d8",
   "speed": "25 ft.",
-  "stats": [10, 13, 12, 13, 14, 17],
+  "stats": [10, 13, 13, 13, 15, 17],
   "saves": ["Wis +4", "Cha +5"],
-  "skills": ["Insight +4", "Persuasion +5", "Deception +5", "Perception +2", "Animal Handling +2", "Performance +3", "Intimidation +3"],
-  "languages": ["Common", "Gnomish", "+2 unchosen"],
+  "skills": ["Deception +5", "Insight +4", "Persuasion +5", "Arcana +1", "History +1", "Investigation +1", "Nature +1", "Religion +1", "Animal Handling +2", "Medicine +2", "Perception +2", "Survival +2", "Performance +3", "Intimidation +3", "Acrobatics +1", "Sleight of Hand +1", "Stealth +1"],
+  "languages": ["Common", "Gnomish", "+2 others"],
   "proficiency": 2,
   "passive_perception": 12,
   "background": "Court Functionary",
   "inspiration": false,
   "equipment": [
-    "Studded leather armor",
-    "Dagger x2",
-    "Pouch",
-    "64 gp, 5 sp",
-    "Favourite leathery book (Bond item)"
+    "Studded Leather Armor (12 + Dex mod AC = 13)",
+    "Shortsword (+3, 1d6+1 piercing)",
+    "Dagger x2 (+3, 1d4+1 piercing, thrown 20/60)",
+    "Bell [2024]",
+    "Bedroll",
+    "Candle Wick Tear (1 use)",
+    "Half Price Potion (roll d100 for effect)",
+    "154 gp, 5 sp",
+    "Favourite leathery book (Bond item / Book of Shadows)"
   ],
-  "spells": ["Chill Touch (cantrip)", "Minor Illusion (cantrip)", "Bane", "Charm Person"],
+  "spells": [
+    "Argument (custom cantrip)",
+    "Chill Touch",
+    "Fire Bolt",
+    "Mage Hand",
+    "Minor Illusion",
+    "True Strike",
+    "Invocation: Devil's Sight",
+    "Bane",
+    "Charm Person",
+    "Hold Person",
+    "Mirror Image",
+    "Misty Step"
+  ],
   "spellcasting": [
     {
       "name": "Warlock Spellcasting (Charisma)",
-      "desc": "Spell save DC 13; spell attack +5. 2 first-level spell slots — regained on short or long rest. Cantrips: Chill Touch, Minor Illusion. Spells known: Bane (2024), Charm Person."
+      "desc": "Spell save DC 13; spell attack +5. Spell slots: 2 (2nd level) — all slots are 2nd level, regained on short or long rest. Cantrips: Argument, Chill Touch, Fire Bolt, Mage Hand, Minor Illusion, True Strike. 1st-level spells known: Bane, Charm Person. 2nd-level spells known: Hold Person, Mirror Image, Misty Step."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Shortsword",
+      "desc": "Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 1d6+1 piercing."
+    },
+    {
+      "name": "Dagger",
+      "desc": "Melee or Ranged Weapon Attack: +3 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 1d4+1 piercing."
+    },
+    {
+      "name": "Cast a Spell",
+      "desc": "Spell save DC 13; spell attack +5. 2 second-level slots. Spells: Bane, Charm Person, Hold Person, Mirror Image, Misty Step."
     }
   ],
   "class_features": [
     {
       "name": "Otherworldly Patron — Loopholes, Bargains & Spoken Intent",
-      "desc": "Patron deals in fine print and spoken word. If someone does Detect Thoughts on Warryn, they will be frightened of the patron. The patron provides a Pact of the Tome."
+      "desc": "Patron deals in fine print and spoken word. If someone casts Detect Thoughts on Warryn, they will be frightened by what they encounter. The patron provides a Pact of the Tome."
     },
     {
       "name": "Pact of the Tome",
-      "desc": "Warryn possesses a Book of Shadows — his favourite leathery book. He may cast three additional cantrips from any class spell list at will while the book is on his person. If lost, a 1-hour ceremony (short or long rest) summons a replacement. The book turns to ash when he dies."
+      "desc": "Warryn possesses a Book of Shadows — his favourite leathery book. He may cast three additional cantrips from any class spell list at will while the book is on his person. If lost, a 1-hour ceremony (during short or long rest) summons a replacement. The book turns to ash when he dies."
+    },
+    {
+      "name": "Eldritch Invocation: Devil's Sight",
+      "desc": "Warryn can see normally in darkness, both magical and nonmagical, to a distance of 120 feet."
     },
     {
       "name": "Combat Ability: The Argument",
-      "desc": "Once per combat, when Warryn speaks aloud as part of casting a spell or taking an action, he may append an Argument. Choose one creature within 30 ft that can hear him — Wisdom save vs DC 13. On a fail choose: Rebuttal Damage (2d6 psychic), Staggered Logic (disadvantage on next attack/save), or Forced Pause (speed becomes 0 until start of its next turn). On success: half damage or no effect. DOWNSIDE — Warryn becomes visibly marked by drifting margin-lines and glowing text; the first attack against him before his next turn has advantage."
+      "desc": "Once per combat, when Warryn speaks aloud as part of casting a spell or taking an action, he may append an Argument. Choose one creature within 30 ft that can hear him — Wisdom save vs DC 13. On a fail choose: Rebuttal Damage (2d6 psychic), Staggered Logic (disadvantage on next attack/save), or Forced Pause (speed becomes 0 until start of its next turn). On success: half damage or no effect. DOWNSIDE: Warryn becomes visibly marked by drifting margin-lines and glowing text. The first attack against him before his next turn has advantage."
     },
     {
       "name": "Court Functionary (Background)",
-      "desc": "Understands court bureaucracy; can gain access to officials and information through court connections."
-    },
-    {
-      "name": "Eldritch Invocations",
-      "desc": "No invocations chosen yet at level 2."
+      "desc": "Understands court bureaucracy. Can gain access to officials and information through court connections."
     }
   ],
   "traits": [
     {
       "name": "Personality",
-      "desc": "Trait: Good at two-digit multiplication; terrified of liquorice. Ideal: Will always seek new spells. Bond: His favourite leathery book. Flaw: Believes he can sell ice-cream to an Eskimo — literally."
+      "desc": "Trait: Good at two-digit multiplication; terrified of liquorice. Ideal: Will always seek new spells. Bond: His favourite leathery book (Book of Shadows). Flaw: Believes he can sell ice-cream to an Eskimo — literally."
     },
     {
-      "name": "Rock Gnome Traits",
-      "desc": "Darkvision 60 ft. Gnome Cunning: advantage on Int/Wis/Cha saving throws vs magic. Artificer's Lore: double proficiency on History checks about magic, tech, or alchemy. Tinker: can construct tiny clockwork devices."
+      "name": "Rock Gnome",
+      "desc": "Darkvision 60 ft. Gnome Cunning: advantage on Int/Wis/Cha saving throws against magic. Artificer's Lore: double proficiency on History checks about magic, tech, or alchemy. Tinker: construct tiny clockwork devices."
     }
   ],
   "goals": [
@@ -75,5 +106,5 @@
     "Collect and learn new spells — always"
   ],
   "backstory": "Warryn has six children, but his wife cheated on him and left 20 years ago, taking the kids. She left him for a warlock named Albus. He became a warlock himself to beat Albus at his own game — to one day find him and destroy him. He joined the gnome expedition hoping it would lead him to clues about Albus, or his wife and children. His constant humour and flirtatious manner is a coping mechanism. The real Warryn — the grieving, vengeful one — only slips out rarely. Remember the fish scene? That was the mask slipping.",
-  "notes": "The facade of a charming, joke-cracking rogue gnome conceals a man driven by cold, patient revenge. Nobody in the party knows his true motivation. If pushed emotionally, there are flashes of something darker. His patron is drawn to him precisely because of the legal and emotional loopholes in his grief."
+  "notes": "Level 4 update: Now has 2nd level spell slots. New spells include Hold Person, Mirror Image, Misty Step. Has Devil's Sight invocation — sees in magical and nonmagical darkness 120ft. New weapons: Shortsword and Daggers. AC is 13 (Studded Leather + Dex). Has 154gp, 5sp. His patron is drawn to him because of the legal and emotional loopholes in his grief. Nobody in the party knows his true motivation."
 }

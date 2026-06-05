@@ -1,85 +1,113 @@
 {
   "name": "Sarick Quillbonk Xobar Stoutboots Jetor Squiggledust",
-  "player": "Sarick",
+  "player": "Jordan",
   "size": "Small",
   "race": "Rock Gnome",
   "type": "humanoid",
   "class": "Barbarian",
   "subclass": "Path of the Berserker",
   "alignment": "Neutral Good",
-  "level": 2,
-  "ac": 12,
+  "level": 4,
+  "ac": 16,
   "hp": 30,
   "hp_max": 30,
-  "hp_current": 30,
-  "hit_dice": "2d12",
+  "hp_current": 24,
+  "hp_temp": 4,
+  "hit_dice": "4d12",
   "speed": "25 ft.",
-  "stats": [14, 9, 13, 11, 13, 13],
+  "stats": [14, 9, 13, 9, 13, 13],
   "saves": ["Str +4", "Con +3"],
-  "skills": ["Animal Handling +3", "Intimidation +3", "Survival +3", "Athletics +2", "Insight +1", "Medicine +1", "Perception +1", "Deception +1", "Performance +1", "Persuasion +1"],
-  "languages": ["Common", "Gnomish"],
+  "skills": ["Animal Handling +3", "Intimidation +3", "Survival +3", "Athletics +4", "Insight +3", "Perception +1"],
+  "languages": ["Common", "Gnomish", "Giant"],
   "proficiency": 2,
   "passive_perception": 11,
   "background": "Giant Foundling",
   "inspiration": false,
   "equipment": [
-    "Greataxe",
-    "Chain shirt",
-    "Explorer's pack",
-    "10 gp"
+    "Greataxe (+4, 1d12+2 slashing — raging: 1d12+4)",
+    "Chain shirt (AC 13 base)",
+    "Specialist Barbarian Armour (13 + Str mod = 16 AC)",
+    "Stone Heart Amulet (+4 temp HP while raging — from his elder/mentor)",
+    "Explorer's Pack (backpack, bedroll, mess kit, tinderbox, 10 torches, 10 rations, waterskin, 50ft rope)",
+    "Rock Necklace (made by Dwayne — identifies real Sarick from fakes)",
+    "Kraken's Kiss Dark Rum (gives gills for 10 minutes)",
+    "Half Price Potion (roll d100 for effect)",
+    "80 gp"
   ],
   "spells": [],
-  "spellcasting": [],
+  "spellcasting": [
+    {
+      "name": "Rune: Stone Rune (Giant Foundling)",
+      "desc": "While wearing/carrying the inscribed object: advantage on Wisdom (Insight) checks and darkvision 120 ft. Reaction: when a creature ends its turn within 30 ft, force Wisdom saving throw or be charmed (speed 0, incapacitated, dreamy stupor) for 1 minute. Repeats save each turn. Once per short or long rest."
+    }
+  ],
   "actions": [
     {
       "name": "Greataxe",
-      "desc": "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 8 (1d12+2) slashing. While raging: 10 (1d12+4) slashing."
+      "desc": "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 1d12+2 slashing. While raging: 1d12+4 slashing."
+    },
+    {
+      "name": "Stone Throw (Keenness of the Stone Giant)",
+      "desc": "Ranged spell attack, range 60 ft. On a hit: 1d10 force damage + DC [8+PB+Str mod] Strength saving throw or Prone. Uses: proficiency bonus per long rest."
     },
     {
       "name": "Reckless Attack",
-      "desc": "On his first attack of the turn, Sarick can choose to attack with advantage on all Strength melee attacks this turn. Until his next turn, attack rolls against him also have advantage."
+      "desc": "On first attack each turn, choose to gain advantage on all Str-based melee attacks this turn. Until next turn, attacks against Sarick also have advantage."
     }
   ],
   "class_features": [
     {
-      "name": "Rage (2/long rest)",
-      "desc": "Bonus action to enter rage. While raging: advantage on Str checks and Str saves; +2 damage on Str-based melee weapon attacks; resistance to bludgeoning, piercing, and slashing damage. Ends if Sarick hasn't attacked or taken damage since his last turn, or if he falls unconscious."
+      "name": "Rage (3/long rest)",
+      "desc": "Bonus action to enter rage. While raging: advantage on Str checks and Str saves; +2 damage on Str melee attacks; resistance to bludgeoning, piercing, and slashing damage. Ends if no attack/damage since last turn or falls unconscious. 3 uses at level 4."
     },
     {
       "name": "Reckless Attack",
-      "desc": "On his first attack each turn, can choose to gain advantage on all Str-based melee attacks this turn. Attack rolls against him have advantage until his next turn."
+      "desc": "Advantage on all Str melee attacks this turn. Attackers also have advantage against Sarick until his next turn."
     },
     {
       "name": "Danger Sense",
-      "desc": "Advantage on Dexterity saving throws against effects he can see — including traps and spells. Doesn't apply while blinded, deafened, or incapacitated."
+      "desc": "Advantage on Dexterity saving throws against effects he can see (traps, spells). Not while blinded, deafened, or incapacitated."
+    },
+    {
+      "name": "Path of the Berserker: Frenzy",
+      "desc": "When raging, Sarick can choose to frenzy. For the rage's duration, he can make one melee weapon attack as a bonus action each turn after the first. When rage ends, he suffers one level of Exhaustion. Use carefully."
     },
     {
       "name": "Unarmored Defense",
-      "desc": "While not wearing armor, AC = 10 + Dex mod (-1) + Con mod (+1) = 10. Currently wearing chain shirt (AC 13 + Dex, capped: 12 shown)."
+      "desc": "Without armor: AC = 10 + Dex mod (-1) + Con mod (+1) = 10. Currently using Specialist Barbarian Armour (13 + Str mod +3 = 16 AC)."
     },
     {
-      "name": "Frenzy (Path of the Berserker — Level 3)",
-      "desc": "NOT YET UNLOCKED (available at level 3). When Sarick rages, he can choose to frenzy. For the duration he can make a single melee weapon attack as a bonus action each turn after the first. When the rage ends he suffers one level of exhaustion."
+      "name": "Keenness of the Stone Giant (Feat)",
+      "desc": "+1 Str (included). Darkvision extended by 60 ft (now 120 ft total). Stone Throw: bonus action, ranged spell attack 60 ft, 1d10 force + Prone on failed Str save. Uses = proficiency bonus per long rest."
+    },
+    {
+      "name": "Ability Score Improvement (Level 4)",
+      "desc": "+1 Str, +1 Con from ASI (reflected in current stats)."
     }
   ],
   "traits": [
     {
       "name": "Rock Gnome",
-      "desc": "Darkvision 60 ft. Gnome Cunning: advantage on Int/Wis/Cha saving throws against magic. Artificer's Lore: double proficiency on History checks about magic, tech, or alchemy. Tinker: construct tiny clockwork devices."
+      "desc": "Darkvision 60 ft (extended to 120 ft by feat and Stone Rune). Gnome Cunning: advantage on Int/Wis/Cha saving throws against magic. Artificer's Lore: double proficiency on History checks about magic, tech, or alchemy. Tinker: construct tiny clockwork devices."
     },
     {
       "name": "Giant Foundling (Background)",
-      "desc": "Raised among giants or their culture. Provides skill proficiencies listed above."
+      "desc": "Raised among giants. Skill proficiencies: Intimidation, Survival. Grants the Strike of the Giants feat at character creation. Origin: likely found/raised by stone giants."
     },
     {
       "name": "Personality",
-      "desc": "Trait: Curious and inquisitive. Bond: Easily distracted. He is an angry dude."
+      "desc": "Curious and inquisitive. Easily distracted. Is an angry dude."
+    },
+    {
+      "name": "Special Notes",
+      "desc": "🍳🥓 Bonus action for +4 temp HP (cooking related). Has 1 free Inspiration+ for slicing an enemy in half. Stone Heart Amulet gives +4 temp HP while raging. Temp +2 AC available from some source. Augury available as ritual via class access."
     }
   ],
   "goals": [
     "Collect interesting rocks",
-    "Fight things"
+    "Fight things",
+    "Honour his giant mentor (Stone Heart Amulet)"
   ],
-  "backstory": "A Rock Gnome barbarian raised in or around giant culture. Curious and easily distracted, but deeply angry underneath. Simple wants: rocks and combat. What fuels the anger is left to discover at the table.",
-  "notes": "Simple character with a big axe and a short temper. Key combat loop: Rage (bonus action) → Reckless Attack (advantage on greataxe) → deal significant damage while taking resistance to physical damage. Watch for Reckless Attack being used carelessly — it gives enemies advantage on him too. Frenzy unlocks at level 3 but comes with exhaustion cost — worth flagging when they level up. AC 12 is low; he relies on HP (30 is solid for level 2) and damage resistance while raging to survive. Gnome Cunning is surprisingly strong for a Barbarian — good saves vs magic."
+  "backstory": "A Rock Gnome barbarian raised among giants. The Stone Heart Amulet was given to him by his previous elder or mentor. He wears a Rock Necklace made by Dwayne so others can tell the real Sarick from any impersonators. Curious, easily distracted, but with a deep anger underneath.",
+  "notes": "Level 4 update: Str increased to 14 (+2), Con 13 (+1). AC is 16 using Specialist Barbarian Armour (scales with Str mod). Currently at 24/30 HP with 4 temp HP from Stone Heart Amulet. Has Frenzy available — warn player about the Exhaustion cost each use. Stone Throw is a bonus action ranged attack, uses per long rest = proficiency bonus (2). Stone Rune reaction is very powerful — charmed + incapacitated + speed 0. Rage uses: 3 per long rest at level 4."
 }

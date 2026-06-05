@@ -1,63 +1,108 @@
 {
   "name": "Derrick Willow Aleoi Yusaf Nate Erickson",
-  "player": "Derrick",
+  "player": "Jason",
   "size": "Small",
   "race": "Rock Gnome",
   "type": "humanoid",
   "class": "Druid",
-  "subclass": "Circle of the Land (likely)",
+  "subclass": "Circle of the Land",
   "alignment": "Neutral Good",
-  "level": 2,
-  "ac": 10,
+  "level": 4,
+  "ac": 14,
   "hp": 27,
   "hp_max": 27,
   "hp_current": 27,
-  "hit_dice": "2d8",
+  "hit_dice": "4d8",
   "speed": "25 ft.",
-  "stats": [8, 7, 13, 17, 15, 12],
-  "saves": ["Int +5", "Wis +4"],
-  "skills": ["Medicine +4", "Religion +5", "Persuasion +3", "Arcana +3", "History +3", "Investigation +3", "Nature +3", "Animal Handling +2", "Insight +2", "Perception +2", "Survival +2", "Performance +1", "Deception +1"],
-  "languages": ["Common", "Gnomish", "Goblin", "Druidic (secret)"],
+  "stats": [8, 7, 12, 15, 15, 12],
+  "saves": ["Int +4", "Wis +4"],
+  "skills": ["Medicine +4", "Persuasion +3", "Religion +5", "Arcana +3", "History +3", "Investigation +3", "Nature +3", "Animal Handling +2", "Insight +2", "Perception +2", "Survival +2", "Performance +1", "Deception +1"],
+  "languages": ["Common", "Gnomish", "Goblin", "Druidic (secret language)"],
   "proficiency": 2,
   "passive_perception": 12,
-  "background": "Plaintiff (Legalese trait)",
-  "inspiration": false,
+  "background": "Plaintiff",
+  "inspiration": 2,
   "equipment": [
-    "Hide armor",
-    "Wooden quarterstaff",
-    "Herbalism kit",
-    "Fine clothes",
-    "70 gp"
+    "Moonspire Robe (AC 14 — see tracker)",
+    "Wooden Staff / Druidic Focus (1d6 bludgeoning, versatile 1d8)",
+    "Shortsword (+3, 1d6 piercing, finesse, light)",
+    "Tinker's Tools",
+    "Weird Brown Truffle Substance x5",
+    "Truffles x2",
+    "Odd Mushroom (quantity 0 — used up)",
+    "Silver Drop Drink x2 (last use: wild mushroom space trip — observe effects on other species)",
+    "Bedroll",
+    "Half Price Potion (roll d100 for effect)",
+    "160 gp"
   ],
-  "spells": ["Cure Wounds", "Entangle", "Grease", "Healing Word", "Mending (cantrip)", "Shape Water (cantrip)", "Moonbeam"],
+  "spells": [
+    "Mending (cantrip)",
+    "Shape Water / Hurl Wave (cantrip, homebrew — 1d8 cold damage)",
+    "Thunderclap (cantrip — 1d6 thunder, 5ft emanation, Con save)",
+    "Cure Wounds",
+    "Entangle",
+    "Grease (free once per long rest via Artificer Initiate)",
+    "Healing Word",
+    "Darkness",
+    "Moonbeam",
+    "Melf's Acid Arrow"
+  ],
   "spellcasting": [
     {
       "name": "Druid Spellcasting (Wisdom)",
-      "desc": "Spell save DC 12; spell attack +4. 3 first-level spell slots. Cantrips: Mending, Shape Water. Prepared (4): Cure Wounds, Entangle, Grease (from Artificer Initiate), Healing Word."
+      "desc": "Spell save DC 12; spell attack +4. Slots: 3 cantrips, 3 (1st level), 4 (2nd level), 3 (3rd level — wait, level 4 druid gets 3/4/3 per XML slotsCurrent). Prepared spells = Wis mod + druid level = 2 + 4 = 6 spells. Ritual casting available. Spellcasting focus: wooden staff or druidic focus."
+    },
+    {
+      "name": "Circle of Land: Natural Recovery",
+      "desc": "Once per long rest, during a short rest, recover expended spell slots totalling up to half druid level rounded up (2 levels). Can recover a 2nd-level slot or two 1st-level slots."
     }
   ],
   "actions": [
     {
-      "name": "Quarterstaff",
-      "desc": "Melee Weapon Attack: +0 to hit, reach 5 ft., one target. Hit: 3 (1d6-1) bludgeoning, or 2 (1d4-1) one-handed."
+      "name": "Shortsword",
+      "desc": "Melee Weapon Attack: +3 to hit (Dex), reach 5 ft., one target. Hit: 1d6 piercing (finesse). Vex mastery: on hit, advantage on next attack against same target."
+    },
+    {
+      "name": "Wooden Staff",
+      "desc": "Melee Weapon Attack: -1 to hit (Str), reach 5 ft., one target. Hit: 1d6-1 bludgeoning (1d8-1 two-handed). Functionally useless in combat — use spells."
+    },
+    {
+      "name": "Wild Shape",
+      "desc": "Transform into a beast CR 1/2 or lower, no flying speed (level 4). Duration: 2 hours. 2 uses per short or long rest."
     },
     {
       "name": "Cast a Spell",
-      "desc": "Spell save DC 12; spell attack +4. Slots: 3 (1st). Prepared: Cure Wounds, Entangle, Grease, Healing Word. Cantrips: Mending, Shape Water."
+      "desc": "Spell save DC 12; spell attack +4. Key spells: Moonbeam (2d10 radiant, Con save, moves 60ft/turn), Entangle (Str save, restrained), Melf's Acid Arrow (ranged spell attack, 4d4 acid + 2d4 next turn), Healing Word (bonus action, 2d4+2 heal), Cure Wounds (touch, 1d8+2 heal), Darkness (15ft radius magical dark, concentration)."
     }
   ],
   "class_features": [
     {
       "name": "Druidic",
-      "desc": "Knows the secret language of druids. Can leave hidden messages understood only by other druids."
+      "desc": "Knows the secret language of druids. Can leave hidden messages readable only by other druids (DC 15 Perception to notice, magic required to decipher)."
     },
     {
-      "name": "Wild Shape",
-      "desc": "Transform into a beast with CR 1/4 or lower (no flying or swimming speed). 2 uses per short/long rest. Duration: 1 hour."
+      "name": "Wild Shape (Level 4)",
+      "desc": "CR 1/2 or lower, no flying speed. Duration 2 hours. 2 uses per short/long rest. Retains Int/Wis/Cha; gains beast's physical stats and HP. Can't cast spells in beast form. Equipment falls, merges, or is worn."
+    },
+    {
+      "name": "Circle of the Land: Bonus Cantrip",
+      "desc": "Learned one additional druid cantrip (Thunderclap taken from the XML)."
+    },
+    {
+      "name": "Circle of the Land: Natural Recovery",
+      "desc": "Once per long rest, short rest lets Derrick recover spell slots totalling up to 2 levels (a 2nd-level slot or two 1st-level slots)."
     },
     {
       "name": "Artificer Initiate (Feat)",
-      "desc": "Knows Mending cantrip. Can cast Grease once per long rest without a spell slot. Gains proficiency with one artisan tool."
+      "desc": "Knows Mending cantrip. Can cast Grease once per long rest without a spell slot (uses Intelligence as casting ability). Proficient with Tinker's Tools."
+    },
+    {
+      "name": "Ability Score Improvement (Level 4)",
+      "desc": "+1 Int, +1 Wis from ASI (reflected in current stats: Int 15, Wis 15)."
+    },
+    {
+      "name": "Companion: Gerrick's Son (Baboon)",
+      "desc": "A baboon companion (Derrick calls it Gerrick's Son). AC 12, HP 3, speed 30ft/climb 30ft. Bite: +1 to hit, 1d4-1 piercing. Pack Tactics: advantage on attacks if an ally is within 5ft of target."
     }
   ],
   "traits": [
@@ -71,20 +116,21 @@
     },
     {
       "name": "Legalese (Background)",
-      "desc": "Advantage on checks to interpret, negotiate, or exploit legal and contractual text. Took law as an elective — can talk the talk but doesn't fully understand it."
+      "desc": "Can use complex legal terminology to frighten, intimidate, or deceive people who don't know better. Advantage on checks to interpret, negotiate, or exploit legal and contractual text. Took law as an elective — talks the talk but doesn't fully understand it."
     },
     {
       "name": "Personality",
-      "desc": "Traits: Gambling addict. Experimentalist — tests foreign materials for medicinal purpose. Ideals: Will do anything to advance medical knowledge; the needs of the many outweigh the few. Flaws: Cannot read facial expressions or interpret emotions from body language. Thirst for experimentation regularly breaks moral boundaries — never misses a medical opportunity."
+      "desc": "Gambling addict. In pursuit of medical prowess, experiments on new materials for medicinal purposes. Ideals: Will do anything to further medical career. The needs of the many outweigh the needs of the few. Flaws: Cannot read facial expressions or interpret emotions (type of autism). Thirst for experimentation regularly crosses moral lines — never misses a medical opportunity."
     }
   ],
   "goals": [
     "Become one of the greatest healers of his time",
-    "Gather foreign ingredients and medical knowledge from across the world",
+    "Gather foreign ingredients and medical knowledge (Silver Drop Drink, Weird Brown Truffle Substance, Odd Mushrooms)",
     "Return home to open a profitable medical centre",
     "Feed his gambling addiction",
-    "Acquire money"
+    "Get new robes (currently has Moonspire Robe)",
+    "Figure out what assistance Blaine can provide"
   ],
-  "backstory": "A relatively young Rock Gnome who graduated from a prestigious local institution with ambitions of becoming the greatest healer of his generation. He studied law as an elective — enough to sound convincing but not enough to fully understand it.\n\nHe left home to adventure and explore foreign lands, seeking medical knowledge from beyond his home village's borders. His method is experimentation — testing unknown materials to discover their medicinal properties, a habit that frequently crosses moral lines.\n\nHis long-term plan: gather enough knowledge and ingredients, return home, and open a medical centre. The profit would fund his gambling addiction. He has befriended Blaine — details of that relationship are still being worked out.\n\nHe needs new robes.",
-  "notes": "Focus hooks on: gambling and money opportunities, mysterious or exotic ingredients he could experiment with. Has befriended Blaine — work out what assistance Blaine might provide. Needs new robes as an in-world goal. His AC (10) is dangerously low — he is extremely fragile in melee. His value is in healing (Cure Wounds, Healing Word) and control (Entangle, Grease). Low Str and Dex means his quarterstaff is essentially useless."
+  "backstory": "A young Rock Gnome who graduated from a prestigious institution with ambitions of becoming the greatest healer of his generation. Studied law as an elective — sounds convincing but doesn't fully understand it. Left home to gather medical knowledge by experimentation, testing unknown substances on whatever subjects are available. Long-term plan: return home with knowledge and exotic ingredients and open a profitable medical centre to fund his gambling addiction. Has befriended Blaine — relationship still being developed. Now has the Moonspire Robe and a baboon companion named Gerrick's Son. Has 2 uses of Inspiration.",
+  "notes": "Level 4 update: Slots now 3/4/3 (cantrips/1st/2nd). Spell save DC 12, attack +4. New spells: Darkness, Moonbeam, Melf's Acid Arrow. AC is 14 from Moonspire Robe (tracked separately). Has 160gp and a wide collection of experimental substances — hook into these for RP. His Wild Shape now reaches CR 1/2 (crocodile, giant spider, etc). Gerrick's Son baboon companion — find out how this was acquired. Silver Drop Drink causes wild psychedelic effects — 2 remaining. Has 2 Inspiration. Note: Darkness is not on druid spell list — flagged as possibly from Moonspire Robe or another source."
 }

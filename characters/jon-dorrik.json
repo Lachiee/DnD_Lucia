@@ -1,5 +1,5 @@
 {
-  "name": "Dorrik \"Rockpocket\"",
+  "name": "Dorrik Bromrick Tovin Brambleknot Pindle Foddick Rockpocket",
   "player": "Dorrik",
   "size": "Small",
   "race": "Rock Gnome",
@@ -7,77 +7,107 @@
   "class": "Paladin",
   "subclass": "Oath of Devotion",
   "alignment": "Chaotic Good",
-  "level": 2,
+  "level": 4,
   "ac": 19,
-  "hp": 34,
-  "hp_max": 34,
-  "hp_current": 34,
-  "hit_dice": "2d10",
+  "hp": 44,
+  "hp_max": 44,
+  "hp_current": 15,
+  "hit_dice": "4d10",
   "speed": "25 ft.",
-  "stats": [12, 8, 17, 15, 17, 9],
-  "saves": ["Str +1", "Dex -1", "Con +3", "Int +2", "Wis +5", "Cha +1"],
-  "skills": ["History +4", "Insight +5", "Survival +5", "Religion +4", "Athletics +1", "Perception +3", "Medicine +3", "Animal Handling +3", "Investigation +2", "Nature +2"],
+  "stats": [12, 8, 18, 15, 17, 10],
+  "saves": ["Wis +5", "Cha +2"],
+  "skills": ["History +4", "Insight +5", "Survival +5", "Religion +4"],
   "languages": ["Common", "Gnomish"],
   "proficiency": 2,
   "passive_perception": 13,
   "background": "Fisher",
   "inspiration": false,
   "equipment": [
-    "Chain mail",
-    "Shield",
+    "Chain mail (AC 16 base)",
+    "Shield (+3 AC)",
     "Morningstar",
+    "Moonthistle Morningstar (magic item)",
     "Cook's Utensils",
     "Basic Fishing Gear",
-    "Priest's Pack",
-    "10 gp"
+    "Priest's Pack"
   ],
-  "spells": ["Divine Favor", "Shield of Faith", "Command"],
+  "spells": [
+    "Bless",
+    "Command",
+    "Divine Favor",
+    "Shield of Faith",
+    "Thunderous Smite"
+  ],
   "spellcasting": [
     {
       "name": "Paladin Spellcasting (Charisma)",
-      "desc": "Spell save DC 9; spell attack +1. 2 first-level spell slots. Prepared spells: Divine Favor, Shield of Faith, Command."
+      "desc": "Spell save DC 10; spell attack +2. Spell slots: 3 (1st level). Prepared spells: Bless, Command, Divine Favor, Shield of Faith, Thunderous Smite."
     }
   ],
   "actions": [
     {
       "name": "Morningstar",
-      "desc": "Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 5 (1d8+1) bludgeoning."
+      "desc": "Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 1d8+1 piercing."
+    },
+    {
+      "name": "Moonthistle Morningstar",
+      "desc": "Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 1d8+1 bludgeoning. (Magic item — counts as magical for overcoming resistance.)"
     },
     {
       "name": "Lay on Hands",
-      "desc": "Heal HP from a pool of 10 HP total. Spend 5 HP to cure a disease or neutralise a poison."
+      "desc": "Pool of 20 HP (4 × 5). Restore HP as an action, or spend 5 HP to cure a disease or neutralise a poison. Replenishes on long rest."
+    },
+    {
+      "name": "Divine Smite",
+      "desc": "When Dorrik hits with a melee weapon attack, expend a spell slot to deal radiant damage: 2d8 for a 1st-level slot (+1d8 per slot level above 1st, max +5d8). +1d8 extra against undead or fiends."
     },
     {
       "name": "Cast a Spell",
-      "desc": "Spell save DC 9; spell attack +1. Slots: 2 (1st). Prepared: Divine Favor, Shield of Faith, Command."
+      "desc": "Spell save DC 10; spell attack +2. Slots: 3 (1st). Prepared: Bless, Command, Divine Favor, Shield of Faith, Thunderous Smite."
     }
   ],
   "class_features": [
     {
       "name": "Divine Sense",
-      "desc": "Sense celestials, fiends, and undead within 60 ft (not behind total cover) until end of next turn. Uses: 1 + Cha mod per long rest."
+      "desc": "Sense celestials, fiends, and undead within 60 ft (not behind total cover) until end of next turn. Uses: 1 + Cha mod (1) = 1 per long rest."
     },
     {
       "name": "Lay on Hands",
-      "desc": "Pool of 10 HP. Restore HP as an action, or spend 5 HP to cure a disease or neutralise a poison. Replenishes on long rest."
+      "desc": "Pool of 20 HP. Restore HP or spend 5 HP to cure disease/poison. Refreshes on long rest."
     },
     {
       "name": "Fighting Style — Defense",
-      "desc": "+1 AC while wearing armor. Already included in AC total."
+      "desc": "+1 AC while wearing armor. Already included in AC total (19)."
     },
     {
       "name": "Divine Smite",
-      "desc": "When Dorrik hits with a melee weapon attack, he may expend a spell slot to deal radiant damage: 2d8 for a 1st-level slot (+1d8 per slot level above 1st, max +5d8). +1d8 extra against undead or fiends."
+      "desc": "On a melee hit, expend a spell slot: 2d8 radiant (1st slot) +1d8 per level above 1st, max 5d8. +1d8 vs undead/fiends."
     },
     {
-      "name": "Oath of Devotion — DM NOTE",
-      "desc": "Oath of Devotion is a rigid oath. Dorrik holds everyone — including himself — to the same strict standards of good. Watch for situations that might tempt him to break it. Breaking the oath makes him an Oathbreaker Paladin."
+      "name": "Divine Health",
+      "desc": "Immune to disease."
+    },
+    {
+      "name": "Sacred Weapon (Channel Divinity — Oath of Devotion)",
+      "desc": "As an action, imbue one weapon with positive energy. For 1 minute: add Cha modifier to attack rolls with the weapon (minimum +1); weapon emits bright light 20 ft, dim light 20 ft further; weapon becomes magical if not already. Ends early if Dorrik is incapacitated or sheathes the weapon."
+    },
+    {
+      "name": "Turn the Unholy (Channel Divinity — Oath of Devotion)",
+      "desc": "As an action, present your holy symbol. Each fiend or undead within 30 ft that can see or hear you must make a DC 10 Wisdom save or be turned for 1 minute. Turned: must move away, can't take reactions, can only Dash or escape. Ends if it can't move away or takes damage."
+    },
+    {
+      "name": "Oath of Devotion Tenets — DM NOTE",
+      "desc": "Honesty, Courage, Compassion, Honour, Duty. This is a rigid oath — Dorrik holds himself and everyone around him to strict standards of good. Watch for moments that might tempt him to break it (deception, allowing harm to innocents, acting dishonourably for a good outcome). Breaking the oath risks becoming an Oathbreaker Paladin."
+    },
+    {
+      "name": "ASI / Feat (Level 4)",
+      "desc": "Ability score improvement or feat taken at level 4 — not specified in source data. Con went from 17 → 18 suggesting +1 Con, possibly paired with +1 Wis or a feat like War Caster / Resilient."
     }
   ],
   "traits": [
     {
       "name": "Chef (Feat)",
-      "desc": "+1 Con (included). Proficiency with Cook's Utensils. Replenishing Meal: during a short rest, up to 4+PB creatures spending Hit Dice heal +1d8. Bolstering Treats: create PB treats per day, each granting PB temporary HP (lasts 8 hours)."
+      "desc": "+1 Con (included in stats). Proficiency with Cook's Utensils. Replenishing Meal: during a short rest, up to 4+PB creatures spending Hit Dice each heal +1d8. Bolstering Treats: create PB treats per day, each granting PB temporary HP for 8 hours."
     },
     {
       "name": "Rock Gnome",
@@ -85,7 +115,7 @@
     },
     {
       "name": "Harvest the Water (Fisher Background)",
-      "desc": "Advantage on fishing checks. Can sustain a modest lifestyle by fishing alone and feed up to 10 people per day when near water."
+      "desc": "Advantage on fishing checks. Can sustain a modest lifestyle by fishing and feed up to 10 people per day near water."
     },
     {
       "name": "Personality",
@@ -99,6 +129,6 @@
     "Collect loot",
     "Fish whenever possible"
   ],
-  "backstory": "Dorrik grew up in Pebble-Push, a village squeezed between a large cave and the ocean, connected by a river running through an underground lake. His family were the village's front-line defenders against constant kobold raids, and Dorrik was destined to carry the family shield. He had a natural talent for cooking and fishing from childhood.\n\nWhen travelling paladins passed through, Dorrik fed them fresh fish in exchange for stories of the outside world. That night a massive kobold assault hit the village. Dorrik fought but nearly died — he was saved by the paladins, though one of them died protecting him. The attack was repelled and the kobold leader killed. The paladins left Dorrik a book on their faith and told him he was always welcome.\n\nYears later, Dorrik was out on a fishing charter when a freak storm struck. He saw a light in the clouds and believed it was a divine sign. He guided his crew to safety following it. When they returned to shore and made their way home, they found Pebble-Push in flames — the kobolds had planned the attack for when the village was weakest. Dorrik's childhood home burned. They were forced to flee.\n\nDorrik sought out the paladins' church and swore his Oath of Devotion. He became well known at the coven — one of the only Rock Gnome paladins, and beloved in the kitchen. When dwarf soldiers came through heading to retake Pebble-Push from the kobolds who had occupied it, Dorrik joined them. They wiped out the kobolds and Dorrik finally avenged his village. He then continued with the dwarves toward another Rock Gnome settlement, determined to use his strength to protect his kind.",
-  "notes": "Watch his Oath of Devotion — it is one of the strictest oaths, holding himself and everyone around him to rigid standards of good. Breaking the oath risks becoming an Oathbreaker. He is one of the only Rock Gnome paladins and is known for cooking. His spell save DC (9) and spell attack (+1) are low due to poor Charisma — his main value is as a melee frontliner with healing support."
+  "backstory": "Dorrik grew up in Pebble-Push, a village between a large cave and the ocean. His family were the village's front-line defenders against kobold raids and he was destined to carry the family shield. He had a natural talent for cooking and fishing.\n\nWhen travelling paladins passed through, Dorrik fed them fish in exchange for stories. That night a massive kobold assault hit the village. Dorrik fought but nearly died — saved by the paladins, though one died protecting him. The paladins left him a book on their faith.\n\nYears later, out on a fishing charter, a freak storm struck. Dorrik saw a light in the clouds — a divine sign. He guided his crew to safety. Returning home they found Pebble-Push in flames, a planned kobold attack timed for the village's weakest moment. They fled.\n\nDorrik sought the paladins' church and swore his Oath of Devotion. He became known as one of the only Rock Gnome paladins and beloved in the kitchen. When dwarf soldiers came through to retake Pebble-Push, Dorrik joined them. They wiped out the kobolds. He then continued with the dwarves toward another Rock Gnome settlement, determined to protect his kind.",
+  "notes": "Level 4 update: HP up to 44, Con increased to 18 (+4 mod), now has 3 spell slots and 5 prepared spells including Thunderous Smite and Bless. Has acquired the Moonthistle Morningstar (magic weapon). Lay on Hands pool is now 20 HP. Channel Divinity (Sacred Weapon / Turn the Unholy) unlocked at level 3 — 1 use per short or long rest. Currently on 15/44 HP — note to heal before next session. Spell save DC 10 and spell attack +2 remain low (Cha 10). His strength is melee frontline + smites + healing support, not spellcasting."
 }
