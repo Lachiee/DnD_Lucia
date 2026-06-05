@@ -582,6 +582,13 @@ textarea.tall{min-height:90px}
       <div><label>First Prep for Next Session</label><textarea id="next-prep" placeholder="What to prep first next time…"></textarea></div>
     </div>
   </div>
+
+  <div class="sec">
+    <div class="stitle">Consequences &amp; Ongoing Effects</div>
+    <p class="shint">Track consequences from this session — injuries, debts, curses, faction shifts, reputation changes, broken bonds. Assign to a character or the whole party.</p>
+    <div class="cl" id="conseq-list"></div>
+    <button class="abtn" data-ac="fn-addConseq">+ Add Consequence</button>
+  </div>
 </div>
 
 <!-- ══ HISTORY ══ -->
@@ -675,7 +682,7 @@ const GITHUB_CONFIG = {
   user: 'Lachiee',
   repo: 'DnD_Lucia',
   branch: 'main',
-  folder: 'Characters',   // ← Capital C to match your repo
+  folder: 'characters',   // ← lowercase — GitHub stores it as 'characters'
   characterFiles: [
     'stuart-warryn.json'
     // Add more filenames here as players join
@@ -721,6 +728,7 @@ document.addEventListener('click', function(e) {
     'fn-exportSession': exportSession,
     'fn-print': () => window.print(),
     'fn-clearAll': clearAll,
+    'fn-addConseq': addConseq,
     'fn-closeParse': closeParseModal,
     'fn-parseAndLoad': parseAndLoad,
     'fn-tabsLeft': () => scrollTabs(-120),
@@ -1358,6 +1366,28 @@ function handleDrop(e){
   reader.readAsText(file);
 }
 
+function addConseq(){
+  const card = mkCard('conseq-list',[
+    {cols:3, items:[
+      {key:'cq-char', label:'Assigned To', placeholder:'Character name or "Party"'},
+      {key:'cq-type', label:'Type', placeholder:'Injury / Curse / Debt / Reputation / Bond / Other'},
+      {key:'cq-severity', label:'Severity', placeholder:'Minor / Moderate / Major / Critical'}
+    ]},
+    {cols:2, items:[
+      {key:'cq-title', label:'Consequence', placeholder:'e.g. Broken ribs from the cave-in'},
+      {key:'cq-source', label:'Source / Cause', placeholder:'e.g. Failed Str save vs rockfall in Session 7'}
+    ]},
+    {cols:1, items:[{key:'cq-desc', label:'Mechanical Effect / Ongoing Condition', type:'textarea', rows:2,
+      placeholder:'e.g. Disadvantage on Athletics checks until healed. Needs a week of rest or magical healing.', span:true}]},
+    {cols:2, items:[
+      {key:'cq-resolved', label:'Resolved?', placeholder:'No / Yes — how?'},
+      {key:'cq-session', label:'Session Introduced', placeholder:'e.g. Session 7'}
+    ]}
+  ]);
+  // Style the card with a left red border to make it stand out
+  if(card) card.style.borderLeft = '4px solid var(--red)';
+}
+
 // ══════════════════════════════════════════════════════
 //  SAVE / LOAD / EXPORT
 // ══════════════════════════════════════════════════════
@@ -1368,7 +1398,7 @@ function collectData(){
     'summary','worked-well','improve','loose-threads','secrets-used','next-prep'];
   ids.forEach(id=>{const el=document.getElementById(id);if(el)data[id]=el.value;});
   const cardLists=['hook-list','scenes-list','secrets-list','loc-list',
-    'npc-list','mon-list','treas-list','faction-list'];
+    'npc-list','mon-list','treas-list','faction-list','conseq-list'];
   cardLists.forEach(lid=>{
     const list=document.getElementById(lid);if(!list)return;
     data[lid]=Array.from(list.querySelectorAll('.card')).map(card=>
@@ -1402,7 +1432,7 @@ function applyData(data){
   ids.forEach(id=>{const el=document.getElementById(id);if(el&&data[id]!==undefined)el.value=data[id];});
   const restorers={'hook-list':addHook,'scenes-list':addScene,'secrets-list':addSecret,
     'loc-list':addLoc,'npc-list':addNPC,'mon-list':addMon,
-    'treas-list':addTreas,'faction-list':addFaction};
+    'treas-list':addTreas,'faction-list':addFaction,'conseq-list':addConseq};
   Object.keys(restorers).forEach(lid=>{
     const list=document.getElementById(lid);if(!list||!data[lid])return;
     list.innerHTML='';
