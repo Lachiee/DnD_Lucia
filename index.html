@@ -1547,11 +1547,79 @@ function addNPC(){mkCard('npc-list',[
   {cols:2,items:[{key:'np-goal',label:'Active Quest / Goal',placeholder:'What are they doing to get it?'},{key:'np-fic',label:'Based On (fiction)',placeholder:'e.g. Tyrion Lannister'}]},
   {cols:1,items:[{key:'np-notes',label:'Notes / Secrets',type:'textarea',rows:1,placeholder:'Hooks, attitude to party…',span:true}]}
 ]);}
-function addMon(){mkCard('mon-list',[
-  {cols:5,items:[{key:'mn-name',label:'Name',placeholder:'Vampire Spawn'},{key:'mn-cr',label:'CR',placeholder:'5'},{key:'mn-hp',label:'HP',placeholder:'82'},{key:'mn-ac',label:'AC',placeholder:'15'},{key:'mn-n',label:'Count',placeholder:'2'}]},
-  {cols:2,items:[{key:'mn-mot',label:'Motivation',placeholder:'Feed and obey Strahd'},{key:'mn-tac',label:'Tactics',placeholder:'Bite first, charm if outnumbered'}]},
-  {cols:1,items:[{key:'mn-notes',label:'What Makes This Monster Interesting?',type:'textarea',rows:1,placeholder:'Beyond the stat block…',span:true}]}
-]);}
+function addMon(){
+  const card = mkCard('mon-list',[
+    {cols:5,items:[{key:'mn-name',label:'Name',placeholder:'Vampire Spawn'},{key:'mn-cr',label:'CR',placeholder:'5'},{key:'mn-hp',label:'HP',placeholder:'82'},{key:'mn-ac',label:'AC',placeholder:'15'},{key:'mn-n',label:'Count',placeholder:'2'}]},
+    {cols:2,items:[{key:'mn-mot',label:'Motivation',placeholder:'Feed and obey Strahd'},{key:'mn-tac',label:'Tactics',placeholder:'Bite first, charm if outnumbered'}]},
+    {cols:1,items:[{key:'mn-notes',label:'What Makes This Monster Interesting?',type:'textarea',rows:1,placeholder:'Beyond the stat block…',span:true}]}
+  ]);
+  if(card) addInitBtnToMonCard(card);
+}
+
+function addInitBtnToMonCard(card){
+  const btnRow = document.createElement('div');
+  btnRow.style.cssText = 'margin-top:.5rem;display:flex;gap:.4rem;flex-wrap:wrap;align-items:center';
+
+  const initBtn = document.createElement('button');
+  initBtn.className = 'abtn';
+  initBtn.style.cssText = 'border-color:var(--red);color:var(--red);font-size:.62rem';
+  initBtn.textContent = '⚔ Add to Initiative';
+  initBtn.addEventListener('click', () => {
+    const name = (card.querySelector('[data-key="mn-name"]')?.value || 'Monster').trim();
+    const hp   = parseInt(card.querySelector('[data-key="mn-hp"]')?.value)  || 10;
+    const ac   = parseInt(card.querySelector('[data-key="mn-ac"]')?.value)  || 10;
+    const count = parseInt(card.querySelector('[data-key="mn-n"]')?.value)  || 1;
+    for(let i = 0; i < count; i++){
+      const label = count > 1 ? `${name} ${i+1}` : name;
+      // Avoid exact duplicate names
+      let finalLabel = label;
+      let n = 2;
+      while(combatants.find(x => x.name === finalLabel)){ finalLabel = `${label} (${n++})`; }
+      combatants.push({name:finalLabel, type:'monster', initiative:0, hp, hpMax:hp, ac, dex:10, conditions:[]});
+    }
+    renderInitList();
+    updateInitSelects();
+    // Flash button feedback
+    initBtn.textContent = `✓ Added${count>1?' ('+count+')':''}`;
+    initBtn.style.background = 'rgba(139,26,26,.1)';
+    setTimeout(()=>{ initBtn.textContent='⚔ Add to Initiative'; initBtn.style.background=''; }, 1800);
+    // Switch to initiative tab
+    const btn = document.querySelector('[data-ac="tab-init"]');
+    if(btn) sw('init', btn);
+  });
+
+  const rollInitBtn = document.createElement('button');
+  rollInitBtn.className = 'abtn';
+  rollInitBtn.style.cssText = 'font-size:.62rem';
+  rollInitBtn.textContent = '🎲 Roll & Add';
+  rollInitBtn.addEventListener('click', () => {
+    const name  = (card.querySelector('[data-key="mn-name"]')?.value || 'Monster').trim();
+    const hp    = parseInt(card.querySelector('[data-key="mn-hp"]')?.value)  || 10;
+    const ac    = parseInt(card.querySelector('[data-key="mn-ac"]')?.value)  || 10;
+    const count = parseInt(card.querySelector('[data-key="mn-n"]')?.value)  || 1;
+    for(let i = 0; i < count; i++){
+      const roll = Math.floor(Math.random()*20)+1;
+      const label = count > 1 ? `${name} ${i+1}` : name;
+      let finalLabel = label;
+      let n = 2;
+      while(combatants.find(x => x.name === finalLabel)){ finalLabel = `${label} (${n++})`; }
+      combatants.push({name:finalLabel, type:'monster', initiative:roll, hp, hpMax:hp, ac, dex:10, conditions:[]});
+    }
+    // Sort by initiative
+    combatants.sort((a,b)=>b.initiative-a.initiative);
+    renderInitList();
+    updateInitSelects();
+    rollInitBtn.textContent = `✓ Rolled & Added${count>1?' ('+count+')':''}`;
+    rollInitBtn.style.background = 'rgba(180,130,60,.15)';
+    setTimeout(()=>{ rollInitBtn.textContent='🎲 Roll & Add'; rollInitBtn.style.background=''; }, 1800);
+    const btn = document.querySelector('[data-ac="tab-init"]');
+    if(btn) sw('init', btn);
+  });
+
+  btnRow.appendChild(initBtn);
+  btnRow.appendChild(rollInitBtn);
+  card.appendChild(btnRow);
+}
 function addTreas(){mkCard('treas-list',[
   {cols:4,items:[{key:'tr-name',label:'Item / Reward',placeholder:'+1 Longsword'},{key:'tr-type',label:'Type',placeholder:'Magic/Coin/Info'},{key:'tr-meth',label:'Method',placeholder:'Chosen/Random'},{key:'tr-for',label:'Best For',placeholder:'Character or Any'}]},
   {cols:1,items:[{key:'tr-desc',label:'Description / Lore',type:'textarea',rows:1,placeholder:'Where found, what it does…',span:true}]}
@@ -2183,6 +2251,8 @@ function applyData(data){
       Object.entries(row).forEach(([key,val])=>{
         const inp=card.querySelector('[data-key="'+key+'"]');if(inp)inp.value=val;
       });
+      // Re-add initiative button for monster cards
+      if(lid==='mon-list' && card) addInitBtnToMonCard(card);
     });
   });
   if(data['enc-list-html'])document.getElementById('enc-list').innerHTML=data['enc-list-html'];
