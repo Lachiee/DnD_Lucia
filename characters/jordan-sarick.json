@@ -11,7 +11,7 @@
   "ac": 16,
   "hp": 30,
   "hp_max": 30,
-  "hp_current": 24,
+  "hp_current": 30,
   "hp_temp": 4,
   "hit_dice": "4d12",
   "speed": "25 ft.",
