@@ -1330,6 +1330,32 @@ canvas#web-canvas:active { cursor: grabbing; }
         <div class="gen-history" id="start-history"></div>
       </div>
 
+      <!-- FORK GENERATOR -->
+      <div class="gen-card gen-full">
+        <div class="gen-card-title">Scene Fork</div>
+        <div class="gen-card-hint">A meaningful choice with two genuine paths. Filter by situation type, then generate. Riff on the result — don't use it literally.</div>
+        <div class="gen-controls" style="margin-bottom:.6rem">
+          <select class="gen-select" id="fork-type-filter">
+            <option value="any">Any Situation</option>
+            <option value="travel">Travel / Journey</option>
+            <option value="social">Social / Political</option>
+            <option value="dungeon">Dungeon / Location</option>
+            <option value="moral">Moral Dilemma</option>
+            <option value="combat">Combat / Conflict</option>
+            <option value="mystery">Mystery / Investigation</option>
+          </select>
+          <button class="gen-btn" data-ac="fn-genFork">🎲 Generate Fork</button>
+        </div>
+        <div id="fork-result-block" style="background:rgba(255,255,255,.25);border:1px solid var(--parch-shadow);border-radius:2px;padding:.7rem .9rem;margin-bottom:.6rem;min-height:80px">
+          <div style="font-family:'IM Fell English',serif;font-style:italic;font-size:.88rem;color:var(--ink-light)">Click Generate Fork to create a player choice…</div>
+        </div>
+        <div style="display:flex;gap:.4rem;flex-wrap:wrap">
+          <button class="gen-send-btn" data-ac="fn-genForkSend">→ Send to Scenes / Forks (Step 3)</button>
+          <button class="gen-send-btn" data-ac="fn-genForkCopy">📋 Copy to Clipboard</button>
+        </div>
+        <div class="gen-history" id="fork-history"></div>
+      </div>
+
     </div>
   </div>
 </div>
@@ -1459,6 +1485,9 @@ document.addEventListener('click', function(e) {
     'fn-genTrap': genTrap,
     'fn-genStart': genStart,
     'fn-genStartSend': genStartSend,
+    'fn-genFork': genFork,
+    'fn-genForkSend': genForkSend,
+    'fn-genForkCopy': genForkCopy,
     'fn-addFork': addFork,
     'fn-calcBench': calcBenchmark,
     'fn-loadCarryForward': loadCarryForward,
@@ -4729,6 +4758,297 @@ document.addEventListener('input', e => {
 window.addEventListener('DOMContentLoaded', ()=>{
   setTimeout(calcBenchmark, 300);
 });
+
+
+// ══════════════════════════════════════════════════════
+//  FORK GENERATOR
+// ══════════════════════════════════════════════════════
+const FORKS = {
+  travel: [
+    {
+      q: 'The road splits. One route is faster but passes through territory known for danger. The other is longer but supposedly safe.',
+      a: 'Take the dangerous shortcut — save time, risk an encounter or toll',
+      b: 'Take the long road — lose half a day, but arrive at something unexpected along the way',
+      change: 'The shortcut reveals information about a current threat. The long road leads them past someone or something that opens a different thread entirely.'
+    },
+    {
+      q: 'A local offers to guide them through the region — for a price. Or they can navigate alone with the map they have.',
+      a: 'Hire the guide — they know things the map doesn\'t, but their loyalty is unknown',
+      b: 'Go alone — slower and riskier, but they stay in control of who knows where they\'re going',
+      change: 'The guide has their own agenda. Going alone means they stumble across something unguarded that the guide would have steered them away from.'
+    },
+    {
+      q: 'They can cross through the forest by day and reach the destination tonight, or make camp now and cross in daylight tomorrow.',
+      a: 'Push through now — arrive tonight, but the forest is dangerous after dark',
+      b: 'Camp and cross at dawn — safer, but something happens at camp during the night',
+      change: 'Crossing at night means an encounter but also an opportunity. Camping safely leads to a different kind of trouble — someone finds them.'
+    },
+    {
+      q: 'A river crossing: a rickety bridge maintained by a toll collector, or a ford further upstream that\'s passable but takes them off the main road.',
+      a: 'Pay the toll and cross — but the toll collector wants more than coin',
+      b: 'Ford the river upstream — free, but they discover something on the far bank no one was supposed to find',
+      change: 'The toll collector is a source of local information — or a spy. The ford leads them past ruins or a camp that changes their plans.'
+    },
+    {
+      q: 'Refugees are moving in the opposite direction on the road. They can stop and ask questions, or press on and ignore them.',
+      a: 'Stop and speak with the refugees — learn what they\'re fleeing',
+      b: 'Press on — arrive faster, but whatever the refugees were fleeing may catch up',
+      change: 'The refugees carry information that reframes the session\'s threat. Ignoring them means the party encounters the cause first-hand, unprepared.'
+    },
+    {
+      q: 'A wanted poster on the road shows a face the party recognises. They can investigate now, or continue to their destination.',
+      a: 'Investigate — find out what happened and why the person is wanted',
+      b: 'Continue — reach the destination, but the wanted person is already there',
+      change: 'Investigating now gives context and possibly an ally. Continuing means a confrontation without it.'
+    },
+  ],
+  social: [
+    {
+      q: 'Two factions both want the party\'s help with the same problem — but from opposite sides.',
+      a: 'Side openly with one faction — get their full resources, make an enemy of the other',
+      b: 'Stay neutral and try to broker a solution — slower, harder, but both stay available',
+      change: 'Open allegiance accelerates the conflict. Neutrality forces the party to understand both sides, which reveals something neither wanted known.'
+    },
+    {
+      q: 'They have what someone needs. That person is offering more than it\'s worth — which means they\'re desperate, or they know something about it the party doesn\'t.',
+      a: 'Take the deal and ask no questions',
+      b: 'Refuse or negotiate — find out why it\'s worth that much to them',
+      change: 'Taking the deal hands over something that matters later. Pushing back opens a thread about what the item actually is or does.'
+    },
+    {
+      q: 'A public accusation has been made against someone the party knows. They can defend them publicly, stay out of it, or use it as leverage.',
+      a: 'Defend the accused — spend political capital, potentially expose themselves',
+      b: 'Stay out of it — the accused faces their fate, but the party stays clean',
+      change: 'Defending creates a loyal ally and a powerful enemy. Staying out means the accused loses something, changes, and may no longer be who the party thought.'
+    },
+    {
+      q: 'An NPC offers information — but only if the party does something uncomfortable first.',
+      a: 'Do what\'s asked — get the information, compromise something',
+      b: 'Refuse and find another way — takes longer and the other way has its own cost',
+      change: 'Complying gets the info but creates obligation. Refusing means they find a partial truth from another source — enough to act on, but with a gap.'
+    },
+    {
+      q: 'The person they need to speak with is in a private meeting. They can interrupt, wait, or find a way to listen in.',
+      a: 'Interrupt — immediate access, but it creates a poor first impression',
+      b: 'Listen in or wait — learn something they weren\'t meant to hear, or miss them entirely',
+      change: 'Interrupting changes the dynamic of the meeting. Listening in reveals a secret — but also makes the party a witness to something dangerous.'
+    },
+    {
+      q: 'A rumour is spreading that involves someone in the party. They can address it directly, ignore it, or use it.',
+      a: 'Address it — shut it down or confirm it, but either way they\'re now the story',
+      b: 'Let it spread — the rumour takes on a life of its own, useful or otherwise',
+      change: 'Addressing it creates a confrontation with whoever started it. Ignoring it means it mutates — it becomes something more dangerous or more useful than the truth.'
+    },
+  ],
+  dungeon: [
+    {
+      q: 'Two doors. One is locked and clearly secured. The other is open — which means something either left through it, or is waiting on the other side.',
+      a: 'Force the locked door — whatever was kept in here was kept in for a reason',
+      b: 'Go through the open door — follow the path of least resistance into uncertainty',
+      change: 'The locked room contains something contained. The open door leads toward what contained it — which is no longer there.'
+    },
+    {
+      q: 'The dungeon splits. One path goes deeper and darker. The other loops back toward the entrance but through unexplored territory.',
+      a: 'Press deeper — face whatever is at the heart of this place',
+      b: 'Take the outer ring — find something missed on the way in, or find an exit',
+      change: 'Going deeper means encountering the main threat at full strength. The outer ring reveals a back way in — and something that explains what\'s really happening here.'
+    },
+    {
+      q: 'Something is making noise ahead. They can rush toward it or approach cautiously.',
+      a: 'Rush in — arrive while something is still happening, change the outcome',
+      b: 'Approach slowly — arrive after it\'s over, but see the aftermath and aren\'t seen',
+      change: 'Rushing in means they intervene in a situation mid-event. Approaching carefully means they observe what happened, who did it, and why — but it\'s done.'
+    },
+    {
+      q: 'A trapped prisoner offers to guide them through the dungeon in exchange for freedom. Or the party navigates alone.',
+      a: 'Free the prisoner and accept the guide — risk trusting someone with their own agenda',
+      b: 'Leave them and find their own way — avoid the complication, but miss the knowledge',
+      change: 'The prisoner knows the dungeon but has reasons to steer the party in a particular direction. Going alone means they stumble onto something the prisoner would have hidden.'
+    },
+    {
+      q: 'The way forward is a long corridor clearly visible from a guard post. They can fight through, find a way around, or try to bluff.',
+      a: 'Fight — fast, loud, costs resources, alerts everyone ahead',
+      b: 'Find another way or bluff — slower, quieter, but requires something from the party',
+      change: 'Fighting alerts the area. The quiet approach requires a sacrifice — information, an item, or a concession — that has later consequences.'
+    },
+    {
+      q: 'A mechanism in the room has two settings. Neither is labelled. One must be activated to proceed.',
+      a: 'Activate the left setting — something good or neutral happens, but something else goes wrong elsewhere',
+      b: 'Activate the right setting — solves the immediate problem but opens something else',
+      change: 'Each setting has a consequence in another part of the dungeon — a door opens, a passage floods, a creature is released. The party won\'t know which until they get there.'
+    },
+  ],
+  moral: [
+    {
+      q: 'They can save many people by sacrificing one. The one person knows what\'s happening and has accepted it. But they don\'t have to accept it.',
+      a: 'Accept the sacrifice — save the many, carry the weight',
+      b: 'Refuse and find another way — harder, slower, not guaranteed to work',
+      change: 'Accepting it works — but the cost follows the party. Finding another way delays and complicates, but changes what the many owe the party and each other.'
+    },
+    {
+      q: 'They\'ve discovered that someone who does genuine good is also responsible for a genuine harm. Exposing them ends the good. Concealing it allows the harm.',
+      a: 'Expose them — justice, at the cost of the good they do',
+      b: 'Conceal it — protect the good, become complicit in the harm',
+      change: 'Exposing them collapses something the community depended on, but creates a vacuum someone else fills. Concealing makes the party responsible for everything that follows.'
+    },
+    {
+      q: 'They can help someone who has done terrible things — and may do so again — because that person is the only one who can help them in return.',
+      a: 'Accept the help — get what they need, knowingly empower someone dangerous',
+      b: 'Refuse — take the harder road without the help, keep their hands clean',
+      change: 'Accepting the help creates a debt and an association. Refusing means they face the next challenge without a crucial resource — but may find an unexpected ally.'
+    },
+    {
+      q: 'A law is unjust. Breaking it would help someone who genuinely needs it. Following it causes harm to that person.',
+      a: 'Break the law — do the right thing, face the legal or social consequence',
+      b: 'Follow the law — stay safe, watch the harm unfold, find another way through official channels',
+      change: 'Breaking the law makes the party outlaws in this area — but earns loyalty. Following it closes one door and opens a different one via the system, slowly and imperfectly.'
+    },
+    {
+      q: 'A dying enemy asks for mercy. Giving it may allow them to recover and cause harm again. Refusing means killing someone who is already beaten.',
+      a: 'Show mercy — let them go, or treat them as a prisoner',
+      b: 'Finish it — remove the threat, deal with what that means for the party',
+      change: 'Mercy creates a future encounter — the enemy returns changed, or their allies seek vengeance. The alternative creates guilt, reputation, or a different kind of consequence.'
+    },
+    {
+      q: 'Someone asks the party to lie on their behalf. The lie protects an innocent. The truth serves justice but harms that innocent.',
+      a: 'Tell the lie — protect the innocent, undermine the institution',
+      b: 'Tell the truth — serve justice, damage the innocent',
+      change: 'The lie becomes a thread — someone knows, or the truth emerges later anyway. The truth earns respect in one place and hostility in another.'
+    },
+  ],
+  combat: [
+    {
+      q: 'The enemy leader is trying to escape while their forces hold the party back. Pursue the leader or finish the fight?',
+      a: 'Pursue the leader — let some enemies escape, but cut off the head',
+      b: 'Finish the fight — the leader gets away, but the party is safe and fully resourced',
+      change: 'Pursuing the leader is a chase — risky, but ends the threat. Finishing the fight means the leader reports back, regroups, and comes back with more information about the party.'
+    },
+    {
+      q: 'The party can win this fight, but winning will destroy something important in the process.',
+      a: 'Win the fight at the cost — accept the collateral damage',
+      b: 'Fight differently — harder, riskier, but try to preserve what matters',
+      change: 'Taking the easy win destroys something with later consequences. Fighting carefully costs resources and possibly a character is injured — but preserves an asset or relationship.'
+    },
+    {
+      q: 'An enemy is offering surrender mid-combat. Accepting means prisoners and complications. Refusing means the fight continues but the moral position shifts.',
+      a: 'Accept the surrender — deal with prisoners, spare lives, create obligation',
+      b: 'Refuse or the offer isn\'t genuine — the fight continues to its conclusion',
+      change: 'Accepting creates three new NPCs who know the party\'s capabilities. Refusing radicalises the remaining enemies — they fight harder knowing no quarter is given.'
+    },
+    {
+      q: 'A civilian is caught in the middle. Protecting them costs tactical positioning. Letting them fend for themselves is faster.',
+      a: 'Protect the civilian — tactical disadvantage, moral high ground',
+      b: 'Focus on the fight — the civilian may be hurt, the party stays efficient',
+      change: 'Protecting the civilian earns loyalty and information. The civilian who fends for themselves — or doesn\'t — changes the aftermath of the encounter.'
+    },
+    {
+      q: 'The party can end this fight by destroying something the enemy values. It\'s not dangerous to them — but it may be important to others.',
+      a: 'Destroy it — win efficiently, face the consequence of what was lost',
+      b: 'Find another way to end it — harder, but the thing survives',
+      change: 'Destroying it ends the fight cleanly but creates a debt to whoever else cared about it. Preserving it takes longer and one party member takes a hit that would have been avoided.'
+    },
+    {
+      q: 'Reinforcements are coming — for both sides. The party can retreat and regroup, or press the attack before they arrive.',
+      a: 'Press the attack — finish it before reinforcements tip the balance',
+      b: 'Retreat and regroup — let the reinforcements arrive, change the battlefield',
+      change: 'Pressing gives a chance at a decisive win but at full resource cost. Retreating means facing a harder fight, but the reinforcements on both sides add a new faction to the encounter.'
+    },
+  ],
+  mystery: [
+    {
+      q: 'They have two leads. One points to someone powerful and dangerous. The other points to someone small and easily overlooked.',
+      a: 'Follow the dangerous lead — faster answers, higher risk',
+      b: 'Follow the overlooked lead — slower, but the overlooked person knows more than expected',
+      change: 'The dangerous lead is a dead end designed to be found. The overlooked lead is the real thread — but following it puts a vulnerable person at risk.'
+    },
+    {
+      q: 'They can search this location now while they have access, or come back later when it\'s less guarded.',
+      a: 'Search now — risk of discovery, but the evidence is still here',
+      b: 'Come back later — evidence may be moved or destroyed, but they arrive prepared',
+      change: 'Searching now finds something but triggers awareness of the investigation. Waiting means the scene is altered — something is gone, something new is left behind.'
+    },
+    {
+      q: 'A witness will talk, but only if they believe the party already knows the truth. Bluffing may unlock information. Being honest may shut them down.',
+      a: 'Bluff — pretend to know more than they do, see what gets filled in',
+      b: 'Be honest — risk the witness shutting down, but build real trust',
+      change: 'Bluffing surfaces one piece of information — and confirms to the witness that the party knows something. Honesty closes that door but opens a different one: the witness decides to trust them with something more dangerous.'
+    },
+    {
+      q: 'Two people are each blaming the other. One of them is lying. Both have motive. The party can push one for a confession or investigate separately.',
+      a: 'Push one person hard — force a crack in the story',
+      b: 'Investigate both separately — slower, but more complete',
+      change: 'Pushing creates a confession — real or false — that may be used against them later. Investigating separately reveals that both are partially telling the truth, which complicates everything.'
+    },
+    {
+      q: 'The answer is behind a door someone powerful wants kept shut. They can go through it now while no one is watching, or find a legitimate way in.',
+      a: 'Go through now — find the truth, but without permission or cover',
+      b: 'Find a legitimate way in — takes time, but provides cover and potentially an ally inside',
+      change: 'Going now gets the information first, but they\'re exposed. The legitimate route is slower — and by the time they get there, someone knows they\'re coming.'
+    },
+    {
+      q: 'They\'ve found evidence that implicates someone they trust. It could be a frame, or it could be true.',
+      a: 'Confront the trusted person directly — risk the relationship on the truth',
+      b: 'Investigate further before confronting — more time, more danger, but more certainty',
+      change: 'Confronting early puts the trusted person on guard — guilty or innocent. More investigation uncovers a third party who benefits from the suspicion falling where it has.'
+    },
+  ],
+};
+// Build flat any pool
+FORKS.any = Object.values(FORKS).flat();
+
+let lastFork = null;
+
+function genFork(){
+  const type = document.getElementById('fork-type-filter').value;
+  const pool = type === 'any' ? FORKS.any : (FORKS[type] || FORKS.any);
+  const fork = pick(pool);
+  lastFork = fork;
+
+  const block = document.getElementById('fork-result-block');
+  block.innerHTML = `
+    <div style="font-family:'Cinzel',serif;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-light);margin-bottom:.5rem">Choice / Fork</div>
+    <div style="font-family:'Crimson Text',serif;font-size:1rem;color:var(--ink);line-height:1.5;margin-bottom:.75rem;font-style:italic">${fork.q}</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:.7rem">
+      <div style="background:rgba(139,26,26,.07);border:1px solid rgba(139,26,26,.2);border-radius:2px;padding:.55rem .7rem">
+        <div style="font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--red);margin-bottom:.25rem">Path A</div>
+        <div style="font-family:'Crimson Text',serif;font-size:.92rem;color:var(--ink);line-height:1.45">${fork.a}</div>
+      </div>
+      <div style="background:rgba(26,42,74,.06);border:1px solid rgba(26,42,74,.2);border-radius:2px;padding:.55rem .7rem">
+        <div style="font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin-bottom:.25rem">Path B</div>
+        <div style="font-family:'Crimson Text',serif;font-size:.92rem;color:var(--ink);line-height:1.45">${fork.b}</div>
+      </div>
+    </div>
+    <div style="background:rgba(184,134,11,.07);border:1px solid rgba(184,134,11,.25);border-radius:2px;padding:.5rem .7rem">
+      <div style="font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:.2rem">What Changes</div>
+      <div style="font-family:'Crimson Text',serif;font-size:.9rem;color:var(--ink);line-height:1.45">${fork.change}</div>
+    </div>`;
+
+  addToHistory('fork-history', fork.q.slice(0, 80) + '…');
+  block.classList.remove('fresh'); void block.offsetWidth; block.classList.add('fresh');
+}
+
+function genForkSend(){
+  if(!lastFork) genFork();
+  const f = lastFork;
+  addFork();
+  const list = document.getElementById('forks-list');
+  const card = list.lastElementChild;
+  if(card){
+    const set = (k,v) => { const el=card.querySelector('[data-key="'+k+'"]'); if(el) el.value=v; };
+    set('fork-title', f.q);
+    set('fork-a', f.a);
+    set('fork-b', f.b);
+    set('fork-notes', f.change);
+  }
+  const btn = document.querySelector('[data-ac="tab-s3"]');
+  if(btn) sw('s3', btn);
+}
+
+function genForkCopy(){
+  if(!lastFork) return;
+  const f = lastFork;
+  copyText(`FORK: ${f.q}\n\nPath A: ${f.a}\nPath B: ${f.b}\n\nWhat changes: ${f.change}`);
+}
 
 </script>
 </body>
