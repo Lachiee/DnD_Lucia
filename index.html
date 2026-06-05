@@ -1646,32 +1646,50 @@ function addInitBtnToMonCard(card){
   const btnRow = document.createElement('div');
   btnRow.style.cssText = 'margin-top:.5rem;display:flex;gap:.4rem;flex-wrap:wrap;align-items:center';
 
+  function getMonData(){
+    const name  = (card.querySelector('[data-key="mn-name"]')?.value || 'Monster').trim();
+    const hp    = parseInt(card.querySelector('[data-key="mn-hp"]')?.value)  || 10;
+    const ac    = parseInt(card.querySelector('[data-key="mn-ac"]')?.value)  || 10;
+    const count = Math.max(1, parseInt(card.querySelector('[data-key="mn-n"]')?.value) || 1);
+    return {name, hp, ac, count};
+  }
+
+  function pushToTracker(rollRandom){
+    const {name, hp, ac, count} = getMonData();
+    const roll = rollRandom ? Math.floor(Math.random()*20)+1 : 0;
+    if(count > 1){
+      let groupName = name;
+      let n = 2;
+      while(combatants.find(x=>x.name===groupName && x.isGroup)){ groupName=`${name} (${n++})`; }
+      const members = Array.from({length:count},(_,i)=>({
+        name:`${name} ${i+1}`, hp, hpMax:hp, conditions:[], dead:false
+      }));
+      combatants.push({name:groupName, type:'monster', initiative:roll,
+        hp, hpMax:hp, ac, dex:10, conditions:[], isGroup:true, count, members, expanded:false});
+    } else {
+      let finalName = name;
+      let n = 2;
+      while(combatants.find(x=>x.name===finalName)){ finalName=`${name} (${n++})`; }
+      combatants.push({name:finalName, type:'monster', initiative:roll,
+        hp, hpMax:hp, ac, dex:10, conditions:[]});
+    }
+    combatants.sort((a,b)=>b.initiative-a.initiative);
+    renderInitList();
+    updateInitSelects();
+    const btn = document.querySelector('[data-ac="tab-init"]');
+    if(btn) sw('init', btn);
+  }
+
   const initBtn = document.createElement('button');
   initBtn.className = 'abtn';
   initBtn.style.cssText = 'border-color:var(--red);color:var(--red);font-size:.62rem';
   initBtn.textContent = '⚔ Add to Initiative';
   initBtn.addEventListener('click', () => {
-    const name = (card.querySelector('[data-key="mn-name"]')?.value || 'Monster').trim();
-    const hp   = parseInt(card.querySelector('[data-key="mn-hp"]')?.value)  || 10;
-    const ac   = parseInt(card.querySelector('[data-key="mn-ac"]')?.value)  || 10;
-    const count = parseInt(card.querySelector('[data-key="mn-n"]')?.value)  || 1;
-    for(let i = 0; i < count; i++){
-      const label = count > 1 ? `${name} ${i+1}` : name;
-      // Avoid exact duplicate names
-      let finalLabel = label;
-      let n = 2;
-      while(combatants.find(x => x.name === finalLabel)){ finalLabel = `${label} (${n++})`; }
-      combatants.push({name:finalLabel, type:'monster', initiative:0, hp, hpMax:hp, ac, dex:10, conditions:[]});
-    }
-    renderInitList();
-    updateInitSelects();
-    // Flash button feedback
-    initBtn.textContent = `✓ Added${count>1?' ('+count+')':''}`;
+    const {count} = getMonData();
+    pushToTracker(false);
+    initBtn.textContent = count>1 ? `✓ Group of ${count} added` : '✓ Added';
     initBtn.style.background = 'rgba(139,26,26,.1)';
     setTimeout(()=>{ initBtn.textContent='⚔ Add to Initiative'; initBtn.style.background=''; }, 1800);
-    // Switch to initiative tab
-    const btn = document.querySelector('[data-ac="tab-init"]');
-    if(btn) sw('init', btn);
   });
 
   const rollInitBtn = document.createElement('button');
@@ -1679,27 +1697,11 @@ function addInitBtnToMonCard(card){
   rollInitBtn.style.cssText = 'font-size:.62rem';
   rollInitBtn.textContent = '🎲 Roll & Add';
   rollInitBtn.addEventListener('click', () => {
-    const name  = (card.querySelector('[data-key="mn-name"]')?.value || 'Monster').trim();
-    const hp    = parseInt(card.querySelector('[data-key="mn-hp"]')?.value)  || 10;
-    const ac    = parseInt(card.querySelector('[data-key="mn-ac"]')?.value)  || 10;
-    const count = parseInt(card.querySelector('[data-key="mn-n"]')?.value)  || 1;
-    for(let i = 0; i < count; i++){
-      const roll = Math.floor(Math.random()*20)+1;
-      const label = count > 1 ? `${name} ${i+1}` : name;
-      let finalLabel = label;
-      let n = 2;
-      while(combatants.find(x => x.name === finalLabel)){ finalLabel = `${label} (${n++})`; }
-      combatants.push({name:finalLabel, type:'monster', initiative:roll, hp, hpMax:hp, ac, dex:10, conditions:[]});
-    }
-    // Sort by initiative
-    combatants.sort((a,b)=>b.initiative-a.initiative);
-    renderInitList();
-    updateInitSelects();
-    rollInitBtn.textContent = `✓ Rolled & Added${count>1?' ('+count+')':''}`;
+    const {count} = getMonData();
+    pushToTracker(true);
+    rollInitBtn.textContent = count>1 ? `✓ Group rolled & added` : '✓ Rolled & added';
     rollInitBtn.style.background = 'rgba(180,130,60,.15)';
     setTimeout(()=>{ rollInitBtn.textContent='🎲 Roll & Add'; rollInitBtn.style.background=''; }, 1800);
-    const btn = document.querySelector('[data-ac="tab-init"]');
-    if(btn) sw('init', btn);
   });
 
   btnRow.appendChild(initBtn);
