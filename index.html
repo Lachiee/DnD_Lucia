@@ -749,6 +749,76 @@ canvas#web-canvas:active { cursor: grabbing; }
   min-width: 80px;
 }
 
+
+/* ═══════════════════ RUN SESSION ═══════════════════ */
+.tb.tb-run{color:var(--red);font-weight:700}
+.run-head{display:flex;justify-content:space-between;align-items:flex-end;gap:1rem;flex-wrap:wrap;margin-bottom:.8rem;padding-bottom:.7rem;border-bottom:2px solid var(--parch-shadow)}
+.run-title{font-family:'Cinzel',serif;font-size:1.5rem;font-weight:700;color:var(--red);line-height:1.1}
+.run-sub{font-family:'IM Fell English',serif;font-style:italic;color:var(--ink-light);font-size:.95rem;margin-top:.2rem}
+.run-head-btns{display:flex;gap:.4rem;flex-wrap:wrap}
+.run-check-strip{font-family:'Crimson Text',serif;font-size:.95rem;padding:.45rem .75rem;border-radius:2px;margin-bottom:1rem;border-left:4px solid var(--parch-shadow);background:rgba(180,130,60,.08)}
+.run-check-strip.has-fix{border-left-color:var(--red);background:rgba(139,26,26,.07)}
+.run-check-strip.has-tip{border-left-color:var(--gold)}
+.run-check-strip.all-ok{border-left-color:var(--green);background:rgba(26,74,46,.07)}
+.run-grid{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:1.4rem;align-items:start}
+@media(max-width:760px){.run-grid{grid-template-columns:1fr}}
+.run-block{margin-bottom:1.3rem}
+.run-h{font-family:'Cinzel',serif;font-size:.82rem;font-weight:700;letter-spacing:.06em;color:var(--ink);margin:0 0 .45rem;padding-bottom:.25rem;border-bottom:1px solid rgba(180,130,60,.45);display:flex;justify-content:space-between;align-items:baseline;gap:.5rem}
+.run-count{font-family:'IM Fell English',serif;font-style:italic;font-weight:400;letter-spacing:0;font-size:.85rem;color:var(--ink-light)}
+.run-hint{font-family:'IM Fell English',serif;font-style:italic;font-size:.84rem;color:var(--ink-light);margin:0 0 .5rem}
+.run-strong .run-strong-text{font-family:'Crimson Text',serif;font-size:1.25rem;line-height:1.5;color:var(--ink);padding:.8rem 1rem;background:rgba(255,255,255,.28);border:1px solid var(--parch-shadow);border-left:4px solid var(--gold);border-radius:2px}
+.run-meta-line{font-family:'Crimson Text',serif;font-size:.95rem;color:var(--ink-light);margin:.45rem 0}
+.run-secret{text-transform:none;letter-spacing:normal;color:var(--ink);font-weight:400;display:flex;gap:.6rem;align-items:flex-start;padding:.45rem .55rem;margin-bottom:.3rem;border:1px solid rgba(180,130,60,.3);border-radius:2px;background:rgba(255,255,255,.18);cursor:pointer;font-family:'Crimson Text',serif;font-size:1rem;line-height:1.4;transition:background .2s,opacity .2s}
+.run-secret input{width:auto;margin-top:.25rem;accent-color:var(--red);flex-shrink:0;cursor:pointer}
+.run-secret.is-revealed{opacity:.55;background:rgba(26,74,46,.06)}
+.run-secret.is-revealed span{text-decoration:line-through;text-decoration-color:rgba(26,74,46,.6)}
+.run-fork{padding:.55rem .7rem;margin-bottom:.45rem;border-left:3px solid var(--gold);background:rgba(184,134,11,.06)}
+.run-fork-q{font-family:'Crimson Text',serif;font-style:italic;font-size:1rem;margin-bottom:.35rem}
+.run-fork-paths{display:grid;gap:.25rem;font-family:'Crimson Text',serif;font-size:.95rem}
+.run-path{display:inline-block;width:1.3rem;height:1.3rem;line-height:1.3rem;text-align:center;border-radius:50%;font-family:'Cinzel',serif;font-size:.65rem;font-weight:700;color:#f8e8c0;margin-right:.4rem}
+.run-path.a{background:var(--red)}.run-path.b{background:var(--blue)}
+.run-item{padding:.45rem 0 .55rem;border-bottom:1px dotted rgba(180,130,60,.45)}
+.run-item:last-child{border-bottom:none}
+.run-item-top{display:flex;justify-content:space-between;gap:.5rem;align-items:baseline}
+.run-item-name{font-family:'Cinzel',serif;font-size:.85rem;font-weight:700;color:var(--ink)}
+.run-player{font-family:'IM Fell English',serif;font-style:italic;font-weight:400;color:var(--ink-light);font-size:.85rem}
+.run-tag{font-family:'Crimson Text',serif;font-size:.8rem;color:var(--ink-light);white-space:nowrap}
+.run-tag.is-hot{color:var(--red);font-weight:700}
+.run-text{font-family:'Crimson Text',serif;font-size:.97rem;line-height:1.45;color:var(--ink);margin-top:.15rem}
+.run-small{font-family:'Crimson Text',serif;font-size:.88rem;line-height:1.4;color:var(--ink-light);margin-top:.15rem}
+.run-secretish{color:var(--red);opacity:.85}
+.run-hook{padding:.45rem .6rem;margin-bottom:.35rem;background:rgba(255,255,255,.2);border:1px solid rgba(180,130,60,.3);border-radius:2px}
+.run-hook.is-missing{border-color:rgba(139,26,26,.45);background:rgba(139,26,26,.05)}
+.run-hook.is-missing .run-text{color:var(--red);font-style:italic}
+.run-mon-btns{display:flex;gap:.3rem;flex-wrap:wrap}
+.run-mon-btns .abtn{font-size:.58rem;padding:.22rem .5rem}
+.run-treas-item{font-family:'Crimson Text',serif;padding:.2rem 0}
+.run-empty{font-family:'IM Fell English',serif;font-style:italic;font-size:.9rem;color:var(--ink-light)}
+.run-link{background:none;border:none;padding:0;font:inherit;font-style:normal;color:var(--red);text-decoration:underline;cursor:pointer}
+.run-link:focus-visible,.pc-item:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+
+/* ═══════════════════ PREP CHECK ═══════════════════ */
+.pc-group{margin-bottom:1rem}
+.pc-group h4{font-family:'Cinzel',serif;font-size:.8rem;letter-spacing:.05em;margin:0 0 .4rem}
+.pc-fix h4{color:var(--red)}.pc-tip h4{color:var(--gold)}.pc-ok h4{color:var(--green)}
+.pc-item{display:block;width:100%;text-align:left;font-family:'Crimson Text',serif;font-size:.98rem;line-height:1.4;color:var(--ink);background:rgba(255,255,255,.22);border:1px solid rgba(180,130,60,.3);border-left:3px solid var(--parch-shadow);border-radius:2px;padding:.45rem .65rem;margin-bottom:.3rem}
+button.pc-item{cursor:pointer}
+button.pc-item:hover{background:rgba(255,255,255,.4)}
+.pc-fix .pc-item{border-left-color:var(--red)}.pc-tip .pc-item{border-left-color:var(--gold)}.pc-ok .pc-item{border-left-color:var(--green);color:var(--ink-light)}
+
+/* ═══════════════════ BENCHMARK EXTRAS ═══════════════════ */
+.bench-source{font-family:'Crimson Text',serif;font-size:.9rem;color:var(--ink-light);margin-bottom:.35rem}
+.bench-warn{color:var(--red)}
+.enc-tester{margin-top:.9rem;padding-top:.7rem;border-top:1px dashed rgba(139,26,26,.25)}
+.enc-tester-row{display:grid;grid-template-columns:1fr auto 64px;gap:.6rem;align-items:center;padding:.18rem 0;font-family:'Crimson Text',serif}
+.enc-tester-row input{padding:.2rem .35rem}
+.etr-cr{font-size:.85rem;color:var(--ink-light)}
+.enc-tester-result{font-family:'Crimson Text',serif;font-size:.95rem;margin-top:.5rem}
+.enc-tester-result.is-over{color:var(--red)}
+.enc-tester-result.is-under{color:var(--green)}
+.etr-bar{height:6px;background:rgba(180,130,60,.2);border-radius:3px;overflow:hidden;margin-bottom:.35rem}
+.etr-bar span{display:block;height:100%;background:currentColor;transition:width .3s}
+
 </style>
 </head>
 <body>
@@ -786,6 +856,7 @@ canvas#web-canvas:active { cursor: grabbing; }
   <div class="tab-group">
     <div class="tab-group-label">At The Table</div>
     <div class="tab-group-row">
+      <button class="tb tb-run" data-ac="tab-run">▶ Run Session</button>
       <button class="tb" data-ac="tab-init">⚔ Initiative</button>
       <button class="tb" data-ac="tab-mdb">👾 Monsters</button>
       <button class="tb" data-ac="tab-cond">🩹 Conditions</button>
@@ -961,10 +1032,17 @@ canvas#web-canvas:active { cursor: grabbing; }
             <input type="number" id="bench-level" value="4" min="1" max="20" style="width:70px">
           </div>
           <div style="align-self:end">
-            <button class="abtn" data-ac="fn-calcBench" style="border-color:var(--red);color:var(--red)">Calculate</button>
+            <button class="abtn" data-ac="fn-benchFromSheets" style="border-color:var(--blue);color:var(--blue)">Use party from sheets</button>
           </div>
         </div>
+        <div id="bench-source" class="bench-source"></div>
         <div id="bench-result" class="bench-result"></div>
+      </div>
+      <div class="enc-tester">
+        <label>Test an encounter</label>
+        <p class="shint" style="margin:.1rem 0 .5rem">Set how many of each monster from your list below would be in one fight.</p>
+        <div id="enc-tester-rows"></div>
+        <div id="enc-tester-result" class="enc-tester-result"></div>
       </div>
       <div style="margin-top:.8rem">
         <label>Notes</label>
@@ -1231,6 +1309,87 @@ canvas#web-canvas:active { cursor: grabbing; }
   </div>
 </div>
 
+<!-- ══ RUN SESSION ══ -->
+<div id="tab-run" class="pane">
+  <div class="run-head">
+    <div>
+      <div class="run-title" id="run-title">Session</div>
+      <div class="run-sub" id="run-sub"></div>
+    </div>
+    <div class="run-head-btns">
+      <button class="btns" data-ac="fn-openPrepCheck">✓ Check my prep</button>
+      <button class="btns" data-ac="fn-renderRun">↻ Refresh</button>
+    </div>
+  </div>
+  <div class="run-check-strip" id="run-check-strip"></div>
+
+  <div class="run-grid">
+    <div class="run-main">
+      <section class="run-block run-strong">
+        <h3 class="run-h">Strong start</h3>
+        <div id="run-strong" class="run-strong-text"></div>
+        <div id="run-advhook" class="run-meta-line"></div>
+      </section>
+
+      <section class="run-block">
+        <h3 class="run-h">Secrets and clues <span class="run-count" id="run-sec-count"></span></h3>
+        <p class="run-hint">Tick a secret when the players learn it. Ticked secrets are written into your post-session notes.</p>
+        <div id="run-secrets"></div>
+      </section>
+
+      <section class="run-block">
+        <h3 class="run-h">Forks</h3>
+        <div id="run-forks"></div>
+      </section>
+
+      <section class="run-block">
+        <h3 class="run-h">Scenes</h3>
+        <div id="run-scenes"></div>
+      </section>
+
+      <section class="run-block">
+        <h3 class="run-h">Table notes</h3>
+        <p class="run-hint">Jot what happens as you play. This fills in the Post-Session summary.</p>
+        <textarea id="run-notes" rows="5" placeholder="Warryn heard the name Albus from the captain…"></textarea>
+      </section>
+    </div>
+
+    <aside class="run-side">
+      <section class="run-block">
+        <h3 class="run-h">Character hooks</h3>
+        <div id="run-hooks"></div>
+      </section>
+      <section class="run-block">
+        <h3 class="run-h">NPCs</h3>
+        <div id="run-npcs"></div>
+      </section>
+      <section class="run-block">
+        <h3 class="run-h">Monsters</h3>
+        <div id="run-bench" class="run-meta-line"></div>
+        <div id="run-mons"></div>
+      </section>
+      <section class="run-block">
+        <h3 class="run-h">Locations</h3>
+        <div id="run-locs"></div>
+      </section>
+      <section class="run-block">
+        <h3 class="run-h">Treasure</h3>
+        <div id="run-treas"></div>
+      </section>
+    </aside>
+  </div>
+</div>
+
+<!-- PREP CHECK MODAL -->
+<div class="modal-bg" id="prep-check-modal">
+  <div class="modal">
+    <button class="modal-close" data-ac="fn-closePrepCheck">✕</button>
+    <div class="modal-title">Prep check</div>
+    <div class="modal-sub" id="pc-summary"></div>
+    <div id="pc-list"></div>
+  </div>
+</div>
+
 <!-- ══ GENERATORS ══ -->
 <div id="tab-gen" class="pane">
   <div class="sec">
@@ -1421,6 +1580,7 @@ canvas#web-canvas:active { cursor: grabbing; }
 <div class="actbar">
   <div style="display:flex;gap:.55rem;flex-wrap:wrap;align-items:center">
     <button class="btnp" data-ac="fn-saveAll">✦ Save Session</button>
+    <button class="btns" data-ac="fn-openPrepCheck">✓ Check Prep</button>
     <button class="btns" data-ac="fn-loadSave">↺ Load Browser Save</button>
     <button class="btnp" data-ac="fn-exportSession" style="background:var(--blue)">⇩ Export JSON</button>
     <button class="btns" data-ac="fn-loadSessionFile" style="border-color:var(--blue);color:var(--blue)">📂 Load Session File</button>
@@ -1547,6 +1707,10 @@ document.addEventListener('click', function(e) {
     'fn-genForkCopy': genForkCopy,
     'fn-addFork': addFork,
     'fn-calcBench': calcBenchmark,
+    'fn-benchFromSheets': benchFromSheets,
+    'fn-openPrepCheck': openPrepCheck,
+    'fn-closePrepCheck': closePrepCheck,
+    'fn-renderRun': renderRunMode,
     'fn-loadCarryForward': loadCarryForward,
     'fn-closeParse': closeParseModal,
     'fn-parseAndLoad': parseAndLoad,
@@ -1697,6 +1861,7 @@ function addInitBtnToMonCard(card){
   initBtn.className = 'abtn';
   initBtn.style.cssText = 'border-color:var(--red);color:var(--red);font-size:.62rem';
   initBtn.textContent = '⚔ Add to Initiative';
+  initBtn.dataset.role = 'add-init';
   initBtn.addEventListener('click', () => {
     const {count} = getMonData();
     pushToTracker(false);
@@ -1709,6 +1874,7 @@ function addInitBtnToMonCard(card){
   rollInitBtn.className = 'abtn';
   rollInitBtn.style.cssText = 'font-size:.62rem';
   rollInitBtn.textContent = '🎲 Roll & Add';
+  rollInitBtn.dataset.role = 'roll-init';
   rollInitBtn.addEventListener('click', () => {
     const {count} = getMonData();
     pushToTracker(true);
@@ -1721,6 +1887,7 @@ function addInitBtnToMonCard(card){
   splitInitBtn.className = 'abtn';
   splitInitBtn.style.cssText = 'font-size:.62rem;border-color:var(--blue);color:var(--blue)';
   splitInitBtn.textContent = '🎲 Roll Individual';
+  splitInitBtn.dataset.role = 'roll-indiv';
   splitInitBtn.title = 'Roll a separate initiative for each monster — adds them as individual rows';
   splitInitBtn.addEventListener('click', () => {
     const {count} = getMonData();
@@ -1750,6 +1917,8 @@ function addFaction(){mkCard('faction-list',[
 //  CHARACTER SHEET RENDERING
 // ══════════════════════════════════════════════════════
 const loadedChars=[];
+let pendingCharHooks={};
+let revealedSecrets=[];
 const loadedUrls=new Set();
 
 function mod(s){const m=Math.floor((s-10)/2);return(m>=0?'+':'')+m;}
@@ -1831,7 +2000,7 @@ function renderChar(c){
       ${featureHtml?`<div style="margin-bottom:.7rem">${featureHtml}</div>`:''}
       ${personalityText?`<div class="backstory-box"><div class="backstory-lbl">Personality</div><p style="font-family:'Crimson Text',serif;font-size:.95rem;line-height:1.5">${personalityText}</p></div>`:''}
       ${backstory?`<div class="backstory-box"><div class="backstory-lbl">Backstory</div><p style="font-family:'Crimson Text',serif;font-size:.95rem;line-height:1.5">${backstory.replace(/\n/g,'<br>')}</p></div>`:''}
-      <div class="hook-box"><div class="hook-lbl">★ Session Hook for ${c.name}</div><input type="text" placeholder="What connects ${c.name} to this session?" style="margin-top:.2rem"></div>
+      <div class="hook-box"><div class="hook-lbl">★ Session Hook for ${c.name}</div><input type="text" data-char-hook="${c.name.replace(/"/g,'&quot;')}" placeholder="What connects ${c.name} to this session?" style="margin-top:.2rem"></div>
       <button class="abtn" style="margin-top:.6rem;border-color:var(--blue);color:var(--blue)" data-char-import="${sid}">⚔ Add to Initiative Tracker</button>
     </div>`;
   container.appendChild(div);
@@ -1840,6 +2009,9 @@ function renderChar(c){
   if(hdrEl)hdrEl.addEventListener('click',()=>toggleCS(sid));
   const impBtn=div.querySelector('[data-char-import]');
   if(impBtn)impBtn.addEventListener('click',()=>importToInit(sid));
+  // Restore a saved session hook for this character, if one is waiting
+  const hookInp=div.querySelector('[data-char-hook]');
+  if(hookInp && pendingCharHooks[c.name]!==undefined) hookInp.value=pendingCharHooks[c.name];
   // Auto-expand on load
   const bodyEl=document.getElementById('body-'+sid);
   const chevEl=document.getElementById('chev-'+sid);
@@ -2333,14 +2505,26 @@ function importToInit(sid){
   sw('init',document.querySelector('[data-ac="tab-init"]'));
 }
 
+function pcShortName(c){ return (c.name||'PC').split(' ')[0]; }
 function addFromChars(){
+  let added=0, updated=0;
   loadedChars.forEach(c=>{
-    if(combatants.find(x=>x.name===c.name))return;
     const stats=c.stats||[10,10,10,10,10,10];
-    const hp=c.hp||c.hp_max||10;
-    combatants.push({name:c.name,type:'pc',initiative:0,hp,hpMax:hp,ac:c.ac||10,dex:stats[1]||10,conditions:[]});
+    const hpMax=c.hp_max||c.hp||10;
+    const hpNow=(c.hp_current!==undefined?c.hp_current:hpMax);
+    const short=pcShortName(c);
+    const existing=combatants.find(x=>x.type==='pc'&&(x.name===c.name||x.name===short));
+    if(existing){
+      existing.name=short; existing.ac=c.ac||existing.ac; existing.hpMax=hpMax;
+      existing.dex=stats[1]||10; updated++;
+    } else {
+      combatants.push({name:short,type:'pc',initiative:0,hp:hpNow,hpMax,ac:c.ac||10,dex:stats[1]||10,conditions:[]});
+      added++;
+    }
   });
   renderInitList();updateInitSelects();
+  const s=document.getElementById('sst');
+  if(s){ s.textContent = added?`✓ Added ${added} PC${added>1?'s':''}`:`✓ PCs already in combat`; s.classList.add('vis'); setTimeout(()=>{s.classList.remove('vis');s.textContent='✓ Saved';},2000); }
 }
 
 // ══════════════════════════════════════════════════════
@@ -2459,6 +2643,11 @@ function collectData(){
   const encEl=document.getElementById('enc-list');
   if(encEl)data['enc-list-html']=encEl.innerHTML;
   data.encN=encN;
+  data['char-hooks']={};
+  document.querySelectorAll('[data-char-hook]').forEach(i=>{ if(i.value.trim()) data['char-hooks'][i.dataset.charHook]=i.value; });
+  // keep hooks for characters that aren't loaded right now
+  Object.entries(pendingCharHooks).forEach(([k,v])=>{ if(!(k in data['char-hooks']) && !document.querySelector('[data-char-hook="'+CSS.escape(k)+'"]')) data['char-hooks'][k]=v; });
+  data['revealed-secrets']=revealedSecrets.slice();
   data.savedAt=new Date().toISOString();
   return data;
 }
@@ -2499,6 +2688,11 @@ function applyData(data){
   });
   if(data['enc-list-html'])document.getElementById('enc-list').innerHTML=data['enc-list-html'];
   if(data.encN)encN=data.encN;
+  pendingCharHooks=data['char-hooks']||{};
+  document.querySelectorAll('[data-char-hook]').forEach(i=>{ i.value=pendingCharHooks[i.dataset.charHook]||''; });
+  revealedSecrets=Array.isArray(data['revealed-secrets'])?data['revealed-secrets'].slice():[];
+  if(typeof benchFromSheets==='function' && !benchManual && loadedChars.length) benchFromSheets(); else if(typeof calcBenchmark==='function') calcBenchmark();
+  if(document.getElementById('tab-run') && document.getElementById('tab-run').classList.contains('active')) renderRunMode();
 }
 
 function exportSession(){
@@ -5443,6 +5637,448 @@ function rollAllInit(){
   combatants.sort((a,b)=>b.initiative-a.initiative);
   currentTurn=0;renderInitList();updateInitSelects();
 }
+
+
+// ══════════════════════════════════════════════════════
+//  SHARED HELPERS (run mode, prep check, benchmark)
+// ══════════════════════════════════════════════════════
+function escH(s){ return String(s==null?'':s).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch])); }
+function readList(lid){
+  const list=document.getElementById(lid); if(!list) return [];
+  return Array.from(list.querySelectorAll(':scope > .card')).map((card,idx)=>{
+    const o={_card:card,_idx:idx};
+    card.querySelectorAll('[data-key]').forEach(i=>{ o[i.dataset.key]=(i.value||'').trim(); });
+    return o;
+  });
+}
+function isBlankRow(o){ return Object.keys(o).filter(k=>!k.startsWith('_')).every(k=>!o[k]); }
+function fieldVal(id){ const el=document.getElementById(id); return el?(el.value||'').trim():''; }
+function parseCR(v){
+  v=String(v||'').trim(); if(!v) return NaN;
+  if(v.includes('/')){ const [a,b]=v.split('/').map(Number); return b?a/b:NaN; }
+  return parseFloat(v);
+}
+function fmtCR(n){
+  if(isNaN(n)) return '?';
+  const fr={0.125:'1/8',0.25:'1/4',0.5:'1/2'}; if(fr[n]) return fr[n];
+  return (Math.round(n*100)/100).toString();
+}
+function goTab(name){ const b=document.querySelector('[data-ac="tab-'+name+'"]'); sw(name,b); window.scrollTo({top:0,behavior:'smooth'}); }
+function sheetLevels(){
+  return loadedChars.map(c=>({name:pcShortName(c),level:parseInt(c.level)})).filter(x=>!isNaN(x.level));
+}
+function benchNumbers(levels){
+  // levels: array of character levels
+  const count=levels.length, sum=levels.reduce((a,b)=>a+b,0);
+  const avg=count?sum/count:1, lvl=Math.round(avg);
+  let divisor,tier;
+  if(lvl<=4){divisor=4;tier='levels 1–4: total levels ÷ 4';}
+  else if(lvl<=10){divisor=2;tier='levels 5–10: total levels ÷ 2';}
+  else if(lvl<=16){divisor=4/3;tier='levels 11–16: total levels × ¾';}
+  else {divisor=1;tier='level 17+: total levels';}
+  const benchmark=Math.round(sum/divisor*10)/10;
+  const singleMax=lvl<=4?lvl:Math.round(lvl*1.5*10)/10;
+  return {count,sum,lvl,benchmark,singleMax,tier};
+}
+function currentBench(){
+  const count=parseInt(fieldVal('bench-count'))||4;
+  const level=parseInt(fieldVal('bench-level'))||1;
+  return benchNumbers(Array(count).fill(level));
+}
+
+// ══════════════════════════════════════════════════════
+//  SMART BENCHMARK (replaces the earlier calculator)
+// ══════════════════════════════════════════════════════
+let benchManual=false;
+function calcBenchmark(){
+  const b=currentBench();
+  const resultEl=document.getElementById('bench-result');
+  if(resultEl){
+    resultEl.innerHTML=`Benchmark: <span style="font-size:1.1rem">CR ${b.benchmark} total</span> before an encounter may be deadly. No single monster above CR ${b.singleMax}.
+      <span class="bench-sub">${b.count} characters, total level ${b.sum} (${b.tier})</span>`;
+  }
+  const noteEl=document.getElementById('enc-bench');
+  if(noteEl) noteEl.value=`${b.count} × Lvl ${b.lvl} party → deadly above CR ${b.benchmark} total · single monster max CR ${b.singleMax}`;
+  renderEncTester();
+}
+function benchFromSheets(){
+  const lv=sheetLevels();
+  const src=document.getElementById('bench-source');
+  if(!lv.length){
+    if(src) src.innerHTML='No character sheets are loaded yet. Load them on the Characters tab, or enter the numbers above.';
+    return;
+  }
+  const b=benchNumbers(lv.map(x=>x.level));
+  document.getElementById('bench-count').value=b.count;
+  document.getElementById('bench-level').value=b.lvl;
+  benchManual=false;
+  const pl=parseInt(fieldVal('party-level'));
+  let html=`From the character sheets: ${lv.map(x=>escH(x.name)+' '+x.level).join(', ')}.`;
+  if(pl && lv.some(x=>x.level!==pl)){
+    html+=` <span class="bench-warn">The Party Level box at the top says ${pl}. Update it if the sheets are right.</span>`;
+  }
+  if(src) src.innerHTML=html;
+  calcBenchmark();
+}
+document.addEventListener('input',e=>{
+  if(e.target && (e.target.id==='bench-count'||e.target.id==='bench-level')){
+    benchManual=true;
+    const src=document.getElementById('bench-source'); if(src) src.textContent='Entered by hand.';
+  }
+});
+
+// Encounter tester
+const encTesterCounts={};
+function renderEncTester(){
+  const wrap=document.getElementById('enc-tester-rows'); if(!wrap) return;
+  const mons=readList('mon-list').filter(m=>m['mn-name']);
+  if(!mons.length){ wrap.innerHTML='<div class="run-empty">Add monsters below to test an encounter.</div>'; document.getElementById('enc-tester-result').innerHTML=''; return; }
+  const focused=document.activeElement && document.activeElement.dataset ? document.activeElement.dataset.encName : null;
+  wrap.innerHTML='';
+  mons.forEach(m=>{
+    const key=m['mn-name'];
+    const row=document.createElement('div'); row.className='enc-tester-row';
+    const cr=parseCR(m['mn-cr']);
+    row.innerHTML=`<span class="etr-name">${escH(key)}</span><span class="etr-cr">CR ${escH(m['mn-cr']||'?')}</span>`;
+    const inp=document.createElement('input'); inp.type='number'; inp.min=0; inp.max=30;
+    inp.value=encTesterCounts[key]||0; inp.dataset.encName=key; inp.setAttribute('aria-label','How many '+key);
+    inp.addEventListener('input',()=>{ encTesterCounts[key]=Math.max(0,parseInt(inp.value)||0); updateEncTesterResult(); });
+    row.appendChild(inp);
+    wrap.appendChild(row);
+    if(focused===key) inp.focus();
+  });
+  updateEncTesterResult();
+}
+function updateEncTesterResult(){
+  const out=document.getElementById('enc-tester-result'); if(!out) return;
+  const b=currentBench();
+  const mons=readList('mon-list').filter(m=>m['mn-name']);
+  let total=0, parts=[], overSingle=[];
+  mons.forEach(m=>{
+    const n=encTesterCounts[m['mn-name']]||0; if(!n) return;
+    const cr=parseCR(m['mn-cr']); if(isNaN(cr)) return;
+    total+=cr*n; parts.push(`${n} × ${m['mn-name']}`);
+    if(cr>b.singleMax) overSingle.push(m['mn-name']);
+  });
+  if(!parts.length){ out.innerHTML=''; return; }
+  const pct=Math.min(100,Math.round(total/b.benchmark*100));
+  const over=total>b.benchmark;
+  out.className='enc-tester-result '+(over?'is-over':'is-under');
+  out.innerHTML=`<div class="etr-bar"><span style="width:${pct}%"></span></div>
+    <strong>Total CR ${fmtCR(total)} of ${b.benchmark}.</strong> ${over?'Above the benchmark, so this could be deadly.':'Within the benchmark.'}
+    ${overSingle.length?`<br>${overSingle.map(escH).join(', ')} ${overSingle.length>1?'are':'is'} above the single-monster limit of CR ${b.singleMax}.`:''}`;
+}
+let encTesterTimer=null;
+document.addEventListener('input',e=>{
+  if(e.target && e.target.closest && e.target.closest('#mon-list')){
+    clearTimeout(encTesterTimer); encTesterTimer=setTimeout(renderEncTester,300);
+  }
+});
+document.addEventListener('click',e=>{
+  if(e.target && e.target.closest && e.target.closest('#mon-list .rbtn')) setTimeout(renderEncTester,50);
+  if(e.target && e.target.closest && e.target.closest('[data-ac="tab-s7"],[data-ac="fn-addMon"]')) setTimeout(renderEncTester,50);
+});
+
+// Use the party from sheets automatically once they load (unless numbers were typed by hand)
+window.addEventListener('DOMContentLoaded',()=>{
+  const cs=document.getElementById('char-sheets'); if(!cs) return;
+  let t=null;
+  new MutationObserver(()=>{ clearTimeout(t); t=setTimeout(()=>{ if(!benchManual) benchFromSheets(); },400); }).observe(cs,{childList:true});
+});
+
+// ══════════════════════════════════════════════════════
+//  RUN SESSION
+// ══════════════════════════════════════════════════════
+function charHooks(){
+  const hooks=[];
+  const listHooks=readList('hook-list').filter(h=>h['hk-text']);
+  loadedChars.forEach(c=>{
+    const short=pcShortName(c);
+    const inp=document.querySelector('[data-char-hook="'+CSS.escape(c.name)+'"]');
+    let text=inp?inp.value.trim():'';
+    if(!text){
+      const lh=listHooks.find(h=>(h['hk-char']||'').toLowerCase().includes(short.toLowerCase()));
+      if(lh) text=lh['hk-text'];
+    }
+    hooks.push({name:short,player:c.player||'',text});
+  });
+  // Hooks for characters that aren't loaded as sheets
+  listHooks.forEach(h=>{
+    if(!hooks.find(x=>(h['hk-char']||'').toLowerCase().includes(x.name.toLowerCase())))
+      hooks.push({name:h['hk-char']||'Character',player:h['hk-player']||'',text:h['hk-text']});
+  });
+  return hooks;
+}
+function runEmpty(msg,tab){ return `<div class="run-empty">${msg}${tab?` <button class="run-link" data-go="${tab}">Add some</button>`:''}</div>`; }
+
+function renderRunMode(){
+  const pane=document.getElementById('tab-run'); if(!pane) return;
+  const camp=fieldVal('campaign-name'), sess=fieldVal('session-num'), date=fieldVal('session-date'), pl=fieldVal('party-level');
+  document.getElementById('run-title').textContent=sess||'This session';
+  document.getElementById('run-sub').textContent=[camp,date,pl?('Party level '+pl):''].filter(Boolean).join(', ');
+
+  // Strong start
+  const ss=fieldVal('strong-start');
+  document.getElementById('run-strong').innerHTML=ss?escH(ss).replace(/\n/g,'<br>'):runEmpty('No strong start yet.','s2');
+  const ah=fieldVal('adv-hook');
+  document.getElementById('run-advhook').innerHTML=ah?`<strong>Pulls them in:</strong> ${escH(ah)}`:'';
+
+  // Secrets
+  const secs=readList('secrets-list').filter(s=>s.sec);
+  const secWrap=document.getElementById('run-secrets');
+  revealedSecrets=revealedSecrets.filter(t=>secs.some(s=>s.sec===t));
+  if(!secs.length) secWrap.innerHTML=runEmpty('No secrets written yet.','s4');
+  else{
+    secWrap.innerHTML='';
+    secs.forEach((s,i)=>{
+      const id='run-sec-'+i;
+      const lab=document.createElement('label'); lab.className='run-secret'+(revealedSecrets.includes(s.sec)?' is-revealed':''); lab.htmlFor=id;
+      const cb=document.createElement('input'); cb.type='checkbox'; cb.id=id; cb.checked=revealedSecrets.includes(s.sec);
+      cb.addEventListener('change',()=>toggleSecret(s.sec,cb.checked,lab));
+      const span=document.createElement('span'); span.textContent=s.sec;
+      lab.appendChild(cb); lab.appendChild(span); secWrap.appendChild(lab);
+    });
+  }
+  updateSecretCount(secs.length);
+
+  // Forks
+  const forks=readList('forks-list').filter(f=>f['fork-title']);
+  document.getElementById('run-forks').innerHTML=forks.length?forks.map(f=>`
+    <div class="run-fork">
+      <div class="run-fork-q">${escH(f['fork-title'])}</div>
+      <div class="run-fork-paths">
+        ${f['fork-a']?`<div><span class="run-path a">A</span>${escH(f['fork-a'])}</div>`:''}
+        ${f['fork-b']?`<div><span class="run-path b">B</span>${escH(f['fork-b'])}</div>`:''}
+      </div>
+      ${f['fork-notes']?`<div class="run-small">${escH(f['fork-notes'])}</div>`:''}
+    </div>`).join(''):runEmpty('No forks yet.','s3');
+
+  // Scenes
+  const sh=fieldVal('scene-hook');
+  const scenes=readList('scenes-list').filter(s=>s['sc-name']||s['sc-notes']);
+  document.getElementById('run-scenes').innerHTML=(sh?`<div class="run-meta-line"><strong>Adventure hook:</strong> ${escH(sh)}</div>`:'')+
+    (scenes.length?scenes.map(s=>`
+    <div class="run-item">
+      <div class="run-item-top"><span class="run-item-name">${escH(s['sc-name']||'Untitled scene')}</span>${s['sc-type']?`<span class="run-tag">${escH(s['sc-type'])}</span>`:''}</div>
+      ${s['sc-trig']?`<div class="run-small"><em>When:</em> ${escH(s['sc-trig'])}</div>`:''}
+      ${s['sc-notes']?`<div class="run-text">${escH(s['sc-notes'])}</div>`:''}
+    </div>`).join(''):runEmpty('No scenes yet.','s3'));
+
+  // Table notes <-> post-session summary
+  const notes=document.getElementById('run-notes'), summary=document.getElementById('summary');
+  if(notes && summary && document.activeElement!==notes) notes.value=summary.value;
+
+  // Hooks
+  const hooks=charHooks();
+  document.getElementById('run-hooks').innerHTML=hooks.length?hooks.map(h=>`
+    <div class="run-hook${h.text?'':' is-missing'}">
+      <div class="run-item-name">${escH(h.name)}${h.player?` <span class="run-player">${escH(h.player)}</span>`:''}</div>
+      <div class="run-text">${h.text?escH(h.text):'No hook yet. <button class="run-link" data-go="s1">Add one</button>'}</div>
+    </div>`).join(''):runEmpty('Load character sheets to see their hooks here.','s1');
+
+  // NPCs
+  const npcs=readList('npc-list').filter(n=>n['np-name']);
+  document.getElementById('run-npcs').innerHTML=npcs.length?npcs.map(n=>`
+    <div class="run-item">
+      <div class="run-item-top"><span class="run-item-name">${escH(n['np-name'])}</span>${n['np-role']?`<span class="run-tag">${escH(n['np-role'])}</span>`:''}</div>
+      ${n['np-trait']?`<div class="run-text">${escH(n['np-trait'])}</div>`:''}
+      ${n['np-want']?`<div class="run-small"><em>Wants:</em> ${escH(n['np-want'])}</div>`:''}
+      ${n['np-notes']?`<div class="run-small run-secretish">${escH(n['np-notes'])}</div>`:''}
+    </div>`).join(''):runEmpty('No NPCs yet.','s6');
+
+  // Monsters
+  const b=currentBench();
+  document.getElementById('run-bench').innerHTML=`Benchmark CR ${b.benchmark} per fight, single monster up to CR ${b.singleMax}.`;
+  const mons=readList('mon-list').filter(m=>m['mn-name']);
+  const monWrap=document.getElementById('run-mons');
+  if(!mons.length) monWrap.innerHTML=runEmpty('No monsters yet.','s7');
+  else{
+    monWrap.innerHTML='';
+    mons.forEach(m=>{
+      const cr=parseCR(m['mn-cr']);
+      const div=document.createElement('div'); div.className='run-item';
+      div.innerHTML=`<div class="run-item-top"><span class="run-item-name">${escH(m['mn-name'])}${(parseInt(m['mn-n'])||1)>1?' ×'+escH(m['mn-n']):''}</span>
+        <span class="run-tag${cr>b.singleMax?' is-hot':''}">CR ${escH(m['mn-cr']||'?')}</span></div>
+        <div class="run-small">HP ${escH(m['mn-hp']||'?')}, AC ${escH(m['mn-ac']||'?')}${m['mn-tac']?'. '+escH(m['mn-tac']):''}</div>
+        ${m['mn-notes']?`<div class="run-small run-secretish">${escH(m['mn-notes'])}</div>`:''}`;
+      const btns=document.createElement('div'); btns.className='run-mon-btns';
+      [['add-init','Add to initiative'],['roll-init','Roll and add'],['roll-indiv','Roll each']].forEach(([role,label])=>{
+        if(role==='roll-indiv' && (parseInt(m['mn-n'])||1)<2) return;
+        const bt=document.createElement('button'); bt.className='abtn'; bt.textContent=label;
+        bt.addEventListener('click',()=>{ const src=m._card.querySelector('[data-role="'+role+'"]'); if(src) src.click(); });
+        btns.appendChild(bt);
+      });
+      div.appendChild(btns); monWrap.appendChild(div);
+    });
+  }
+
+  // Locations
+  const locs=readList('loc-list').filter(l=>l['lo-name']);
+  document.getElementById('run-locs').innerHTML=locs.length?locs.map(l=>`
+    <div class="run-item">
+      <div class="run-item-top"><span class="run-item-name">${escH(l['lo-name'])}</span>${l['lo-type']?`<span class="run-tag">${escH(l['lo-type'])}</span>`:''}</div>
+      ${l['lo-desc']?`<div class="run-text">${escH(l['lo-desc'])}</div>`:''}
+      ${l['lo-asp']?`<div class="run-small">${escH(l['lo-asp']).replace(/\n/g,'<br>')}</div>`:''}
+    </div>`).join(''):runEmpty('No locations yet.','s5');
+
+  // Treasure
+  const tr=readList('treas-list').filter(t=>t['tr-name']);
+  document.getElementById('run-treas').innerHTML=tr.length?tr.map(t=>`
+    <div class="run-treas-item"><span class="run-item-name">${escH(t['tr-name'])}</span>${t['tr-for']?` <span class="run-small">for ${escH(t['tr-for'])}</span>`:''}</div>`).join(''):runEmpty('No treasure yet.','s8');
+
+  renderCheckStrip();
+}
+
+function updateSecretCount(total){
+  const el=document.getElementById('run-sec-count');
+  if(el) el.textContent=total?`${revealedSecrets.length} of ${total} revealed`:'';
+}
+function toggleSecret(text,on,lab){
+  const used=document.getElementById('secrets-used');
+  const line='✓ '+text;
+  if(on){ if(!revealedSecrets.includes(text)) revealedSecrets.push(text); }
+  else revealedSecrets=revealedSecrets.filter(t=>t!==text);
+  if(used){
+    let lines=used.value?used.value.split('\n'):[];
+    lines=lines.filter(l=>l!==line);
+    if(on) lines.push(line);
+    used.value=lines.join('\n').replace(/^\n+/,'');
+  }
+  if(lab) lab.classList.toggle('is-revealed',on);
+  updateSecretCount(readList('secrets-list').filter(s=>s.sec).length);
+}
+
+// Jump links inside run mode / prep check
+document.addEventListener('click',e=>{
+  const go=e.target.closest && e.target.closest('[data-go]');
+  if(!go) return;
+  closePrepCheck();
+  goTab(go.dataset.go);
+});
+// Table notes write straight into the post-session summary
+document.addEventListener('input',e=>{
+  if(e.target && e.target.id==='run-notes'){ const s=document.getElementById('summary'); if(s) s.value=e.target.value; }
+});
+// Refresh run mode each time it's opened
+document.addEventListener('click',e=>{
+  if(e.target.closest && e.target.closest('[data-ac="tab-run"]')) renderRunMode();
+});
+
+// ══════════════════════════════════════════════════════
+//  PREP CHECK
+// ══════════════════════════════════════════════════════
+const ROLE_WORDS=['refugee','hunter','captain','knight','innkeeper','farmer','merchant','priest','guide','prisoner','witness','blacksmith','healer','doctor','mayor','elder','messenger','sheriff','bandit'];
+
+function runPrepCheck(){
+  const out=[]; // {lvl:'fix'|'tip'|'ok', text, tab}
+  const add=(lvl,text,tab)=>out.push({lvl,text,tab});
+
+  // Characters and party level
+  const lv=sheetLevels();
+  const pl=parseInt(fieldVal('party-level'));
+  if(!loadedChars.length) add('tip','No character sheets are loaded, so hooks and party level can\'t be checked.','s1');
+  if(lv.length && pl && lv.some(x=>x.level!==pl)){
+    const real=benchNumbers(lv.map(x=>x.level)), set=benchNumbers(Array(lv.length).fill(pl));
+    add('fix',`Party Level says ${pl}, but the character sheets say ${lv.map(x=>escH(x.name)+' '+x.level).join(', ')}. That changes the benchmark from CR ${set.benchmark} to CR ${real.benchmark}.`,'s7');
+  } else if(lv.length && pl) add('ok',`Party level matches the character sheets (${pl}).`);
+
+  // Hooks
+  const hooks=charHooks();
+  const missing=hooks.filter(h=>!h.text && loadedChars.some(c=>pcShortName(c)===h.name));
+  missing.forEach(h=>add('fix',`${escH(h.name)} has no session hook.`,'s1'));
+  if(loadedChars.length && !missing.length) add('ok','Every character has a session hook.');
+
+  // Strong start
+  if(!fieldVal('strong-start')) add('fix','There\'s no strong start.','s2'); else add('ok','Strong start written.');
+
+  // Scenes & forks
+  const scenes=readList('scenes-list'), realScenes=scenes.filter(s=>!isBlankRow(s));
+  if(!realScenes.length) add('fix','There are no scenes.','s3');
+  else{
+    const noTrig=realScenes.filter(s=>!s['sc-trig']);
+    if(noTrig.length) add('tip',`${noTrig.length===1?'One scene has':noTrig.length+' scenes have'} no trigger: ${noTrig.map(s=>escH(s['sc-name']||'untitled')).join(', ')}.`,'s3');
+    else add('ok',`${realScenes.length} scenes, each with a trigger.`);
+  }
+  const forks=readList('forks-list').filter(f=>!isBlankRow(f));
+  if(!forks.length) add('tip','No forks yet. Even one real choice gives players direction.','s3');
+  else add('ok',`${forks.length} fork${forks.length>1?'s':''} ready.`);
+
+  // Secrets
+  const secs=readList('secrets-list'), filled=secs.filter(s=>s.sec);
+  if(!filled.length) add('fix','There are no secrets.','s4');
+  else if(filled.length<10) add('tip',`${filled.length} of 10 secrets. Ten gives you plenty to drop in wherever the players go.`,'s4');
+  else add('ok','Ten secrets ready.');
+  if(secs.length>filled.length) add('tip',`${secs.length-filled.length} empty secret card${secs.length-filled.length>1?'s':''} can be removed.`,'s4');
+
+  // Locations
+  const locs=readList('loc-list').filter(l=>!isBlankRow(l));
+  if(!locs.length) add('tip','No locations yet.','s5');
+  locs.forEach(l=>{
+    const aspects=(l['lo-asp']||'').split(/\n|•|;|\.\s/).map(x=>x.trim()).filter(x=>x.length>2);
+    if(aspects.length<3) add('tip',`${escH(l['lo-name']||'A location')} has ${aspects.length||'no'} fantastic aspect${aspects.length===1?'':'s'}. Three gives players more to interact with.`,'s5');
+  });
+
+  // NPCs
+  const npcs=readList('npc-list').filter(n=>!isBlankRow(n));
+  if(!npcs.length) add('tip','No NPCs yet.','s6');
+  npcs.filter(n=>!n['np-want']).forEach(n=>add('tip',`${escH(n['np-name']||'An NPC')} has no "wants". A want tells you how they react to the party.`,'s6'));
+
+  // People mentioned in scenes/forks without an NPC or monster entry
+  const prose=[fieldVal('strong-start'),fieldVal('adv-hook'),fieldVal('scene-hook'),
+    ...realScenes.map(s=>[s['sc-name'],s['sc-trig'],s['sc-notes']].join(' ')),
+    ...forks.map(f=>[f['fork-title'],f['fork-a'],f['fork-b'],f['fork-notes']].join(' '))].join(' ').toLowerCase();
+  const people=(npcs.map(n=>[n['np-name'],n['np-role'],n['np-notes']].join(' '))
+    .concat(readList('mon-list').map(m=>m['mn-name']||''))).join(' ').toLowerCase();
+  ROLE_WORDS.forEach(w=>{
+    if(new RegExp('\\b'+w+'s?\\b').test(prose) && !people.includes(w))
+      add('tip',`A ${w} appears in your scenes or forks but isn't in your NPC list. A name and one trait is enough.`,'s6');
+  });
+
+  // Monsters vs benchmark
+  const b=currentBench();
+  const mons=readList('mon-list').filter(m=>!isBlankRow(m));
+  if(!mons.length) add('tip','No monsters yet.','s7');
+  mons.forEach(m=>{
+    const nm=escH(m['mn-name']||'A monster');
+    if(!m['mn-hp']||!m['mn-ac']) add('fix',`${nm} is missing ${!m['mn-hp']&&!m['mn-ac']?'HP and AC':!m['mn-hp']?'HP':'AC'}.`,'s7');
+    const cr=parseCR(m['mn-cr']), n=parseInt(m['mn-n'])||1;
+    if(isNaN(cr)) return;
+    if(cr>b.singleMax) add('tip',`${nm} is CR ${fmtCR(cr)}, above the single-monster limit of CR ${b.singleMax} for this party. It could be deadly on its own.`,'s7');
+    else if(cr*n>b.benchmark) add('tip',`${n} × ${nm} totals CR ${fmtCR(cr*n)}, above the benchmark of CR ${b.benchmark}.`,'s7');
+  });
+
+  // Treasure
+  if(!readList('treas-list').filter(t=>t['tr-name']).length) add('tip','No treasure yet.','s8');
+
+  return out;
+}
+
+function renderCheckStrip(){
+  const el=document.getElementById('run-check-strip'); if(!el) return;
+  const r=runPrepCheck(), f=r.filter(x=>x.lvl==='fix').length, t=r.filter(x=>x.lvl==='tip').length;
+  el.className='run-check-strip '+(f?'has-fix':t?'has-tip':'all-ok');
+  el.innerHTML=f||t
+    ?`<span>Prep check: ${f?`${f} to fix`:''}${f&&t?', ':''}${t?`${t} suggestion${t>1?'s':''}`:''}.</span> <button class="run-link" data-ac="fn-openPrepCheck">See details</button>`
+    :'<span>Prep check: everything looks ready.</span>';
+}
+
+function openPrepCheck(){
+  const r=runPrepCheck();
+  const groups=[['fix','Needs fixing'],['tip','Worth a look'],['ok','Looking good']];
+  const f=r.filter(x=>x.lvl==='fix').length, t=r.filter(x=>x.lvl==='tip').length;
+  document.getElementById('pc-summary').textContent=f||t
+    ?`${f} to fix and ${t} suggestion${t===1?'':'s'}. Click an item to jump to it.`
+    :'Everything looks ready. Have a great session.';
+  document.getElementById('pc-list').innerHTML=groups.map(([lvl,label])=>{
+    const items=r.filter(x=>x.lvl===lvl); if(!items.length) return '';
+    return `<div class="pc-group pc-${lvl}"><h4>${label}</h4>${items.map(x=>
+      x.tab?`<button class="pc-item" data-go="${x.tab}">${x.text}</button>`:`<div class="pc-item">${x.text}</div>`).join('')}</div>`;
+  }).join('');
+  document.getElementById('prep-check-modal').classList.add('open');
+}
+function closePrepCheck(){ const m=document.getElementById('prep-check-modal'); if(m) m.classList.remove('open'); }
+document.addEventListener('click',e=>{ const m=document.getElementById('prep-check-modal'); if(m && e.target===m) closePrepCheck(); });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') closePrepCheck(); });
 
 </script>
 </body>
