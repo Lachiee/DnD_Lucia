@@ -819,9 +819,123 @@ button.pc-item:hover{background:rgba(255,255,255,.4)}
 .etr-bar{height:6px;background:rgba(180,130,60,.2);border-radius:3px;overflow:hidden;margin-bottom:.35rem}
 .etr-bar span{display:block;height:100%;background:currentColor;transition:width .3s}
 
+
+/* ═══════════════════ COMBAT PANEL & HELPERS ═══════════════════ */
+.init-name-btn{background:none;border:none;padding:0;font:inherit;color:inherit;text-align:left;cursor:pointer;text-decoration:underline;text-decoration-color:rgba(180,130,60,.5);text-underline-offset:3px}
+.init-name-btn:hover{color:var(--red)}
+.init-name-btn:focus-visible,.init-book:focus-visible,.res-pip:focus-visible,.ds-pip:focus-visible,.run-party-row:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.init-tags{display:flex;flex-wrap:wrap;gap:.25rem;margin-top:.15rem}
+.init-tag{font-family:'Crimson Text',serif;font-size:.78rem;line-height:1.2;padding:.05rem .4rem;border-radius:2px;background:rgba(180,130,60,.15);color:var(--ink-light)}
+.init-tag.conc{background:rgba(184,134,11,.18);color:#7a5a06}
+.init-tag.down{background:rgba(139,26,26,.14);color:var(--red);font-weight:700}
+.init-tag.stable{background:rgba(26,74,46,.12);color:var(--green)}
+.init-row.dying{background:rgba(139,26,26,.06)}
+.init-book{margin-left:.5rem;font-family:'Crimson Text',serif;font-size:.78rem;background:rgba(255,255,255,.3);border:1px solid var(--parch-shadow);border-radius:2px;padding:.02rem .4rem;cursor:pointer;color:var(--ink-light)}
+#combat-alerts{display:flex;flex-direction:column;gap:.35rem;padding:0 .9rem}
+#combat-alerts:not(:empty){padding:.6rem .9rem .2rem}
+.combat-alert{display:flex;gap:.8rem;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:.5rem .7rem;border-left:4px solid var(--gold);background:rgba(184,134,11,.1);border-radius:2px;font-family:'Crimson Text',serif;font-size:.98rem}
+.ca-btns{display:flex;gap:.3rem}
+.ca-btns button{padding:.3rem .65rem;font-size:.6rem}
+.combat-panel{position:fixed;top:0;right:0;bottom:0;width:min(380px,100vw);z-index:90;background:var(--parch);background-image:linear-gradient(170deg,#f8eecc,#eed9a0);box-shadow:-2px 0 0 #7a5c2e,-10px 0 40px rgba(0,0,0,.45);padding:1.4rem 1.2rem 2rem;overflow-y:auto;transform:translateX(105%);transition:transform .25s ease;visibility:hidden}
+.combat-panel.open{transform:none;visibility:visible}
+@media(prefers-reduced-motion:reduce){.combat-panel{transition:none}}
+.cp-name{font-family:'Cinzel',serif;font-size:1.25rem;color:var(--red);margin:0 1.5rem .2rem 0}
+.cp-quick{font-family:'Crimson Text',serif;font-size:1rem;color:var(--ink);margin-bottom:.15rem}
+.cp-notes{margin:.6rem 0;padding:.5rem .65rem;border-left:3px solid var(--red);background:rgba(139,26,26,.05);font-family:'Crimson Text',serif;font-size:.95rem;line-height:1.4}
+.cp-sec,.sb-sec{font-family:'Cinzel',serif;font-size:.78rem;font-weight:700;color:var(--red);margin:.9rem 0 .35rem;padding-bottom:.2rem;border-bottom:1px solid rgba(139,26,26,.25)}
+.sb-type{font-family:'IM Fell English',serif;font-style:italic;color:var(--ink-light);margin:.1rem 0 .5rem}
+.sb-row,.sb-act{font-family:'Crimson Text',serif;font-size:.96rem;line-height:1.4;margin-bottom:.25rem}
+.sb-lbl{font-weight:700}
+.sb-abil{display:grid;grid-template-columns:repeat(6,1fr);gap:.2rem;text-align:center;margin:.5rem 0;padding:.4rem 0;border-top:1px solid rgba(139,26,26,.25);border-bottom:1px solid rgba(139,26,26,.25);font-family:'Crimson Text',serif;font-size:.85rem}
+.sb-abil span{display:block;font-family:'Cinzel',serif;font-size:.62rem;font-weight:700;color:var(--red)}
+.cp-conc{display:grid;gap:.35rem}
+.cp-check{display:flex;gap:.45rem;align-items:center;text-transform:none;letter-spacing:normal;font-family:'Crimson Text',serif;font-size:.98rem;color:var(--ink);cursor:pointer}
+.cp-check input{width:auto;accent-color:var(--gold)}
+.cp-death{display:grid;gap:.35rem;font-family:'Crimson Text',serif}
+.ds-lbl{display:inline-block;width:5.5rem;font-size:.92rem}
+.ds-pip,.res-pip{width:1.15rem;height:1.15rem;border-radius:50%;border:2px solid var(--parch-shadow);background:rgba(255,255,255,.35);margin-right:.25rem;cursor:pointer;vertical-align:middle;padding:0}
+.ds-pip.s.on{background:var(--green);border-color:var(--green)}
+.ds-pip.f.on{background:var(--red);border-color:var(--red)}
+.ds-state{font-size:.9rem;color:var(--ink-light);font-style:italic}
+.cp-death .btnp{justify-self:start;padding:.4rem .8rem;font-size:.62rem}
+.cp-res{padding:.35rem 0 .45rem;border-bottom:1px dotted rgba(180,130,60,.45)}
+.cp-res-top{display:flex;justify-content:space-between;font-family:'Crimson Text',serif;font-size:.98rem}
+.cp-reset{font-size:.8rem;color:var(--ink-light);font-style:italic}
+.cp-pips{display:flex;align-items:center;flex-wrap:wrap;gap:.1rem;margin-top:.2rem}
+.res-pip.on{background:var(--blue);border-color:var(--blue)}
+.res-pip.ex.on{background:var(--red);border-color:var(--red)}
+.cp-left{font-family:'Crimson Text',serif;font-size:.85rem;color:var(--ink-light);margin-left:.35rem}
+.cp-pool{display:flex;align-items:center;gap:.35rem;flex-wrap:wrap;font-family:'Crimson Text',serif;margin-top:.2rem}
+.cp-pool input{width:64px;padding:.2rem .35rem}
+.cp-pool .abtn,.cp-rest .abtn{margin-top:0}
+.cp-rest{display:flex;gap:.4rem;margin-top:.8rem}
+.run-rest-btns{display:flex;gap:.35rem;margin-top:.3rem}
+.run-party-row{display:grid;grid-template-columns:1fr auto;gap:.1rem .5rem;width:100%;text-align:left;background:rgba(255,255,255,.2);border:1px solid rgba(180,130,60,.3);border-radius:2px;padding:.4rem .6rem;margin-bottom:.3rem;cursor:pointer;font:inherit;color:inherit}
+.run-party-row:hover{background:rgba(255,255,255,.4)}
+.run-party-row .run-small{grid-column:1/-1;margin:0}
+/* next session */
+.ns-row{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;margin-bottom:.8rem}
+.ns-opt{display:flex;gap:.55rem;align-items:flex-start;text-transform:none;letter-spacing:normal;font-family:'Crimson Text',serif;font-size:1rem;color:var(--ink);padding:.35rem 0;border-bottom:1px dotted rgba(180,130,60,.4);cursor:pointer}
+.ns-opt input{width:auto;margin-top:.3rem;accent-color:var(--red)}
+.ns-opt input:disabled+span{opacity:.45}
+.ns-count{color:var(--ink-light)}
+.ns-hint{font-size:.88rem;color:var(--ink-light);font-style:italic}
+.ns-btns{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:1rem}
+
+
+/* ═══════════════════ QUICK MONSTER ═══════════════════ */
+.qm-card{background:rgba(139,26,26,.05);border:1px solid rgba(139,26,26,.2);border-radius:2px;padding:.8rem .95rem;margin:.6rem 0 1rem}
+.qm-title{font-family:'Cinzel',serif;font-size:.85rem;font-weight:700;color:var(--red);margin-bottom:.5rem}
+.qm-inputs{display:grid;grid-template-columns:2fr 1fr 1fr 1.6fr;gap:.5rem}
+#qm-run .qm-inputs{grid-template-columns:1fr 1fr}
+@media(max-width:600px){.qm-inputs{grid-template-columns:1fr 1fr}}
+.qm-out{font-family:'Crimson Text',serif;font-size:1rem;line-height:1.45;margin:.6rem 0 .4rem;padding:.45rem .6rem;background:rgba(255,255,255,.3);border-left:3px solid var(--red)}
+.qm-btns{display:flex;gap:.35rem;flex-wrap:wrap}
+.qm-btns .abtn{margin-top:0}
+.qm-btns .qm-add{border-color:var(--red);color:var(--red)}
+.qm-credit{font-family:'IM Fell English',serif;font-style:italic;font-size:.75rem;color:var(--ink-light);margin-top:.45rem}
+.qm-details{margin:.5rem 0}
+.qm-details summary{cursor:pointer;font-family:'Crimson Text',serif;font-size:.98rem;color:var(--red);text-decoration:underline;text-underline-offset:3px}
+.qm-details .qm-card{margin-top:.5rem}
+
+/* ═══════════════════ IMPROV KIT ═══════════════════ */
+.run-h-link{font-family:'Crimson Text',serif;font-size:.85rem;font-weight:400;letter-spacing:0}
+.kit-sec{display:flex;justify-content:space-between;align-items:center;margin:.45rem 0 .2rem}
+.kit-lbl{font-family:'Crimson Text',serif;font-weight:700;font-size:.92rem;color:var(--ink)}
+.kit-reroll{background:none;border:1px solid transparent;border-radius:2px;color:var(--ink-light);cursor:pointer;font-size:.9rem;line-height:1;padding:.1rem .3rem}
+.kit-reroll:hover{border-color:var(--parch-shadow);color:var(--red)}
+.kit-names{display:flex;flex-wrap:wrap;gap:.25rem}
+.kit-name{font-family:'Crimson Text',serif;font-size:.9rem;background:rgba(255,255,255,.3);border:1px solid rgba(180,130,60,.4);border-radius:2px;padding:.1rem .45rem;cursor:pointer;color:var(--ink)}
+.kit-name.used{text-decoration:line-through;opacity:.45}
+.kit-line{font-family:'Crimson Text',serif;font-size:.95rem;line-height:1.4;padding:.1rem 0}
+.kit-true{font-size:.78rem;font-style:italic;color:var(--red)}
+.kit-name:focus-visible,.kit-reroll:focus-visible{outline:2px solid var(--gold);outline-offset:1px}
+
+/* ═══════════════════ ONE-PAGE PREP SHEET ═══════════════════ */
+#print-sheet{display:none}
+@media print{
+  @page{size:A4;margin:9mm}
+  body.printing-sheet{background:#fff!important;padding:0!important;margin:0!important}
+  body.printing-sheet > :not(#print-sheet){display:none!important}
+  body.printing-sheet #print-sheet{display:block;color:#111;font-family:'Crimson Text',Georgia,serif;font-size:8.6pt;line-height:1.25}
+  #print-sheet h1{font-family:'Cinzel',Georgia,serif;font-size:15pt;margin:0;color:#6b1010}
+  #print-sheet h2{font-family:'Cinzel',Georgia,serif;font-size:8pt;letter-spacing:.04em;margin:0 0 1.5mm;padding-bottom:.6mm;border-bottom:.3mm solid #6b1010;color:#6b1010}
+  #print-sheet .ps-head{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:.6mm solid #111;padding-bottom:1.5mm;margin-bottom:2.5mm}
+  #print-sheet .ps-bench{text-align:right;font-size:8pt}
+  #print-sheet .ps-sec{break-inside:avoid;margin-bottom:2.5mm}
+  #print-sheet .ps-sec p{margin:0 0 1mm}
+  #print-sheet .ps-cols{column-count:2;column-gap:6mm}
+  #print-sheet ul{margin:0;padding-left:3.5mm}
+  #print-sheet li{margin-bottom:.8mm;break-inside:avoid}
+  #print-sheet li.ps-box{list-style:none;margin-left:-3.5mm;padding-left:4.5mm;position:relative}
+  #print-sheet li.ps-box::before{content:'';position:absolute;left:0;top:.6mm;width:2.4mm;height:2.4mm;border:.25mm solid #111}
+  #print-sheet .ps-notes{margin-top:2mm;border-top:.3mm solid #999;padding-top:1mm;font-family:'Cinzel',Georgia,serif;font-size:7.5pt;color:#555;min-height:18mm}
+}
+
 </style>
 </head>
 <body>
+<div id="print-sheet" aria-hidden="true"></div>
 <div class="tome"><div class="ti">
 
 <!-- HEADER -->
@@ -908,6 +1022,7 @@ button.pc-item:hover{background:rgba(255,255,255,.4)}
   <div class="sec">
     <div class="stitle"><span class="sbadge">Step 2</span>Create a Strong Start</div>
     <p class="shint">"Something happens." Begin in the middle of the action. What's the first thing the players experience?</p>
+    <div style="margin-bottom:1rem"><label>Last session recap</label><textarea id="prev-recap" rows="2" placeholder="Filled in automatically when you start a new session from the last one."></textarea></div>
     <div class="ssbox"><textarea id="strong-start" class="tall" placeholder="e.g. The party wakes to find the inn ablaze. A hooded figure flees the back window clutching a leather satchel — the barmaid who served them last night…"></textarea></div>
     <div style="margin-top:.9rem"><label>Hook to Pull Into the Adventure</label><textarea id="adv-hook" placeholder="How does the strong start thread into the session?"></textarea></div>
   </div>
@@ -1049,6 +1164,7 @@ button.pc-item:hover{background:rgba(255,255,255,.4)}
         <input type="text" id="enc-bench" placeholder="e.g. 4 × level 4 party → benchmark CR 4 total before deadly">
       </div>
     </div>
+    <details class="qm-details"><summary>Build a monster from just a CR</summary><div class="qm-card" id="qm-s7"></div></details>
     <div style="margin-top:.8rem" class="cl" id="mon-list"></div>
     <button class="abtn" data-ac="fn-addMon">+ Add Monster</button>
   </div>
@@ -1081,6 +1197,7 @@ button.pc-item:hover{background:rgba(255,255,255,.4)}
         </div>
       </div>
 
+      <div id="combat-alerts" aria-live="polite"></div>
       <!-- combatant rows -->
       <div class="init-list" id="init-list">
         <div style="padding:1rem;text-align:center;font-family:'IM Fell English',serif;font-style:italic;color:var(--ink-light);font-size:.9rem">Add combatants below and click Roll All Initiative</div>
@@ -1202,6 +1319,7 @@ button.pc-item:hover{background:rgba(255,255,255,.4)}
   <div class="sec">
     <div class="stitle">👾 Monster Database</div>
     <p class="shint">Search and browse D&amp;D 5e SRD monsters. Click a monster to expand its stat block, then send it directly to the Initiative Tracker.</p>
+    <div class="qm-card" id="qm-db"></div>
     <div style="display:grid;grid-template-columns:1fr auto auto;gap:.6rem;align-items:end;margin-bottom:1rem">
       <div><label>Search Monsters</label><input type="text" id="mdb-search" placeholder="e.g. goblin, dragon, CR 5, undead…" id="mdb-search" data-ac="fn-filterMonsters"></div>
       <div><label>CR Filter</label><select id="mdb-cr" data-mdb-filter="1">
@@ -1318,6 +1436,7 @@ button.pc-item:hover{background:rgba(255,255,255,.4)}
     </div>
     <div class="run-head-btns">
       <button class="btns" data-ac="fn-openPrepCheck">✓ Check my prep</button>
+      <button class="btns" data-ac="fn-printSheet">⎙ Print one-page sheet</button>
       <button class="btns" data-ac="fn-renderRun">↻ Refresh</button>
     </div>
   </div>
@@ -1356,8 +1475,21 @@ button.pc-item:hover{background:rgba(255,255,255,.4)}
 
     <aside class="run-side">
       <section class="run-block">
+        <h3 class="run-h">Party</h3>
+        <div id="run-party"></div>
+        <div class="run-rest-btns">
+          <button class="abtn" data-ac="fn-partyShortRest">Short rest</button>
+          <button class="abtn" data-ac="fn-partyLongRest">Long rest</button>
+        </div>
+      </section>
+      <section class="run-block">
         <h3 class="run-h">Character hooks</h3>
         <div id="run-hooks"></div>
+      </section>
+      <section class="run-block">
+        <h3 class="run-h">Improv kit <button class="run-link run-h-link" data-ac="fn-newKit">New kit</button></h3>
+        <p class="run-hint">Names and details for anything you didn't prep. Click a name once you've used it.</p>
+        <div id="run-kit"></div>
       </section>
       <section class="run-block">
         <h3 class="run-h">NPCs</h3>
@@ -1367,6 +1499,7 @@ button.pc-item:hover{background:rgba(255,255,255,.4)}
         <h3 class="run-h">Monsters</h3>
         <div id="run-bench" class="run-meta-line"></div>
         <div id="run-mons"></div>
+        <details class="qm-details"><summary>Need a monster you didn't prep?</summary><div class="qm-card" id="qm-run"></div></details>
       </section>
       <section class="run-block">
         <h3 class="run-h">Locations</h3>
@@ -1377,6 +1510,30 @@ button.pc-item:hover{background:rgba(255,255,255,.4)}
         <div id="run-treas"></div>
       </section>
     </aside>
+  </div>
+</div>
+
+<!-- COMBAT DETAIL PANEL -->
+<aside class="combat-panel" id="combat-panel" aria-label="Combatant details">
+  <button class="modal-close" data-ac="fn-closeCombatPanel" aria-label="Close">✕</button>
+  <div id="combat-panel-body"></div>
+</aside>
+
+<!-- NEXT SESSION MODAL -->
+<div class="modal-bg" id="next-session-modal">
+  <div class="modal">
+    <button class="modal-close" data-ac="fn-closeNextSession">✕</button>
+    <div class="modal-title">Start the next session</div>
+    <div class="modal-sub">Campaign details, factions and world truths always carry over. Choose what else to bring.</div>
+    <div class="ns-row">
+      <div><label>Session</label><input type="text" id="ns-num"></div>
+      <div><label>Date</label><input type="text" id="ns-date" placeholder="e.g. 20 June 2026"></div>
+    </div>
+    <div id="ns-options"></div>
+    <div class="ns-btns">
+      <button class="btnp" data-ac="fn-startNextExport">Export this session, then start</button>
+      <button class="btns" data-ac="fn-startNextNoExport">Start without exporting</button>
+    </div>
   </div>
 </div>
 
@@ -1581,10 +1738,12 @@ button.pc-item:hover{background:rgba(255,255,255,.4)}
   <div style="display:flex;gap:.55rem;flex-wrap:wrap;align-items:center">
     <button class="btnp" data-ac="fn-saveAll">✦ Save Session</button>
     <button class="btns" data-ac="fn-openPrepCheck">✓ Check Prep</button>
+    <button class="btns" data-ac="fn-openNextSession">➜ Start Next Session</button>
     <button class="btns" data-ac="fn-loadSave">↺ Load Browser Save</button>
     <button class="btnp" data-ac="fn-exportSession" style="background:var(--blue)">⇩ Export JSON</button>
     <button class="btns" data-ac="fn-loadSessionFile" style="border-color:var(--blue);color:var(--blue)">📂 Load Session File</button>
     <button class="btns" data-ac="fn-loadSessionURL">🔗 Load Session URL</button>
+    <button class="btns" data-ac="fn-printSheet">⎙ Print Prep Sheet</button>
     <button class="btns" data-ac="fn-print">Print</button>
     <button class="btns" data-ac="fn-clearAll" style="color:var(--red)">Clear All</button>
     <input type="file" id="session-file-input" accept=".json" style="display:none">
@@ -1711,6 +1870,15 @@ document.addEventListener('click', function(e) {
     'fn-openPrepCheck': openPrepCheck,
     'fn-closePrepCheck': closePrepCheck,
     'fn-renderRun': renderRunMode,
+    'fn-printSheet': printPrepSheet,
+    'fn-newKit': ()=>{ if(!improvKit || confirm('Replace the current improv kit with a new one?')){ improvKit=newImprovKit(); renderKit(); } },
+    'fn-closeCombatPanel': closeCombatPanel,
+    'fn-openNextSession': openNextSession,
+    'fn-closeNextSession': closeNextSession,
+    'fn-startNextExport': ()=>startNextSession(true),
+    'fn-startNextNoExport': ()=>startNextSession(false),
+    'fn-partyShortRest': ()=>partyRest('short'),
+    'fn-partyLongRest': ()=>partyRest('long'),
     'fn-loadCarryForward': loadCarryForward,
     'fn-closeParse': closeParseModal,
     'fn-parseAndLoad': parseAndLoad,
@@ -1919,6 +2087,8 @@ function addFaction(){mkCard('faction-list',[
 const loadedChars=[];
 let pendingCharHooks={};
 let revealedSecrets=[];
+let pcState={};
+let improvKit=null;
 const loadedUrls=new Set();
 
 function mod(s){const m=Math.floor((s-10)/2);return(m>=0?'+':'')+m;}
@@ -2255,15 +2425,16 @@ function renderInitList(){
 }
 
 function renderSingleRow(list,c){
-  const isDead=c.hp<=0;
+  const isDown=c.type==='pc'&&c.hp<=0&&!(c.death&&c.death.dead);
+  const isDead=c.hp<=0&&!isDown;
   const isActive=c.origIdx===currentTurn;
   const typeIcon=c.type==='pc'?'🧙':c.type==='monster'?'👹':'🧑';
   const row=document.createElement('div');
-  row.className='init-row'+(isActive?' active-turn':'')+(isDead?' dead':'');
+  row.className='init-row'+(isActive?' active-turn':'')+(isDead?' dead':'')+(isDown?' dying':'');
 
   const numDiv=document.createElement('div');numDiv.className='init-num';numDiv.textContent=c.initiative||'?';
   const typeDiv=document.createElement('div');typeDiv.className='init-type';typeDiv.textContent=typeIcon;
-  const nameDiv=document.createElement('div');nameDiv.className='init-name';nameDiv.textContent=c.name;
+  const nameDiv=buildInitName(c);
 
   const hpCell=document.createElement('div');hpCell.className='init-hp-cell';
   const hpInput=document.createElement('input');hpInput.type='number';hpInput.value=c.hp;hpInput.min=0;hpInput.style.width='52px';
@@ -2315,6 +2486,9 @@ function renderGroupRow(list,c){
 
   const nameEl=document.createElement('div');nameEl.className='init-name';
   nameEl.innerHTML=`<strong>${c.name}</strong> <span style="font-family:'Cinzel',serif;font-size:.65rem;color:var(--red);letter-spacing:.08em">×${aliveCount}/${totalCount}</span>`;
+  const bookBtn=document.createElement('button');bookBtn.className='init-book';bookBtn.textContent='Stats';bookBtn.title='Show stat block';
+  bookBtn.addEventListener('click',e=>{e.stopPropagation();openCombatPanel({kind:'combatant',idx:c.origIdx});});
+  nameEl.appendChild(bookBtn);
 
   const acEl=document.createElement('div');acEl.className='init-ac';acEl.textContent='🛡 '+(c.ac||'?');
 
@@ -2496,11 +2670,12 @@ function resetCombat(){
 function importToInit(sid){
   const char=loadedChars.find(c=>'cs-'+c.name.replace(/[^a-z0-9]/gi,'-').toLowerCase()===sid);
   if(!char)return;
-  if(combatants.find(c=>c.name===char.name)){alert('Already in tracker.');return;}
+  const short=pcShortName(char);
+  if(combatants.find(c=>c.type==='pc'&&(c.name===char.name||c.name===short))){alert(short+' is already in the tracker.');return;}
   const stats=char.stats||[10,10,10,10,10,10];
   const dex=stats[1]||10;
-  const hp=char.hp||char.hp_max||10;
-  combatants.push({name:char.name,type:'pc',initiative:0,hp,hpMax:hp,ac:char.ac||10,dex,conditions:[]});
+  const hpMax=char.hp_max||char.hp||10, hp=(char.hp_current!==undefined?char.hp_current:hpMax);
+  combatants.push({name:short,type:'pc',initiative:0,hp,hpMax,ac:char.ac||10,dex,conditions:[]});
   renderInitList();updateInitSelects();
   sw('init',document.querySelector('[data-ac="tab-init"]'));
 }
@@ -2630,7 +2805,7 @@ function collectData(){
   const data={};
   const ids=['campaign-name','session-num','session-date','party-level',
     'strong-start','adv-hook','scene-hook','enc-bench','world-truths','camp-notes',
-    'summary','worked-well','improve','loose-threads','secrets-used','next-prep'];
+    'summary','worked-well','improve','loose-threads','secrets-used','next-prep','prev-recap'];
   ids.forEach(id=>{const el=document.getElementById(id);if(el)data[id]=el.value;});
   const cardLists=['hook-list','scenes-list','forks-list','secrets-list','loc-list',
     'npc-list','mon-list','treas-list','faction-list','conseq-list'];
@@ -2648,6 +2823,8 @@ function collectData(){
   // keep hooks for characters that aren't loaded right now
   Object.entries(pendingCharHooks).forEach(([k,v])=>{ if(!(k in data['char-hooks']) && !document.querySelector('[data-char-hook="'+CSS.escape(k)+'"]')) data['char-hooks'][k]=v; });
   data['revealed-secrets']=revealedSecrets.slice();
+  data['pc-state']=JSON.parse(JSON.stringify(pcState));
+  if(improvKit) data['improv-kit']=improvKit;
   data.savedAt=new Date().toISOString();
   return data;
 }
@@ -2668,7 +2845,7 @@ function loadSave(){
 function applyData(data){
   const ids=['campaign-name','session-num','session-date','party-level',
     'strong-start','adv-hook','scene-hook','enc-bench','world-truths','camp-notes',
-    'summary','worked-well','improve','loose-threads','secrets-used','next-prep'];
+    'summary','worked-well','improve','loose-threads','secrets-used','next-prep','prev-recap'];
   ids.forEach(id=>{const el=document.getElementById(id);if(el&&data[id]!==undefined)el.value=data[id];});
   const restorers={'hook-list':addHook,'scenes-list':addScene,'forks-list':addFork,'secrets-list':addSecret,
     'loc-list':addLoc,'npc-list':addNPC,'mon-list':addMon,
@@ -2691,6 +2868,8 @@ function applyData(data){
   pendingCharHooks=data['char-hooks']||{};
   document.querySelectorAll('[data-char-hook]').forEach(i=>{ i.value=pendingCharHooks[i.dataset.charHook]||''; });
   revealedSecrets=Array.isArray(data['revealed-secrets'])?data['revealed-secrets'].slice():[];
+  pcState=data['pc-state']&&typeof data['pc-state']==='object'?data['pc-state']:{};
+  improvKit=data['improv-kit']||null;
   if(typeof benchFromSheets==='function' && !benchManual && loadedChars.length) benchFromSheets(); else if(typeof calcBenchmark==='function') calcBenchmark();
   if(document.getElementById('tab-run') && document.getElementById('tab-run').classList.contains('active')) renderRunMode();
 }
@@ -3299,7 +3478,7 @@ function wrapSpellsInElement(el){
   
   nodes.forEach(textNode => {
     const parent = textNode.parentNode;
-    if(!parent || parent.classList.contains('spell-link') || parent.tagName === 'SCRIPT' || parent.tagName === 'STYLE') return;
+    if(!parent || parent.classList.contains('spell-link') || parent.tagName === 'SCRIPT' || parent.tagName === 'STYLE' || (parent.closest && parent.closest('button,label,select,option,textarea,.dmg-bar-title,.stitle,.tab-groups,.modal-title,.run-h,.cp-sec'))) return;
     
     let text = textNode.textContent;
     let changed = false;
@@ -6079,6 +6258,679 @@ function openPrepCheck(){
 function closePrepCheck(){ const m=document.getElementById('prep-check-modal'); if(m) m.classList.remove('open'); }
 document.addEventListener('click',e=>{ const m=document.getElementById('prep-check-modal'); if(m && e.target===m) closePrepCheck(); });
 document.addEventListener('keydown',e=>{ if(e.key==='Escape') closePrepCheck(); });
+
+
+// ══════════════════════════════════════════════════════
+//  PC RESOURCES
+// ══════════════════════════════════════════════════════
+const FULL_SLOTS=[[],[2],[3],[4,2],[4,3],[4,3,2],[4,3,3],[4,3,3,1],[4,3,3,2],[4,3,3,3,1],[4,3,3,3,2],[4,3,3,3,2,1],[4,3,3,3,2,1],[4,3,3,3,2,1,1],[4,3,3,3,2,1,1],[4,3,3,3,2,1,1,1],[4,3,3,3,2,1,1,1],[4,3,3,3,2,1,1,1,1],[4,3,3,3,3,1,1,1,1],[4,3,3,3,3,2,1,1,1],[4,3,3,3,3,2,2,1,1]];
+const HALF_SLOTS=[[],[],[2],[3],[3],[4,2],[4,2],[4,3],[4,3],[4,3,2],[4,3,2],[4,3,3],[4,3,3],[4,3,3,1],[4,3,3,1],[4,3,3,2],[4,3,3,2],[4,3,3,3,1],[4,3,3,3,1],[4,3,3,3,2],[4,3,3,3,2]];
+function abilMod(s){ return Math.floor(((s||10)-10)/2); }
+function charByShort(short){ return loadedChars.find(c=>pcShortName(c)===short); }
+
+// Build the list of trackers for a character from their class and sheet text
+function pcTrackers(ch){
+  const cls=(ch.class||'').toLowerCase(), sub=(ch.subclass||'').toLowerCase();
+  const L=parseInt(ch.level)||1, PB=parseInt(ch.proficiency)||Math.ceil(L/4)+1;
+  const st=ch.stats||[10,10,10,10,10,10];
+  const t=[];
+  const add=(key,label,max,reset,kind)=>{ if(max>0 && !t.find(x=>x.key===key)) t.push({key,label,max,reset,kind:kind||'pips'}); };
+  // Spell slots
+  let slots=[];
+  if(/wizard|cleric|druid|bard|sorcerer/.test(cls)) slots=FULL_SLOTS[L]||[];
+  else if(/paladin|ranger/.test(cls)) slots=HALF_SLOTS[L]||[];
+  slots.forEach((n,i)=>add('slot'+(i+1),`Level ${i+1} slots`,n,'long'));
+  if(/warlock/.test(cls)){
+    const n=L>=17?4:L>=11?3:L>=2?2:1, lvl=Math.min(5,Math.ceil(L/2));
+    add('pact',`Pact slots (level ${lvl})`,n,'short');
+  }
+  // Class features
+  if(/barbarian/.test(cls)) add('rage','Rage',L>=17?6:L>=12?5:L>=6?4:L>=3?3:2,'long');
+  if(/paladin/.test(cls)){
+    add('loh','Lay on Hands pool',5*L,'long','pool');
+    add('dsense','Divine Sense',Math.max(1,1+abilMod(st[5])),'long');
+    if(L>=3) add('cdiv','Channel Divinity',L>=18?3:L>=6?2:1,'short');
+  }
+  if(/cleric/.test(cls) && L>=2) add('cdiv','Channel Divinity',L>=18?3:L>=6?2:1,'short');
+  if(/druid/.test(cls)){
+    if(L>=2) add('wild','Wild Shape',2,'short');
+    if(L>=2 && /land/.test(sub)) add('natrec','Natural Recovery',1,'long');
+  }
+  if(/fighter/.test(cls)){ add('2wind','Second Wind',1,'short'); if(L>=2) add('surge','Action Surge',L>=17?2:1,'short'); }
+  if(/monk/.test(cls) && L>=2) add('ki','Ki points',L,'short','pool');
+  if(/sorcerer/.test(cls) && L>=2) add('sorc','Sorcery points',L,'long','pool');
+  if(/bard/.test(cls)) add('binsp','Bardic Inspiration',Math.max(1,abilMod(st[5])),L>=5?'short':'long');
+  if(/wizard/.test(cls)) add('arcrec','Arcane Recovery',1,'long');
+  // Features written on the sheet with their own limits
+  const skip=/rage|lay on hands|divine sense|wild shape|natural recovery|channel divinity|spellcasting|personality|rock gnome|background/i;
+  [...(ch.class_features||[]),...(ch.traits||[]),...(ch.spellcasting||[])].forEach(f=>{
+    const name=(f.name||'').trim(), desc=f.desc||'';
+    if(!name || skip.test(name)) return;
+    const label=name.replace(/\s*\(.*?\)\s*/g,' ').replace(/^(Combat Ability|Rune):\s*/i,'').trim();
+    const key='f_'+label.toLowerCase().replace(/[^a-z0-9]+/g,'_');
+    if(/once per combat/i.test(desc)) add(key,label,1,'combat');
+    else if(/proficiency bonus/i.test(desc) && /(uses?|times?|number of times)/i.test(desc)) add(key,/stone throw/i.test(desc)?'Stone Throw':label,PB,'long');
+    else if(/once per (a )?short or long rest|once per short\/long rest|until you finish a short or long rest/i.test(desc)) add(key,label,1,'short');
+    else if(/once per (a )?long rest|once per long rest/i.test(desc)) add(key,label,1,'long');
+  });
+  return t;
+}
+function pcS(short){
+  if(!pcState[short]) pcState[short]={used:{},exhaustion:0,inspiration:0};
+  if(!pcState[short].used) pcState[short].used={};
+  return pcState[short];
+}
+function trackerLeft(short,tr){ const u=pcS(short).used[tr.key]||0; return Math.max(0,tr.max-u); }
+function useTracker(short,key,delta,max){
+  const s=pcS(short); s.used[key]=Math.max(0,Math.min(max,(s.used[key]||0)+delta));
+}
+function restPC(short,kind){
+  const ch=charByShort(short); if(!ch) return;
+  const s=pcS(short);
+  pcTrackers(ch).forEach(tr=>{
+    if(kind==='long' || tr.reset==='short' || tr.reset==='combat') s.used[tr.key]=0;
+  });
+  if(kind==='long'){
+    s.exhaustion=Math.max(0,(s.exhaustion||0)-1);
+    const cb=combatants.find(x=>x.type==='pc'&&x.name===short);
+    if(cb){ cb.hp=cb.hpMax; cb.death=null; }
+  }
+}
+function partyRest(kind){
+  if(!loadedChars.length){ alert('Load the character sheets first.'); return; }
+  if(!confirm(kind==='long'?'Long rest for the whole party? Resets all trackers, restores HP in the tracker and removes one level of exhaustion.':'Short rest for the whole party? Resets short-rest trackers such as pact slots, Channel Divinity and Wild Shape.')) return;
+  loadedChars.forEach(ch=>restPC(pcShortName(ch),kind));
+  renderInitList(); refreshCombatPanel();
+  if(document.getElementById('tab-run').classList.contains('active')) renderRunMode();
+  flashStatus(kind==='long'?'✓ Long rest taken':'✓ Short rest taken');
+}
+function flashStatus(msg){
+  const s=document.getElementById('sst'); if(!s) return;
+  s.textContent=msg; s.classList.add('vis'); setTimeout(()=>{s.classList.remove('vis');s.textContent='✓ Saved';},2200);
+}
+// Combat-long abilities come back when a fight is reset
+const _resetCombatOrig=resetCombat;
+resetCombat=function(){
+  const had=combatants.length;
+  _resetCombatOrig();
+  if(had && !combatants.length){
+    loadedChars.forEach(ch=>{ const short=pcShortName(ch); pcTrackers(ch).filter(t=>t.reset==='combat').forEach(t=>{ pcS(short).used[t.key]=0; }); });
+    document.getElementById('combat-alerts').innerHTML=''; closeCombatPanel();
+  }
+};
+
+// ══════════════════════════════════════════════════════
+//  INITIATIVE NAME CELL
+// ══════════════════════════════════════════════════════
+function buildInitName(c){
+  const div=document.createElement('div'); div.className='init-name';
+  const btn=document.createElement('button'); btn.className='init-name-btn'; btn.textContent=c.name;
+  btn.title=c.type==='pc'?'Show HP, death saves and resources':'Show stat block';
+  btn.addEventListener('click',e=>{ e.stopPropagation(); openCombatPanel({kind:'combatant',idx:c.origIdx}); });
+  div.appendChild(btn);
+  const tags=document.createElement('span'); tags.className='init-tags';
+  if(c.conc) tags.innerHTML+=`<span class="init-tag conc" title="Concentrating">◎ ${escH(c.concSpell||'Concentrating')}</span>`;
+  if(c.type==='pc'&&c.hp<=0&&c.death){
+    const d=c.death;
+    tags.innerHTML+= d.dead?'<span class="init-tag down">Dead</span>':d.stable?'<span class="init-tag stable">Stable</span>':`<span class="init-tag down">Down: ${d.s}✓ ${d.f}✗</span>`;
+  }
+  if(c.type==='pc'){ const ex=(pcState[c.name]||{}).exhaustion||0; if(ex) tags.innerHTML+=`<span class="init-tag">Exhaustion ${ex}</span>`; }
+  if(tags.innerHTML) div.appendChild(tags);
+  return div;
+}
+
+// ══════════════════════════════════════════════════════
+//  DAMAGE, CONCENTRATION AND DEATH SAVES
+// ══════════════════════════════════════════════════════
+function combatAlert(html,buttons){
+  const wrap=document.getElementById('combat-alerts'); if(!wrap) return;
+  const a=document.createElement('div'); a.className='combat-alert';
+  a.innerHTML=`<div class="ca-text">${html}</div>`;
+  const bs=document.createElement('div'); bs.className='ca-btns';
+  (buttons||[{label:'OK'}]).forEach(b=>{
+    const bt=document.createElement('button'); bt.className=b.primary?'btnp':'btns'; bt.textContent=b.label;
+    bt.addEventListener('click',()=>{ if(b.fn) b.fn(); a.remove(); });
+    bs.appendChild(bt);
+  });
+  a.appendChild(bs); wrap.prepend(a);
+  while(wrap.children.length>4) wrap.removeChild(wrap.lastChild);
+}
+function onHPChange(idx,before){
+  const c=combatants[idx]; if(!c) return;
+  const after=c.hp, dmg=before-after;
+  if(dmg>0){
+    if(c.type==='pc'){
+      if(before<=0){
+        c.death=c.death||{s:0,f:0};
+        if(!c.death.dead){ c.death.stable=false; c.death.f=Math.min(3,c.death.f+1); if(c.death.f>=3) c.death.dead=true;
+          combatAlert(`<strong>${escH(c.name)}</strong> took damage while down. That counts as a failed death save (a critical hit counts as two).`); }
+      } else if(after<=0){
+        c.death={s:0,f:0};
+        combatAlert(`<strong>${escH(c.name)}</strong> is down. They make a death save at the start of each of their turns.`);
+      }
+    }
+    if(c.conc){
+      if(after<=0){ const sp=c.concSpell; c.conc=false; c.concSpell='';
+        combatAlert(`<strong>${escH(c.name)}</strong> dropped to 0 HP and lost concentration${sp?' on '+escH(sp):''}.`);
+      } else {
+        const dc=Math.max(10,Math.floor(dmg/2));
+        combatAlert(`<strong>${escH(c.name)}</strong> is concentrating${c.concSpell?' on <em>'+escH(c.concSpell)+'</em>':''} and took ${dmg} damage. <strong>Con save DC ${dc}.</strong>`,
+          [{label:'Kept it',primary:true},{label:'Lost it',fn:()=>{ c.conc=false; c.concSpell=''; renderInitList(); refreshCombatPanel(); }}]);
+      }
+    }
+  } else if(dmg<0 && before<=0 && after>0 && c.type==='pc'){ c.death=null; }
+  renderInitList(); refreshCombatPanel();
+}
+updateHP=function(idx,val){
+  const before=combatants[idx].hp;
+  combatants[idx].hp=Math.max(0,parseInt(val)||0);
+  onHPChange(idx,before);
+};
+applyDmg=function(){
+  const idx=parseInt(document.getElementById('dmg-target').value);
+  const amt=parseInt(document.getElementById('dmg-amount').value)||0;
+  if(isNaN(idx)||!combatants[idx]) return;
+  const c=combatants[idx];
+  if(c.isGroup){ applyGroupDamage(idx,amt); return; }
+  const before=c.hp; c.hp=Math.max(0,c.hp-amt); onHPChange(idx,before);
+};
+applyHeal=function(){
+  const idx=parseInt(document.getElementById('dmg-target').value);
+  const amt=parseInt(document.getElementById('dmg-amount').value)||0;
+  if(isNaN(idx)||!combatants[idx]) return;
+  const c=combatants[idx], before=c.hp;
+  c.hp=Math.min(c.hpMax||c.hp+amt,c.hp+amt); onHPChange(idx,before);
+};
+killCombatant=(function(orig){ return function(idx){
+  const c=combatants[idx];
+  if(c && !c.isGroup){ const before=c.hp; c.hp=0; onHPChange(idx,before); return; }
+  orig(idx);
+};})(killCombatant);
+
+function rollDeathSave(idx){
+  const c=combatants[idx]; if(!c||!c.death) return;
+  const r=Math.floor(Math.random()*20)+1, d=c.death;
+  let msg;
+  if(r===20){ c.hp=1; c.death=null; msg=`rolled a natural 20 and is back up with 1 HP!`; }
+  else if(r===1){ d.f=Math.min(3,d.f+2); msg=`rolled a natural 1. Two failures.`; }
+  else if(r>=10){ d.s=Math.min(3,d.s+1); msg=`rolled ${r}. Success.`; }
+  else { d.f=Math.min(3,d.f+1); msg=`rolled ${r}. Failure.`; }
+  if(c.death){ if(d.s>=3){ d.stable=true; msg+=' They are stable.'; } if(d.f>=3){ d.dead=true; msg+=' They have died.'; } }
+  combatAlert(`<strong>${escH(c.name)}</strong> ${msg}`);
+  renderInitList(); refreshCombatPanel();
+}
+function setDeathMark(idx,type,n){
+  const c=combatants[idx]; if(!c) return; c.death=c.death||{s:0,f:0};
+  c.death[type]=c.death[type]===n?n-1:n;
+  c.death.stable=c.death.s>=3; c.death.dead=c.death.f>=3;
+  renderInitList(); refreshCombatPanel();
+}
+// Remind about death saves when a downed PC's turn comes up
+nextTurn=(function(orig){ return function(){
+  orig();
+  const c=combatants[currentTurn];
+  if(c && c.type==='pc' && c.hp<=0 && c.death && !c.death.stable && !c.death.dead){
+    combatAlert(`It's <strong>${escH(c.name)}</strong>'s turn and they're down. Roll a death save.`,
+      [{label:'Roll death save',primary:true,fn:()=>rollDeathSave(currentTurn)},{label:'They rolled it'}]);
+  }
+};})(nextTurn);
+
+// ══════════════════════════════════════════════════════
+//  COMBAT DETAIL PANEL
+// ══════════════════════════════════════════════════════
+let panelTarget=null;
+function findMonsterData(name){
+  const base=String(name||'').replace(/\s*\(\d+\)\s*$/,'').replace(/\s+\d+\s*$/,'').trim().toLowerCase();
+  return MONSTERS.find(m=>m.name.toLowerCase()===base) || MONSTERS.find(m=>base.startsWith(m.name.toLowerCase())) || null;
+}
+function prepNotesFor(name){
+  const base=String(name||'').replace(/\s*\(\d+\)\s*$/,'').replace(/\s+\d+\s*$/,'').trim().toLowerCase();
+  return readList('mon-list').find(m=>(m['mn-name']||'').toLowerCase()===base);
+}
+function splitTop(s){
+  const out=[]; let depth=0, cur='';
+  for(const ch of String(s||'')){
+    if(ch==='(') depth++; if(ch===')') depth=Math.max(0,depth-1);
+    if(ch===',' && depth===0){ if(cur.trim()) out.push(cur.trim()); cur=''; } else cur+=ch;
+  }
+  if(cur.trim()) out.push(cur.trim()); return out;
+}
+function statLine(item){
+  const m=item.match(/^([^(+]+?)(\s*[+(].*)?$/);
+  return m?`<strong>${escH(m[1].trim())}</strong>${escH(m[2]||'')}`:escH(item);
+}
+function statBlockHTML(m){
+  const ab=['str','dex','con','int','wis','cha'];
+  const sign=n=>(n>=0?'+':'')+n;
+  const list=(label,val)=>val?`<div class="sb-row"><span class="sb-lbl">${label}</span> ${escH(val)}</div>`:'';
+  const acts=(label,val)=>val?`<div class="sb-sec">${label}</div>${splitTop(val).map(a=>`<div class="sb-act">${statLine(a)}</div>`).join('')}`:'';
+  return `<div class="sb-type">${escH(m.type||'')}${m.cr?`, CR ${escH(m.cr)}`:''}</div>
+    ${list('Speed',m.speed)}
+    <div class="sb-abil">${ab.map(k=>`<div><span>${k.toUpperCase()}</span>${m[k]||10} (${sign(abilMod(m[k]))})</div>`).join('')}</div>
+    ${list('Saves',m.saves)}${list('Skills',m.skills)}${list('Senses',m.senses)}
+    ${acts('Traits',m.traits)}${acts('Actions',m.actions)}${acts('Reactions',m.reactions)}${acts('Legendary actions',m.legendary)}`;
+}
+function openCombatPanel(target){ panelTarget=target; refreshCombatPanel(true); }
+function closeCombatPanel(){ panelTarget=null; const p=document.getElementById('combat-panel'); if(p) p.classList.remove('open'); }
+function refreshCombatPanel(force){
+  const panel=document.getElementById('combat-panel'), body=document.getElementById('combat-panel-body');
+  if(!panel||!panelTarget) return;
+  if(!force && !panel.classList.contains('open')) return;
+  let c=null, short=null;
+  if(panelTarget.kind==='combatant'){ c=combatants[panelTarget.idx]; if(!c){ closeCombatPanel(); return; } if(c.type==='pc') short=c.name; }
+  else short=panelTarget.name;
+  const ch=short?(charByShort(short)||loadedChars.find(x=>x.name===short)):null;
+  let html='';
+  if(ch || (c && c.type==='pc')) html=pcPanelHTML(c,ch,short||c.name);
+  else html=monsterPanelHTML(c);
+  body.innerHTML=html;
+  wirePanel(body,c,short||(c&&c.name));
+  panel.classList.add('open');
+  if(typeof wrapSpellsInElement==='function') wrapSpellsInElement(body);
+}
+function concBlockHTML(c,spellList){
+  if(!c) return '';
+  return `<div class="cp-sec">Concentration</div>
+    <div class="cp-conc">
+      <label class="cp-check"><input type="checkbox" data-p="conc" ${c.conc?'checked':''}> Concentrating</label>
+      <input type="text" data-p="concSpell" list="cp-spells" placeholder="Spell name" value="${escH(c.concSpell||'')}">
+      <datalist id="cp-spells">${(spellList||[]).map(s=>`<option value="${escH(s)}">`).join('')}</datalist>
+    </div>`;
+}
+function monsterPanelHTML(c){
+  const m=findMonsterData(c.name), notes=prepNotesFor(c.name);
+  const hp=c.isGroup?`${(c.members||[]).filter(x=>!x.dead).length} of ${(c.members||[]).length} standing`:`HP ${c.hp}/${c.hpMax}`;
+  let html=`<h3 class="cp-name">${escH(c.name)}</h3><div class="cp-quick">AC ${escH(c.ac)}, ${hp}</div>`;
+  if(notes && (notes['mn-mot']||notes['mn-tac']||notes['mn-notes'])){
+    html+=`<div class="cp-notes">${notes['mn-mot']?`<div><em>Wants:</em> ${escH(notes['mn-mot'])}</div>`:''}${notes['mn-tac']?`<div><em>Tactics:</em> ${escH(notes['mn-tac'])}</div>`:''}${notes['mn-notes']?`<div>${escH(notes['mn-notes'])}</div>`:''}</div>`;
+  }
+  html+= m?statBlockHTML(m):c.custom?customBlockHTML(c.custom):`<p class="run-empty">No stat block found for "${escH(c.name)}". Monsters added from the Monster DB, or named exactly as they appear there, show their full stats here.</p>`;
+  if(!c.isGroup) html+=concBlockHTML(c,[]);
+  return html;
+}
+function pcPanelHTML(c,ch,short){
+  const s=pcS(short);
+  let html=`<h3 class="cp-name">${escH(short)}</h3>`;
+  if(ch) html+=`<div class="cp-quick">${escH([ch.race,ch.class,ch.level?'level '+ch.level:''].filter(Boolean).join(' '))}${ch.player?', played by '+escH(ch.player):''}</div>`;
+  if(c){
+    html+=`<div class="cp-quick">AC ${escH(c.ac)}, HP ${c.hp}/${c.hpMax}</div>`;
+    if(c.hp<=0){
+      const d=c.death||{s:0,f:0};
+      const pip=(type,n,on)=>`<button class="ds-pip ${type}${on?' on':''}" data-ds="${type}" data-n="${n}" aria-label="${type==='s'?'Success':'Failure'} ${n}"></button>`;
+      html+=`<div class="cp-sec">Death saves</div>
+        <div class="cp-death">
+          <div><span class="ds-lbl">Successes</span>${[1,2,3].map(n=>pip('s',n,d.s>=n)).join('')}</div>
+          <div><span class="ds-lbl">Failures</span>${[1,2,3].map(n=>pip('f',n,d.f>=n)).join('')}</div>
+          <div class="ds-state">${d.dead?'Dead.':d.stable?'Stable. Unconscious but no longer rolling.':'Roll at the start of each of their turns. 10 or higher succeeds.'}</div>
+          ${d.dead||d.stable?'':'<button class="btnp" data-p="rollds">Roll death save</button>'}
+        </div>`;
+    }
+    html+=concBlockHTML(c,ch&&Array.isArray(ch.spells)?ch.spells.map(x=>String(x).replace(/\s*\(.*$/,'')):[]);
+  } else {
+    html+=`<p class="run-empty">Not in the initiative tracker. HP is tracked there during combat.</p>`;
+  }
+  if(ch){
+    const trs=pcTrackers(ch);
+    html+=`<div class="cp-sec">Resources</div>`;
+    if(!trs.length) html+=`<p class="run-empty">No limited-use resources found on this sheet.</p>`;
+    trs.forEach(tr=>{
+      const left=trackerLeft(short,tr);
+      const resetTxt=tr.reset==='combat'?'per fight':tr.reset==='short'?'short rest':'long rest';
+      if(tr.kind==='pool'){
+        html+=`<div class="cp-res"><div class="cp-res-top"><span>${escH(tr.label)}</span><span class="cp-reset">${resetTxt}</span></div>
+          <div class="cp-pool"><strong>${left}</strong> of ${tr.max} left
+            <input type="number" min="1" data-pool-amt="${tr.key}" placeholder="amt">
+            <button class="abtn" data-pool-spend="${tr.key}" data-max="${tr.max}">Spend</button>
+            <button class="abtn" data-pool-reset="${tr.key}">Refill</button></div></div>`;
+      } else {
+        html+=`<div class="cp-res"><div class="cp-res-top"><span>${escH(tr.label)}</span><span class="cp-reset">${resetTxt}</span></div>
+          <div class="cp-pips">${Array.from({length:tr.max},(_,i)=>`<button class="res-pip${i<left?' on':''}" data-tr="${tr.key}" data-i="${i}" data-max="${tr.max}" aria-label="${escH(tr.label)} ${i+1}"></button>`).join('')}<span class="cp-left">${left} left</span></div></div>`;
+      }
+    });
+    html+=`<div class="cp-res"><div class="cp-res-top"><span>Exhaustion</span></div>
+      <div class="cp-pips">${[1,2,3,4,5,6].map(n=>`<button class="res-pip ex${(s.exhaustion||0)>=n?' on':''}" data-ex="${n}" aria-label="Exhaustion ${n}"></button>`).join('')}<span class="cp-left">${EXH_TEXT[s.exhaustion||0]}</span></div></div>`;
+    html+=`<div class="cp-rest"><button class="abtn" data-rest="short">Short rest</button><button class="abtn" data-rest="long">Long rest</button></div>`;
+  }
+  return html;
+}
+const EXH_TEXT=['None','Disadvantage on ability checks','Speed halved','Disadvantage on attacks and saves','HP maximum halved','Speed 0','Death'];
+function wirePanel(body,c,short){
+  const idx=c?combatants.indexOf(c):-1;
+  body.querySelectorAll('[data-p="conc"]').forEach(cb=>cb.addEventListener('change',()=>{ c.conc=cb.checked; if(!cb.checked) c.concSpell=''; renderInitList(); refreshCombatPanel(); }));
+  body.querySelectorAll('[data-p="concSpell"]').forEach(inp=>inp.addEventListener('change',()=>{ c.concSpell=inp.value.trim(); if(c.concSpell) c.conc=true; renderInitList(); refreshCombatPanel(); }));
+  body.querySelectorAll('[data-p="rollds"]').forEach(b=>b.addEventListener('click',()=>rollDeathSave(idx)));
+  body.querySelectorAll('[data-ds]').forEach(b=>b.addEventListener('click',()=>setDeathMark(idx,b.dataset.ds,parseInt(b.dataset.n))));
+  body.querySelectorAll('[data-tr]').forEach(b=>b.addEventListener('click',()=>{
+    const max=parseInt(b.dataset.max), i=parseInt(b.dataset.i), s=pcS(short);
+    const left=max-(s.used[b.dataset.tr]||0);
+    // clicking a filled pip spends down to it; clicking an empty one restores up to it
+    s.used[b.dataset.tr]= i<left ? max-i : max-(i+1);
+    refreshCombatPanel(); refreshRunPartyIfOpen();
+  }));
+  body.querySelectorAll('[data-pool-spend]').forEach(b=>b.addEventListener('click',()=>{
+    const key=b.dataset.poolSpend, amt=parseInt(body.querySelector(`[data-pool-amt="${key}"]`).value)||0;
+    if(amt>0){ useTracker(short,key,amt,parseInt(b.dataset.max)); refreshCombatPanel(); refreshRunPartyIfOpen(); }
+  }));
+  body.querySelectorAll('[data-pool-reset]').forEach(b=>b.addEventListener('click',()=>{ pcS(short).used[b.dataset.poolReset]=0; refreshCombatPanel(); refreshRunPartyIfOpen(); }));
+  body.querySelectorAll('[data-ex]').forEach(b=>b.addEventListener('click',()=>{
+    const n=parseInt(b.dataset.ex), s=pcS(short); s.exhaustion=(s.exhaustion===n)?n-1:n; renderInitList(); refreshCombatPanel(); refreshRunPartyIfOpen();
+  }));
+  body.querySelectorAll('[data-rest]').forEach(b=>b.addEventListener('click',()=>{ restPC(short,b.dataset.rest); renderInitList(); refreshCombatPanel(); refreshRunPartyIfOpen(); flashStatus(b.dataset.rest==='long'?'✓ Long rest taken':'✓ Short rest taken'); }));
+}
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ closeCombatPanel(); closeNextSession(); } });
+
+// ══════════════════════════════════════════════════════
+//  RUN MODE: PARTY BLOCK
+// ══════════════════════════════════════════════════════
+function renderRunParty(){
+  const wrap=document.getElementById('run-party'); if(!wrap) return;
+  if(!loadedChars.length){ wrap.innerHTML=runEmpty('Load character sheets to track HP and resources.','s1'); return; }
+  wrap.innerHTML='';
+  loadedChars.forEach(ch=>{
+    const short=pcShortName(ch);
+    const cb=combatants.find(x=>x.type==='pc'&&x.name===short);
+    const hpMax=ch.hp_max||ch.hp||0, hp=cb?cb.hp:(ch.hp_current!==undefined?ch.hp_current:hpMax);
+    const trs=pcTrackers(ch);
+    const summary=trs.filter(t=>t.kind!=='pool'||true).slice(0,4).map(t=>`${escH(t.label.replace(/ slots$/,''))} ${trackerLeft(short,t)}/${t.max}`).join(', ');
+    const row=document.createElement('button'); row.className='run-party-row';
+    row.innerHTML=`<span class="run-item-name">${escH(short)}</span><span class="run-tag${hp<=0?' is-hot':''}">HP ${hp}/${hpMax}${cb&&cb.conc?' ◎':''}</span>
+      <span class="run-small">${summary||'No tracked resources'}${(pcState[short]||{}).exhaustion?`, exhaustion ${pcState[short].exhaustion}`:''}</span>`;
+    row.addEventListener('click',()=>openCombatPanel(cb?{kind:'combatant',idx:combatants.indexOf(cb)}:{kind:'pc',name:short}));
+    wrap.appendChild(row);
+  });
+}
+function refreshRunPartyIfOpen(){ const p=document.getElementById('tab-run'); if(p&&p.classList.contains('active')) renderRunParty(); }
+renderRunMode=(function(orig){ return function(){ orig(); renderRunParty(); }; })(renderRunMode);
+
+// ══════════════════════════════════════════════════════
+//  START NEXT SESSION
+// ══════════════════════════════════════════════════════
+function nextSessionName(cur){
+  cur=String(cur||'').trim();
+  const m=cur.match(/^(.*?)(\d+)(\D*)$/);
+  return m?m[1]+(parseInt(m[2])+1)+m[3]:(cur?cur+' (next)':'Session 1');
+}
+function undiscoveredSecrets(){
+  const used=fieldVal('secrets-used').toLowerCase();
+  return readList('secrets-list').map(s=>s.sec).filter(Boolean).filter(t=>!revealedSecrets.includes(t) && !used.includes(t.slice(0,25).toLowerCase()));
+}
+function openConsequences(){
+  return readList('conseq-list').filter(q=>!isBlankRow(q)).filter(q=>!/^\s*(yes|resolved|done)/i.test(q['cq-resolved']||''));
+}
+function openNextSession(){
+  const cur=fieldVal('session-num');
+  document.getElementById('ns-num').value=nextSessionName(cur);
+  document.getElementById('ns-date').value='';
+  const secs=undiscoveredSecrets(), cons=openConsequences();
+  const npcs=readList('npc-list').filter(n=>n['np-name']).length, locs=readList('loc-list').filter(l=>l['lo-name']).length;
+  const mons=readList('mon-list').filter(m=>m['mn-name']).length, tr=readList('treas-list').filter(t=>t['tr-name']).length;
+  const opt=(id,label,count,on,hint)=>`<label class="ns-opt"><input type="checkbox" id="${id}" ${on?'checked':''} ${count===0?'disabled':''}>
+    <span><strong>${label}</strong>${count!==null?` <span class="ns-count">(${count})</span>`:''}${hint?`<br><span class="ns-hint">${hint}</span>`:''}</span></label>`;
+  const hasNotes=!!(fieldVal('summary')||fieldVal('loose-threads')||fieldVal('next-prep'));
+  document.getElementById('ns-options').innerHTML=
+    opt('ns-secrets','Undiscovered secrets',secs.length,true,'Secrets the players haven\'t learned yet go into Step 4.')+
+    opt('ns-notes','Session notes',hasNotes?null:0,hasNotes,'The recap goes on the Strong Start tab. Loose threads and first prep are added to Open Threads.')+
+    opt('ns-cons','Unresolved consequences',cons.length,true,'')+
+    opt('ns-npcs','NPCs',npcs,true,'Recurring characters the party may meet again.')+
+    opt('ns-locs','Locations',locs,false,'')+
+    opt('ns-mons','Monsters',mons,false,'')+
+    opt('ns-treas','Treasure',tr,false,'Keep this if the party didn\'t find it yet.')+
+    opt('ns-rest','Party takes a long rest',null,true,'Resets spell slots and abilities, and removes one level of exhaustion.');
+  document.getElementById('next-session-modal').classList.add('open');
+}
+function closeNextSession(){ const m=document.getElementById('next-session-modal'); if(m) m.classList.remove('open'); }
+function startNextSession(doExport){
+  const on=id=>{ const el=document.getElementById(id); return el&&el.checked&&!el.disabled; };
+  const old=collectData();
+  const oldName=old['session-num']||'last session';
+  if(doExport) exportSession();
+  const strip=rows=>rows.map(r=>{ const o={}; Object.keys(r).forEach(k=>{ if(!k.startsWith('_')) o[k]=r[k]; }); return o; });
+  const d={};
+  ['campaign-name','party-level','world-truths','camp-notes'].forEach(k=>d[k]=old[k]||'');
+  const lv=sheetLevels(); if(lv.length) d['party-level']=String(benchNumbers(lv.map(x=>x.level)).lvl);
+  d['session-num']=document.getElementById('ns-num').value.trim()||nextSessionName(oldName);
+  d['session-date']=document.getElementById('ns-date').value.trim();
+  ['strong-start','adv-hook','scene-hook','enc-bench','summary','worked-well','improve','loose-threads','secrets-used','next-prep','prev-recap'].forEach(k=>d[k]='');
+  if(on('ns-notes')){
+    d['prev-recap']=old['summary']||'';
+    const extra=[old['loose-threads']?`Loose threads: ${old['loose-threads']}`:'',old['next-prep']?`First prep: ${old['next-prep']}`:''].filter(Boolean).join('\n');
+    if(extra) d['camp-notes']=(d['camp-notes']?d['camp-notes'].trimEnd()+'\n\n':'')+`After ${oldName}:\n`+extra;
+  }
+  d['hook-list']=[]; d['scenes-list']=[]; d['forks-list']=[];
+  d['secrets-list']=on('ns-secrets')?undiscoveredSecrets().map(s=>({sec:s})):[];
+  d['loc-list']=on('ns-locs')?old['loc-list']:[];
+  d['npc-list']=on('ns-npcs')?old['npc-list']:[];
+  d['mon-list']=on('ns-mons')?old['mon-list']:[];
+  d['treas-list']=on('ns-treas')?old['treas-list']:[];
+  d['faction-list']=old['faction-list']||[];
+  d['conseq-list']=on('ns-cons')?strip(openConsequences()):[];
+  d['enc-list-html']=''; d.encN=0;
+  d['char-hooks']={}; d['revealed-secrets']=[];
+  d['pc-state']=old['pc-state']||{};
+  const encList=document.getElementById('enc-list'); if(encList) encList.innerHTML='';
+  encN=0;
+  applyData(d);
+  if(on('ns-rest')) loadedChars.forEach(ch=>restPC(pcShortName(ch),'long'));
+  saveAll();
+  closeNextSession();
+  goTab('s1');
+  flashStatus(`✓ ${d['session-num']} started`);
+}
+
+
+// ══════════════════════════════════════════════════════
+//  QUICK MONSTER BUILDER
+//  Formulas from the Lazy GM's 5e Monster Builder Resource Document
+//  by Teos Abadía, Scott Fitzgerald Gray and Michael E. Shea (CC BY 4.0)
+// ══════════════════════════════════════════════════════
+const QM_CRS=['0','1/8','1/4','1/2',...Array.from({length:30},(_,i)=>String(i+1))];
+const QM_TRICKS={
+  none:{label:'None'},
+  knockdown:{label:'Knockdown',text:s=>`When it hits with a melee attack, the target makes a DC ${s.dc} Strength save or is knocked prone.`},
+  grab:{label:'Restraining grab',text:s=>`When it hits with a melee attack, the target is grappled (escape DC ${s.dc}).`},
+  misty:{label:'Misty step',text:()=>`As a bonus action, it teleports up to 30 feet to a space it can see.`},
+  elemental:{label:'Elemental strike',text:s=>`Its attacks deal an extra ${s.cr<5?'3 (1d6)':s.cr<=10?'7 (2d6)':s.cr<=16?'14 (4d6)':'28 (8d6)'} damage of a type that fits its story.`},
+  aura:{label:'Damage aura',text:s=>`Enemies that start their turn within 10 feet take ${s.cr<=4?'9 (2d8)':s.cr<=10?'13 (3d8)':s.cr<=16?'18 (4d8)':'27 (6d8)'} damage of a type that fits its story.`},
+  blast:{label:'Damaging blast',text:s=>`Ranged attack, 60 ft: +${s.atk} to hit, ${s.dmgText} damage.`},
+  reflect:{label:'Damage reflection',text:s=>`A creature that hits it with a melee attack takes ${Math.max(1,Math.floor(s.perAvg/2))} damage in return. (It makes one fewer attack.)`},
+  fear:{label:'Frightening presence',text:s=>`Once per fight, enemies within 30 feet make a DC ${s.dc} Wisdom save or are frightened for 1 minute (save again at the end of each turn).`}
+};
+function lazyStats(crStr,trick){
+  const cr=parseCR(crStr);
+  let ac,atk,hp,dpr,attacks,mod;
+  if(cr<1){
+    const t={0:[10,2,3,1],0.125:[12,3,7,3],0.25:[12,3,11,4],0.5:[12,3,15,5]}[cr]||[12,3,15,5];
+    [ac,atk,hp,dpr]=t; attacks=1; mod=1;
+  } else {
+    const half=Math.floor(cr/2);
+    ac=cr<=16?12+half:20+Math.floor((cr-16)/3);
+    atk=4+half; hp=15*cr+15; dpr=7*cr;
+    attacks=cr<2?1:cr<10?2:cr<17?3:4; mod=Math.max(1,atk-2);
+  }
+  const dc=cr<1?(cr===0?10:12):12+Math.floor(cr/2);
+  if(trick==='reflect') attacks=Math.max(1,attacks-1), dpr=Math.round(dpr*attacks/(attacks+1));
+  const per=Math.max(1,Math.round(dpr/attacks));
+  let dice;
+  if(per-mod<=0){ dice=`${per}`; }
+  else if(per-mod<=3){ dice=`1d4+${mod}`; }
+  else if(per-mod<=4){ dice=`1d6+${mod}`; }
+  else { const n=Math.max(1,Math.round((per-mod)/4.5)); dice=`${n}d8+${mod}`; }
+  const perAvg=(()=>{ const m=dice.match(/(\d+)d(\d+)\+(\d+)/); if(!m) return per; return Math.floor(parseInt(m[1])*(parseInt(m[2])+1)/2)+parseInt(m[3]); })();
+  const s={cr,crStr,ac,dc,atk,hp,dpr,attacks,perAvg,dmgText:`${perAvg} (${dice})`};
+  s.trickText=trick&&QM_TRICKS[trick]&&QM_TRICKS[trick].text?QM_TRICKS[trick].text(s):'';
+  s.trickLabel=trick&&trick!=='none'?QM_TRICKS[trick].label:'';
+  return s;
+}
+function customBlockHTML(s){
+  return `<div class="sb-type">Quick monster, CR ${escH(s.crStr)}</div>
+    <div class="sb-row"><span class="sb-lbl">Armour Class</span> ${s.ac}. <span class="sb-lbl">Save DC</span> ${s.dc}.</div>
+    <div class="sb-row"><span class="sb-lbl">Best save and skills</span> +${s.atk}. Make up the rest as you need them.</div>
+    <div class="sb-sec">Actions</div>
+    <div class="sb-act"><strong>${s.attacks>1?`Multiattack.`:'Attack.'}</strong> ${s.attacks>1?`${s.attacks} attacks, each `:''}+${s.atk} to hit, ${escH(s.dmgText)} damage.</div>
+    ${s.trickText?`<div class="sb-sec">${escH(s.trickLabel)}</div><div class="sb-act">${escH(s.trickText)}</div>`:''}`;
+}
+function renderQuickMonster(id){
+  const box=document.getElementById(id); if(!box || box.dataset.ready) return;
+  box.dataset.ready='1';
+  box.innerHTML=`
+    <div class="qm-title">Quick monster from a CR</div>
+    <div class="qm-inputs">
+      <div><label for="${id}-name">Name</label><input type="text" id="${id}-name" placeholder="Knight of Alvar"></div>
+      <div><label for="${id}-cr">CR</label><select id="${id}-cr">${QM_CRS.map(x=>`<option${x==='3'?' selected':''}>${x}</option>`).join('')}</select></div>
+      <div><label for="${id}-n">Count</label><input type="number" id="${id}-n" value="1" min="1" max="20"></div>
+      <div><label for="${id}-trick">Trick</label><select id="${id}-trick">${Object.entries(QM_TRICKS).map(([k,v])=>`<option value="${k}">${v.label}</option>`).join('')}<option value="random">Random</option></select></div>
+    </div>
+    <div class="qm-out" id="${id}-out"></div>
+    <div class="qm-btns">
+      <button class="abtn qm-add" data-qm="init">Add to initiative</button>
+      <button class="abtn" data-qm="roll">Roll and add</button>
+      <button class="abtn" data-qm="s7">Add to Step 7</button>
+    </div>
+    <div class="qm-credit">Formulas from the Lazy GM's 5e Monster Builder Resource Document (CC BY 4.0).</div>`;
+  const get=()=>{
+    let trick=box.querySelector(`#${id}-trick`).value;
+    if(trick==='random'){ const keys=Object.keys(QM_TRICKS).filter(k=>k!=='none'); trick=box.dataset.rt||(box.dataset.rt=pick(keys)); }
+    else delete box.dataset.rt;
+    return {name:box.querySelector(`#${id}-name`).value.trim()||'Quick monster',
+      crStr:box.querySelector(`#${id}-cr`).value, n:Math.max(1,parseInt(box.querySelector(`#${id}-n`).value)||1), trick};
+  };
+  const update=()=>{
+    const g=get(), s=lazyStats(g.crStr,g.trick), b=currentBench();
+    const warn=s.cr>b.singleMax?` <span class="bench-warn">Above the single-monster limit of CR ${b.singleMax}.</span>`:'';
+    box.querySelector(`#${id}-out`).innerHTML=`<strong>AC ${s.ac}, HP ${s.hp}</strong>, attack +${s.atk}, save DC ${s.dc}.
+      ${s.attacks>1?s.attacks+' attacks':'1 attack'} of ${escH(s.dmgText)} damage.${s.trickText?`<br><em>${escH(s.trickLabel)}:</em> ${escH(s.trickText)}`:''}${warn}`;
+  };
+  box.addEventListener('input',e=>{ if(e.target.id===`${id}-trick`) delete box.dataset.rt; update(); });
+  box.addEventListener('change',e=>{ if(e.target.id===`${id}-trick`) delete box.dataset.rt; update(); });
+  box.querySelectorAll('[data-qm]').forEach(btn=>btn.addEventListener('click',()=>{
+    const g=get(), s=lazyStats(g.crStr,g.trick), act=btn.dataset.qm;
+    if(act==='s7'){
+      addMon();
+      const card=document.getElementById('mon-list').lastElementChild;
+      const set=(k,v)=>{ const el=card.querySelector(`[data-key="${k}"]`); if(el) el.value=v; };
+      set('mn-name',g.name); set('mn-cr',g.crStr); set('mn-hp',s.hp); set('mn-ac',s.ac); set('mn-n',g.n);
+      set('mn-tac',`${s.attacks>1?s.attacks+' attacks':'1 attack'}, +${s.atk} to hit, ${s.dmgText} each. Save DC ${s.dc}.`);
+      if(s.trickText) set('mn-notes',`${s.trickLabel}: ${s.trickText}`);
+      renderEncTester(); flashStatus(`✓ ${g.name} added to Step 7`);
+      return;
+    }
+    const roll=act==='roll'?Math.floor(Math.random()*20)+1:0;
+    const custom={...s};
+    if(g.n>1){
+      let gname=g.name, k=2; while(combatants.find(x=>x.name===gname&&x.isGroup)) gname=`${g.name} (${k++})`;
+      combatants.push({name:gname,type:'monster',initiative:roll,hp:s.hp,hpMax:s.hp,ac:s.ac,dex:10,conditions:[],isGroup:true,count:g.n,expanded:false,custom,
+        members:Array.from({length:g.n},(_,i)=>({name:`${g.name} ${i+1}`,hp:s.hp,hpMax:s.hp,conditions:[],dead:false}))});
+    } else {
+      let nm=g.name, k=2; while(combatants.find(x=>x.name===nm)) nm=`${g.name} (${k++})`;
+      combatants.push({name:nm,type:'monster',initiative:roll,hp:s.hp,hpMax:s.hp,ac:s.ac,dex:10,conditions:[],custom});
+    }
+    combatants.sort((a,b)=>b.initiative-a.initiative);
+    renderInitList(); updateInitSelects();
+    flashStatus(`✓ ${g.n>1?g.n+' × ':''}${g.name} added to initiative`);
+  }));
+  update();
+}
+function initQuickMonsters(){ ['qm-db','qm-s7','qm-run'].forEach(renderQuickMonster); }
+window.addEventListener('DOMContentLoaded',()=>setTimeout(initQuickMonsters,100));
+
+// ══════════════════════════════════════════════════════
+//  IMPROV KIT
+// ══════════════════════════════════════════════════════
+const TAVERN_ADJ=['Gilded','Rusty','Drowned','Laughing','Crooked','Sleeping','Wandering','Salty','Burnt','Merry','Three-Legged','Hollow','Silver','Stubborn','Weeping','Lucky','One-Eyed','Copper','Howling','Muddy','Prancing','Broken','Golden','Tipsy'];
+const TAVERN_NOUN=['Goose','Anchor','Dragon','Barrel','Stag','Lantern','Mule','Kettle','Crow','Boar','Hound','Candle','Wyvern','Tankard','Fox','Pike','Gnome','Oak','Badger','Pony','Toad','Owl','Cauldron','Wheel'];
+const SHOP_TYPES=['apothecary','smithy','general store','bookbinder','fletcher','tailor','curio shop','herbalist','chandler','tinker','cartographer','stables','jeweller','pawnshop'];
+const WEATHER=['Clear and cold, breath fogging in the air','Warm and still, insects everywhere','Light drizzle that soaks through everything by midday','A heavy thunderstorm rolling in by evening','Thick morning fog that burns off by noon','Blustering wind that snatches at cloaks and maps','Grey overcast skies with a threat of rain that never comes','Hot, bright sun with no shade on the road','Sleet turning the roads to mud','A strange green tint to the sky at sunset','First snow, light and wet','Humid and heavy, a storm building all day','Crisp autumn air and falling leaves','A red dawn. Old folk say it means blood','Hail for ten minutes, then sudden sunshine','Dead calm. Not a bird is singing'];
+const TRAVEL_EVENTS=['A broken-down cart blocks the road. Its driver is nowhere to be seen.','A travelling merchant offers "rare goods" that are obviously stolen.','Fresh tracks cross the road: heavy, clawed and heading the same way as the party.','A shrine by the road has a fresh offering on it. Someone passed by within the hour.','A lost child asks the way to a village that burned down last month.','Crows circle something in a field off the road.','A patrol stops the party and asks for their names and business.','The bridge ahead is out. The ford is swollen but crossable.','A hermit offers shelter for the night in exchange for news.','A body in the ditch, robbed, but still wearing a signet ring.','Two farmers argue over a boundary stone and ask the party to judge.','A pedlar sells a map. Parts of it are wrong, one part is very right.','A wounded animal limps out of the trees, an arrow in its side with unfamiliar fletching.','A signpost has been turned to point the wrong way.','Distant smoke rises from the direction the party is heading.','A pilgrim group travels the same road and invites the party to join them.','A merchant caravan pays well for guards for the next day of travel.','The road passes an old battlefield. Rusted weapons poke out of the grass.','Someone has been following the party for an hour, keeping their distance.','A ruined tower stands on a hill nearby, with a light in its top window.'];
+const RUMOURS=['Someone at {place} has been buying up all the silver in the area.','{npc} was seen talking to strangers after dark.','Travellers who take the old road at night don\'t always arrive.','A reward is being quietly offered for a missing ledger.','The well water tastes of iron lately, and the animals won\'t drink it.','There\'s a hidden cellar beneath {place} that nobody admits to.','A knight in black armour has been asking about the party by name.','The price of healing potions has doubled. Someone is buying them all.','A hunter swears he saw the trees move in the forest last week.','Goblins have been seen trading peacefully at the edge of town.','{npc} owes a great deal of money to the wrong people.','A letter arrived for someone who died three years ago.','The old temple bell rang last night. The temple has no bell.','Someone is paying children to watch the roads and count travellers.'];
+function newImprovKit(){
+  const names=[]; const seen=new Set();
+  while(names.length<10){ const g=genName('any','any'); if(seen.has(g.name)) continue; seen.add(g.name); names.push({t:g.name,d:g.race,used:false}); }
+  const places=[];
+  for(let i=0;i<2;i++) places.push({t:`The ${pick(TAVERN_ADJ)} ${pick(TAVERN_NOUN)}`,d:'tavern'});
+  const owner=genName('any','any').name.split(' ');
+  places.push({t:`${owner[owner.length-1]}'s ${pick(SHOP_TYPES)}`,d:'shop'});
+  return {names,places,weather:pick(WEATHER),travel:pick(TRAVEL_EVENTS),rumours:makeRumours()};
+}
+function makeRumours(){
+  const npcs=readList('npc-list').map(n=>n['np-name']).filter(Boolean);
+  const locs=readList('loc-list').map(l=>l['lo-name']).filter(Boolean);
+  const fill=t=>t.replace('{npc}',npcs.length?pick(npcs):'the innkeeper').replace('{place}',locs.length?pick(locs):'the old mill');
+  const out=pickN(RUMOURS,2).map(t=>({t:fill(t),src:'rumour'}));
+  const secret=(typeof undiscoveredSecrets==='function')?undiscoveredSecrets():[];
+  if(secret.length) out.unshift({t:pick(secret),src:'secret'});
+  else out.push({t:fill(pick(RUMOURS)),src:'rumour'});
+  return out;
+}
+function renderKit(){
+  const wrap=document.getElementById('run-kit'); if(!wrap) return;
+  if(!improvKit) improvKit=newImprovKit();
+  const k=improvKit;
+  const reroll=part=>`<button class="kit-reroll" data-kit-reroll="${part}" title="Roll again" aria-label="Roll ${part} again">↻</button>`;
+  wrap.innerHTML=`
+    <div class="kit-sec"><span class="kit-lbl">Names</span>${reroll('names')}</div>
+    <div class="kit-names">${k.names.map((n,i)=>`<button class="kit-name${n.used?' used':''}" data-kit-name="${i}" title="${escH(n.d)}">${escH(n.t)}</button>`).join('')}</div>
+    <div class="kit-sec"><span class="kit-lbl">Places</span>${reroll('places')}</div>
+    ${k.places.map(p=>`<div class="kit-line">${escH(p.t)} <span class="run-small">${escH(p.d)}</span></div>`).join('')}
+    <div class="kit-sec"><span class="kit-lbl">Weather</span>${reroll('weather')}</div>
+    <div class="kit-line">${escH(k.weather)}</div>
+    <div class="kit-sec"><span class="kit-lbl">On the road</span>${reroll('travel')}</div>
+    <div class="kit-line">${escH(k.travel)}</div>
+    <div class="kit-sec"><span class="kit-lbl">Rumours</span>${reroll('rumours')}</div>
+    ${k.rumours.map(r=>`<div class="kit-line">${escH(r.t)}${r.src==='secret'?' <span class="kit-true">true, from your secrets</span>':''}</div>`).join('')}`;
+  wrap.querySelectorAll('[data-kit-name]').forEach(b=>b.addEventListener('click',()=>{ const n=k.names[b.dataset.kitName]; n.used=!n.used; b.classList.toggle('used',n.used); }));
+  wrap.querySelectorAll('[data-kit-reroll]').forEach(b=>b.addEventListener('click',()=>{
+    const part=b.dataset.kitReroll, fresh=newImprovKit();
+    if(part==='rumours') k.rumours=makeRumours(); else k[part]=fresh[part];
+    renderKit();
+  }));
+}
+renderRunMode=(function(orig){ return function(){ orig(); renderKit(); }; })(renderRunMode);
+
+// ══════════════════════════════════════════════════════
+//  ONE-PAGE PREP SHEET
+// ══════════════════════════════════════════════════════
+function buildPrintSheet(){
+  const camp=fieldVal('campaign-name'), sess=fieldVal('session-num'), date=fieldVal('session-date');
+  const b=currentBench();
+  const sec=(title,body)=>body?`<section class="ps-sec"><h2>${title}</h2>${body}</section>`:'';
+  const li=items=>items.length?`<ul>${items.join('')}</ul>`:'';
+  const hooks=charHooks().map(h=>`<li><b>${escH(h.name)}</b>${h.text?': '+escH(h.text):': <i>no hook</i>'}</li>`);
+  const secrets=readList('secrets-list').filter(s=>s.sec).map(s=>`<li class="ps-box">${escH(s.sec)}</li>`);
+  const scenes=readList('scenes-list').filter(s=>s['sc-name']||s['sc-notes']).map(s=>`<li><b>${escH(s['sc-name']||'Scene')}</b>${s['sc-trig']?` <i>(${escH(s['sc-trig'])})</i>`:''}${s['sc-notes']?'. '+escH(s['sc-notes']):''}</li>`);
+  const forks=readList('forks-list').filter(f=>f['fork-title']).map(f=>`<li>${escH(f['fork-title'])}${f['fork-a']?`<br><b>A:</b> ${escH(f['fork-a'])}`:''}${f['fork-b']?` <b>B:</b> ${escH(f['fork-b'])}`:''}</li>`);
+  const npcs=readList('npc-list').filter(n=>n['np-name']).map(n=>`<li><b>${escH(n['np-name'])}</b>${n['np-role']?`, ${escH(n['np-role'])}`:''}${n['np-trait']?`. ${escH(n['np-trait'])}`:''}${n['np-want']?` <i>Wants:</i> ${escH(n['np-want'])}`:''}</li>`);
+  const mons=readList('mon-list').filter(m=>m['mn-name']).map(m=>`<li><b>${escH(m['mn-name'])}${(parseInt(m['mn-n'])||1)>1?' ×'+escH(m['mn-n']):''}</b> CR ${escH(m['mn-cr']||'?')}, AC ${escH(m['mn-ac']||'?')}, HP ${escH(m['mn-hp']||'?')}${m['mn-tac']?'. '+escH(m['mn-tac']):''}</li>`);
+  const locs=readList('loc-list').filter(l=>l['lo-name']).map(l=>`<li><b>${escH(l['lo-name'])}</b>${l['lo-desc']?'. '+escH(l['lo-desc']):''}${l['lo-asp']?` <i>${escH(l['lo-asp']).replace(/\n/g,'; ')}</i>`:''}</li>`);
+  const treas=readList('treas-list').filter(t=>t['tr-name']).map(t=>`<li class="ps-box">${escH(t['tr-name'])}</li>`);
+  if(!improvKit) improvKit=newImprovKit();
+  const kitNames=improvKit.names.filter(n=>!n.used).slice(0,8).map(n=>escH(n.t)).join(', ');
+  return `
+    <header class="ps-head">
+      <div><h1>${escH(sess||'Session')}</h1><div>${escH([camp,date].filter(Boolean).join(', '))}</div></div>
+      <div class="ps-bench">Benchmark CR ${b.benchmark} per fight<br>Single monster up to CR ${b.singleMax}</div>
+    </header>
+    ${sec('Strong start',fieldVal('strong-start')?`<p>${escH(fieldVal('strong-start'))}</p>${fieldVal('adv-hook')?`<p><i>${escH(fieldVal('adv-hook'))}</i></p>`:''}`:'')}
+    <div class="ps-cols">
+      ${sec('Character hooks',li(hooks))}
+      ${sec('Secrets and clues',li(secrets))}
+      ${sec('Scenes',li(scenes))}
+      ${sec('Forks',li(forks))}
+      ${sec('NPCs',li(npcs))}
+      ${sec('Locations',li(locs))}
+      ${sec('Monsters',li(mons))}
+      ${sec('Treasure',li(treas))}
+      ${sec('Improv',`<p><b>Names:</b> ${kitNames}</p><p><b>Places:</b> ${improvKit.places.map(p=>escH(p.t)).join(', ')}</p><p><b>Weather:</b> ${escH(improvKit.weather)}</p>`)}
+    </div>
+    <footer class="ps-notes">Notes</footer>`;
+}
+function printPrepSheet(){
+  const ps=document.getElementById('print-sheet');
+  ps.innerHTML=buildPrintSheet();
+  document.body.classList.add('printing-sheet');
+  const done=()=>{ document.body.classList.remove('printing-sheet'); window.removeEventListener('afterprint',done); };
+  window.addEventListener('afterprint',done);
+  setTimeout(()=>window.print(),50);
+}
 
 </script>
 </body>
