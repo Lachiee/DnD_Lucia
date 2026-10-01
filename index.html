@@ -932,6 +932,85 @@ button.pc-item:hover{background:rgba(255,255,255,.4)}
   #print-sheet .ps-notes{margin-top:2mm;border-top:.3mm solid #999;padding-top:1mm;font-family:'Cinzel',Georgia,serif;font-size:7.5pt;color:#555;min-height:18mm}
 }
 
+
+/* ═══════════════════ CHARACTER SHEETS (readable layout) ═══════════════════ */
+.cs-card{background:rgba(255,255,255,.14)}
+.cs-hdr{display:grid;grid-template-columns:minmax(0,1fr) auto 18px;gap:.4rem 1rem;align-items:center;width:100%;text-align:left;background:rgba(139,26,26,.08);border:none;border-bottom:1px solid rgba(180,130,60,.3);padding:.75rem 1rem;cursor:pointer;font:inherit;color:inherit}
+.cs-hdr:hover{background:rgba(139,26,26,.13)}
+.cs-hdr:focus-visible,.cs-tab:focus-visible,.cs-feat summary:focus-visible{outline:2px solid var(--gold);outline-offset:-2px}
+.cs-id{display:flex;flex-direction:column;min-width:0}
+.cs-short{font-family:'Cinzel',serif;font-size:1.2rem;font-weight:700;color:var(--red);line-height:1.15}
+.cs-full{font-family:'IM Fell English',serif;font-style:italic;font-size:.82rem;color:var(--ink-light);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cs-meta{font-family:'Crimson Text',serif;font-size:.95rem;color:var(--ink);margin-top:.1rem}
+.cs-pills{display:flex;flex-wrap:wrap;gap:.3rem;justify-content:flex-end}
+.cs-pill{display:inline-flex;flex-direction:column;align-items:center;min-width:3.4rem;padding:.2rem .45rem;background:rgba(255,255,255,.4);border:1px solid rgba(180,130,60,.4);border-radius:2px;font-family:'Crimson Text',serif;font-size:1.05rem;font-weight:700;color:var(--ink);line-height:1.1}
+.cs-pill-l{font-family:'Cinzel',serif;font-size:.55rem;font-weight:600;letter-spacing:.06em;color:var(--ink-light)}
+.cs-pill.is-low{border-color:var(--red);color:var(--red)}
+@media(max-width:700px){.cs-hdr{grid-template-columns:1fr 18px}.cs-pills{grid-column:1/-1;grid-row:2;justify-content:flex-start}.chev{grid-row:1;grid-column:2}}
+.cs-hook{display:flex;gap:.6rem;align-items:center;padding:.5rem 1rem;border-bottom:1px solid rgba(180,130,60,.25);background:rgba(184,134,11,.07)}
+.cs-hook label{margin:0;white-space:nowrap;color:var(--gold)}
+.cs-hook input{flex:1;padding:.35rem .55rem}
+.cs-hook.is-empty{background:rgba(139,26,26,.06)}
+.cs-hook.is-empty label{color:var(--red)}
+.cs-body{padding:0 1rem 1rem}
+.cs-tabs{display:flex;gap:.2rem;border-bottom:1px solid rgba(180,130,60,.4);margin:0 -1rem .9rem;padding:0 1rem;overflow-x:auto}
+.cs-tab{background:none;border:none;border-bottom:3px solid transparent;padding:.6rem .8rem .45rem;font-family:'Cinzel',serif;font-size:.72rem;font-weight:600;letter-spacing:.05em;color:var(--ink-light);cursor:pointer;white-space:nowrap}
+.cs-tab:hover{color:var(--ink)}
+.cs-tab.on{color:var(--red);border-bottom-color:var(--red)}
+.cs-panel{display:none}
+.cs-panel.on{display:block}
+.cs-h{font-family:'Cinzel',serif;font-size:.74rem;font-weight:700;letter-spacing:.05em;color:var(--ink);margin:.9rem 0 .4rem;padding-bottom:.2rem;border-bottom:1px solid rgba(180,130,60,.4)}
+.cs-panel > .cs-h:first-child,.cs-two .cs-h:first-child{margin-top:0}
+.cs-text{font-family:'Crimson Text',serif;font-size:1rem;line-height:1.55;color:var(--ink);margin:0 0 .55rem;max-width:68ch}
+.cs-empty{font-family:'IM Fell English',serif;font-style:italic;color:var(--ink-light);font-size:.92rem}
+.cs-abils{display:grid;grid-template-columns:repeat(6,1fr);gap:.4rem;margin-bottom:1rem}
+@media(max-width:600px){.cs-abils{grid-template-columns:repeat(3,1fr)}}
+.cs-ab{text-align:center;padding:.4rem .2rem .35rem;background:rgba(180,130,60,.1);border:1px solid rgba(180,130,60,.3);border-radius:2px}
+.cs-ab.is-prof{border-color:rgba(26,42,74,.45);background:rgba(26,42,74,.06)}
+.cs-ab-l{font-family:'Cinzel',serif;font-size:.6rem;font-weight:700;letter-spacing:.06em;color:var(--ink-light)}
+.cs-ab-m{font-family:'Crimson Text',serif;font-size:1.45rem;font-weight:700;color:var(--ink);line-height:1.1}
+.cs-ab-s{font-family:'Crimson Text',serif;font-size:.82rem;color:var(--ink-light)}
+.cs-ab-save{font-family:'Crimson Text',serif;font-size:.78rem;color:var(--blue);margin-top:.1rem}
+.cs-two{display:grid;grid-template-columns:1.25fr 1fr;gap:1.4rem}
+@media(max-width:640px){.cs-two{grid-template-columns:1fr}}
+.cs-atk{padding:.4rem 0;border-bottom:1px dotted rgba(180,130,60,.45)}
+.cs-atk-n{font-family:'Crimson Text',serif;font-weight:700;font-size:1.02rem;color:var(--ink)}
+.cs-atk-d{font-family:'Crimson Text',serif;font-size:.96rem;color:var(--ink)}
+.cs-skills,.cs-res{list-style:none;margin:0;padding:0}
+.cs-skills li,.cs-res li{display:flex;justify-content:space-between;gap:.6rem;padding:.18rem 0;border-bottom:1px dotted rgba(180,130,60,.35);font-family:'Crimson Text',serif;font-size:.98rem}
+.cs-skills b,.cs-res b{font-variant-numeric:tabular-nums}
+.cs-res li{display:grid;grid-template-columns:1fr auto 5.5rem}
+.cs-res i{font-size:.82rem;color:var(--ink-light);text-align:right}
+.cs-spellstats{display:flex;gap:.5rem;margin-bottom:.7rem}
+.cs-spellstats div{padding:.3rem .8rem;border:1px solid rgba(26,42,74,.3);background:rgba(26,42,74,.06);border-radius:2px;text-align:center}
+.cs-spellstats span{display:block;font-family:'Cinzel',serif;font-size:.58rem;font-weight:600;color:var(--ink-light);letter-spacing:.05em}
+.cs-spellstats b{font-family:'Crimson Text',serif;font-size:1.3rem}
+.cs-spells{columns:2;column-gap:1.5rem;margin:0;padding-left:1.1rem;font-family:'Crimson Text',serif;font-size:1rem;line-height:1.6}
+@media(max-width:560px){.cs-spells{columns:1}}
+.cs-feat{border-bottom:1px dotted rgba(180,130,60,.45);padding:.45rem 0}
+.cs-feat summary{cursor:pointer;list-style:none;font-family:'Crimson Text',serif;font-size:1rem;line-height:1.45}
+.cs-feat summary::-webkit-details-marker{display:none}
+.cs-feat summary::before{content:'▸';display:inline-block;width:1rem;color:var(--red);transition:transform .15s}
+.cs-feat[open] summary::before{transform:rotate(90deg)}
+.cs-feat summary b,.cs-feat-plain b{color:var(--ink);margin-right:.35rem}
+.cs-feat summary span,.cs-feat-plain span{color:var(--ink-light)}
+.cs-feat[open] summary span{display:none}
+.cs-feat p{font-family:'Crimson Text',serif;font-size:1rem;line-height:1.55;margin:.3rem 0 .2rem 1rem;max-width:68ch}
+.cs-feat-plain{font-family:'Crimson Text',serif;font-size:1rem;line-height:1.45;padding-left:1rem}
+.cs-goals{margin:0 0 .4rem;padding-left:1.1rem;font-family:'Crimson Text',serif;font-size:1rem;line-height:1.55}
+.cs-dmnote{margin-top:1rem;padding:.6rem .85rem;border-left:4px solid var(--red);background:rgba(139,26,26,.06)}
+.cs-dmnote .cs-h{margin-top:0;color:var(--red);border-bottom-color:rgba(139,26,26,.25)}
+.cs-gear{list-style:none;margin:0 0 1rem;padding:0}
+.cs-gear li{padding:.25rem 0;border-bottom:1px dotted rgba(180,130,60,.35);font-family:'Crimson Text',serif;font-size:1rem}
+.cs-gear span{color:var(--ink-light);font-size:.92rem}
+.cs-facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:.6rem}
+.cs-facts div{font-family:'Crimson Text',serif;font-size:1rem}
+.cs-facts span{display:block;font-family:'Cinzel',serif;font-size:.6rem;font-weight:600;letter-spacing:.06em;color:var(--ink-light)}
+.cs-foot{margin-top:1rem;padding-top:.7rem;border-top:1px solid rgba(180,130,60,.3)}
+.cs-foot .abtn{border-color:var(--blue);color:var(--blue);margin-top:0}
+.cs-bulk{display:flex;gap:.8rem;justify-content:flex-end;margin:-.3rem 0 .5rem;font-family:'Crimson Text',serif;font-size:.92rem}
+@media print{.cs-body{display:block!important}.cs-panel{display:block!important}.cs-tabs,.cs-foot{display:none!important}}
+
 </style>
 </head>
 <body>
@@ -1009,6 +1088,7 @@ button.pc-item:hover{background:rgba(255,255,255,.4)}
       <button class="abtn" data-ac="fn-openParse" style="border-style:solid;border-color:var(--blue);color:var(--blue)">⌨ Paste / Type Character Sheet (any format)</button>
     </div>
 
+    <div class="cs-bulk"><button class="run-link" data-ac="fn-csOpenAll">Open all</button><button class="run-link" data-ac="fn-csCloseAll">Close all</button></div>
     <div id="char-sheets"></div>
 
     <div class="stitle" style="margin-top:1.4rem"><span class="sbadge">Hooks</span>Session Hooks Per Character</div>
@@ -1870,6 +1950,8 @@ document.addEventListener('click', function(e) {
     'fn-openPrepCheck': openPrepCheck,
     'fn-closePrepCheck': closePrepCheck,
     'fn-renderRun': renderRunMode,
+    'fn-csOpenAll': ()=>document.querySelectorAll('.cs-card').forEach(d=>{ if(!document.getElementById('body-'+d.id).classList.contains('open')) toggleCS(d.id); }),
+    'fn-csCloseAll': ()=>document.querySelectorAll('.cs-card').forEach(d=>{ if(document.getElementById('body-'+d.id).classList.contains('open')) toggleCS(d.id); }),
     'fn-printSheet': printPrepSheet,
     'fn-newKit': ()=>{ if(!improvKit || confirm('Replace the current improv kit with a new one?')){ improvKit=newImprovKit(); renderKit(); } },
     'fn-closeCombatPanel': closeCombatPanel,
@@ -2099,97 +2181,135 @@ function renderChar(c){
   if(document.getElementById(sid))return;
   loadedChars.push(c);updateInitSelects();
 
-  const insp=c.inspiration?'<span class="ip-badge" title="Has Inspiration"></span>':'';
+  const E=s=>String(s==null?'':s).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+  const short=(c.name||'Character').split(' ')[0];
+  const rest=(c.name||'').split(' ').slice(1).join(' ');
   const stats=c.stats||[10,10,10,10,10,10];
-  const snames=['STR','DEX','CON','INT','WIS','CHA'];
+  const abil=['Strength','Dexterity','Constitution','Intelligence','Wisdom','Charisma'];
+  const abbr=['STR','DEX','CON','INT','WIS','CHA'];
+  const hpMax=c.hp_max||c.hp||'?';
+  const hpCur=c.hp_current!==undefined?c.hp_current:hpMax;
+  const savesArr=Array.isArray(c.saves)?c.saves:String(c.saves||'').split(',').map(s=>s.trim()).filter(Boolean);
+  const pb=c.proficiency||c.proficiencyBonus||2;
+  const pp=c.passive_perception||(10+Math.floor(((stats[4]||10)-10)/2));
+  const casting=(c.spellcasting||[]);
+  const castText=casting.map(s=>s.desc||'').join(' ');
+  const dcM=castText.match(/save DC\s*(\d+)/i), atkM=castText.match(/attack\s*\+(\d+)/i);
+  const isPersonality=f=>/^personality$/i.test(f.name||'');
+  const isDMNote=f=>/dm note/i.test(f.name||'');
+  const featList=[...(c.class_features||c.features||[]),...(c.traits||[])].filter(f=>f&&typeof f==='object'&&!isPersonality(f)&&!isDMNote(f));
+  const dmNotes=[...(c.class_features||[]),...(c.traits||[])].filter(f=>f&&isDMNote(f));
+  const personality=(c.traits||[]).find(isPersonality);
+  const actions=(c.actions||[]).filter(a=>a&&!/^cast a spell$/i.test(a.name||''));
+  const lvl=parseInt(c.level)||'?';
 
-  const statHtml=snames.map((s,i)=>`<div class="sbox"><div class="slbl">${s}</div><div class="sval">${stats[i]||10}</div><div class="smod">${mod(stats[i]||10)}</div></div>`).join('');
+  // Header pills
+  const pill=(label,val,cls)=>`<span class="cs-pill${cls?' '+cls:''}"><span class="cs-pill-l">${label}</span>${E(val)}</span>`;
+  const hpCls=(typeof hpCur==='number'&&typeof hpMax==='number'&&hpCur<hpMax/2)?'is-low':'';
+  const pills=[pill('AC',c.ac||'?'),pill('HP',`${hpCur}/${hpMax}`,hpCls),pill('Speed',(c.speed||'30 ft.').replace(/\s*ft\.?/,' ft')),pill('Perception',pp)];
+  if(dcM) pills.push(pill('Spell DC',dcM[1]));
 
-  const hpMax=c.hp||c.hp_max||'?';
-  const hpCur=c.hp_current||hpMax;
-  const ac=c.ac||'?'; const spd=c.speed||'30 ft.';
-
-  const skills=(c.skills||[]).map(s=>`<span class="tag">${s}</span>`).join('');
-  const langs=(c.languages||[]).map(s=>`<span class="tag">${s}</span>`).join('');
-  const equip=(c.equipment||[]).map(e=>`<span class="tag">${typeof e==='object'?e.name:e}</span>`).join('');
-  const spells=(c.spells||[]).map(s=>`<span class="tag">${s}</span>`).join('');
-  const feats=(c.class_features||c.features||[]);
-  const traits=(c.traits||[]);
-  const actions=(c.actions||[]);
-  const saves=(c.saves||[]).join(', ');
-  const allFeatures=[...feats,...traits,...actions];
-
-  const featureHtml=allFeatures.map(f=>{
-    const n=typeof f==='string'?f:(f.name||'');
-    const d=typeof f==='string'?'':(f.desc||'');
-    if(!n&&!d)return '';
-    return `<div class="feature-block"><div class="feature-name">${n}</div>${d?`<div class="feature-desc">${d}</div>`:''}</div>`;
+  // Combat tab
+  const firstSentence=t=>{ const s=String(t||''); const m=s.match(/^(.{20,160}?[.!?])(\s|$)/); return m?m[1]:(s.length>160?s.slice(0,157)+'…':s); };
+  const abilHtml=stats.map((v,i)=>{
+    const m=Math.floor(((v||10)-10)/2), sv=savesArr.find(s=>s.toLowerCase().startsWith(abbr[i].toLowerCase())||s.toLowerCase().startsWith(abil[i].toLowerCase()));
+    return `<div class="cs-ab${sv?' is-prof':''}" title="${abil[i]} ${v}">
+      <div class="cs-ab-l">${abbr[i]}</div><div class="cs-ab-m">${m>=0?'+':''}${m}</div><div class="cs-ab-s">${v||10}</div>
+      ${sv?`<div class="cs-ab-save">Save ${E(sv.replace(/^[A-Za-z]+\s*/,''))}</div>`:''}</div>`;
   }).join('');
+  const attackHtml=actions.length?actions.map(a=>{
+    const d=a.desc||'', hit=d.match(/([+-]\d+)\s*to hit/i), dmg=d.match(/Hit:\s*([^.]+)/i);
+    return `<div class="cs-atk"><div class="cs-atk-n">${E(a.name)}</div>
+      <div class="cs-atk-d">${hit||dmg?`${hit?`<b>${E(hit[1])}</b> to hit`:''}${hit&&dmg?', ':''}${dmg?E(dmg[1].trim()):''}`:E(d)}</div></div>`;
+  }).join(''):'<p class="cs-empty">No attacks listed on the sheet.</p>';
+  const skillItems=(c.skills||[]).map(s=>{ const m=String(s).match(/^(.*?)\s*([+-]\d+)$/); return m?{n:m[1],v:parseInt(m[2])}:{n:String(s),v:null}; })
+    .sort((a,b)=>(b.v??-99)-(a.v??-99));
+  const skillHtml=skillItems.length?`<ul class="cs-skills">${skillItems.map(s=>`<li><span>${E(s.n)}</span><b>${s.v===null?'':(s.v>=0?'+':'')+s.v}</b></li>`).join('')}</ul>`:'<p class="cs-empty">No skills listed.</p>';
+  let resHtml='';
+  if(typeof pcTrackers==='function'){
+    const trs=pcTrackers(c);
+    if(trs.length) resHtml=`<h4 class="cs-h">Limited resources</h4><ul class="cs-res">${trs.map(t=>`<li><span>${E(t.label)}</span><b>${t.max}</b><i>${t.reset==='combat'?'per fight':t.reset==='short'?'short rest':'long rest'}</i></li>`).join('')}</ul>`;
+  }
 
-  const spellcast=(c.spellcasting||[]).map(f=>`<div class="feature-block"><div class="feature-name">${f.name||'Spellcasting'}</div><div class="feature-desc">${f.desc||''}</div></div>`).join('');
+  // Spells tab
+  const spellNames=(c.spells||[]).map(s=>typeof s==='object'?(s.name||''):String(s)).filter(Boolean);
+  const cantrips=spellNames.filter(s=>/cantrip/i.test(s)), leveled=spellNames.filter(s=>!/cantrip/i.test(s));
+  const spellTab=(spellNames.length||casting.length)?`
+    ${dcM||atkM?`<div class="cs-spellstats">${dcM?`<div><span>Save DC</span><b>${dcM[1]}</b></div>`:''}${atkM?`<div><span>Spell attack</span><b>+${atkM[1]}</b></div>`:''}</div>`:''}
+    ${casting.map(s=>`<p class="cs-text"><b>${E(s.name||'Spellcasting')}.</b> ${E(s.desc||'')}</p>`).join('')}
+    ${leveled.length?`<h4 class="cs-h">Spells</h4><ul class="cs-spells">${leveled.map(s=>`<li>${E(s)}</li>`).join('')}</ul>`:''}
+    ${cantrips.length?`<h4 class="cs-h">Cantrips</h4><ul class="cs-spells">${cantrips.map(s=>`<li>${E(s.replace(/\s*\(cantrip[^)]*\)/i,''))}</li>`).join('')}</ul>`:''}`:'';
 
-  const personality=(c.traits||[]).find(t=>t.name==='Personality');
-  const personalityText=personality?personality.desc:'';
+  // Features tab
+  const featTab=featList.length?featList.map(f=>{
+    const d=f.desc||'', fs=firstSentence(d), more=d.length>fs.length+2;
+    return more?`<details class="cs-feat"><summary><b>${E(f.name)}</b><span>${E(fs)}</span></summary><p>${E(d)}</p></details>`
+               :`<div class="cs-feat cs-feat-plain"><b>${E(f.name)}</b><span>${E(d)}</span></div>`;
+  }).join(''):'<p class="cs-empty">No features listed.</p>';
 
+  // Story tab
+  const goals=(c.goals||[]);
   const backstory=c.backstory||(c.notes&&c.notes.backstory)||'';
+  const notes=typeof c.notes==='string'?c.notes:'';
+  const storyTab=`
+    ${goals.length?`<h4 class="cs-h">Wants</h4><ul class="cs-goals">${goals.map(g=>`<li>${E(g)}</li>`).join('')}</ul>`:''}
+    ${personality?`<h4 class="cs-h">Personality</h4>${String(personality.desc||'').split(/(?<=\.)\s+(?=(?:Traits?|Ideals?|Bonds?|Flaws?)\s*:)/).map(p=>`<p class="cs-text">${E(p).replace(/^(Traits?|Ideals?|Bonds?|Flaws?):/,'<b>$1:</b>')}</p>`).join('')}`:''}
+    ${backstory?`<h4 class="cs-h">Backstory</h4>${String(backstory).split(/\n\s*\n|\n/).filter(Boolean).map(p=>`<p class="cs-text">${E(p)}</p>`).join('')}`:''}
+    ${notes||dmNotes.length?`<div class="cs-dmnote"><h4 class="cs-h">DM notes</h4>${notes?`<p class="cs-text">${E(notes)}</p>`:''}${dmNotes.map(n=>`<p class="cs-text">${E(n.desc||'')}</p>`).join('')}</div>`:''}`;
+
+  // Gear tab
+  const equip=(c.equipment||[]).map(e=>typeof e==='object'?(e.name||''):String(e)).filter(Boolean);
+  const gearTab=`
+    ${equip.length?`<ul class="cs-gear">${equip.map(e=>{ const m=e.match(/^([^(]+?)\s*(\(.*\))?$/); return `<li><b>${E(m?m[1]:e)}</b>${m&&m[2]?` <span>${E(m[2].slice(1,-1))}</span>`:''}</li>`; }).join('')}</ul>`:'<p class="cs-empty">No equipment listed.</p>'}
+    <div class="cs-facts">
+      <div><span>Languages</span>${E((c.languages||['Common']).join(', '))}</div>
+      <div><span>Proficiency bonus</span>+${E(pb)}</div>
+      ${c.background?`<div><span>Background</span>${E(c.background)}</div>`:''}
+      ${c.alignment?`<div><span>Alignment</span>${E(c.alignment)}</div>`:''}
+    </div>`;
+
+  const tabs=[['combat','Combat',`
+      <div class="cs-abils">${abilHtml}</div>
+      <div class="cs-two">
+        <div><h4 class="cs-h">Attacks</h4>${attackHtml}${resHtml}</div>
+        <div><h4 class="cs-h">Skills</h4>${skillHtml}</div>
+      </div>`]];
+  if(spellTab) tabs.push(['spells','Spells',spellTab]);
+  tabs.push(['features','Features',featTab],['story','Story',storyTab],['gear','Gear',gearTab]);
 
   const div=document.createElement('div');
-  div.className='char-card';div.id=sid;
+  div.className='char-card cs-card';div.id=sid;
   div.innerHTML=`
-    <div class="char-hdr" data-char-toggle="${sid}">
-      <div>
-        <span class="char-name">${c.name}${insp}</span>
-        <span class="char-meta"> · ${c.size||''} ${c.race||c.type||''} ${c.class||''} ${c.subclass?'('+c.subclass+')':''} · Level ${c.level||'?'}</span>
-      </div>
-      <div style="display:flex;align-items:center;gap:.5rem">
-        <span style="font-family:'Cinzel',serif;font-size:.65rem;color:var(--ink-light)">${c.alignment||''}</span>
-        <span class="chev" id="chev-${sid}">▶</span>
-      </div>
+    <button class="cs-hdr" data-char-toggle="${sid}" aria-expanded="false" aria-controls="body-${sid}">
+      <span class="cs-id">
+        <span class="cs-short">${E(short)}${c.inspiration?'<span class="ip-badge" title="Has Inspiration"></span>':''}</span>
+        ${rest?`<span class="cs-full">${E(rest)}</span>`:''}
+        <span class="cs-meta">${E([c.race,c.class?`${c.class} ${lvl}`:'',c.subclass].filter(Boolean).join(' · '))}${c.player?` · <i>${E(c.player)}</i>`:''}</span>
+      </span>
+      <span class="cs-pills">${pills.join('')}</span>
+      <span class="chev" id="chev-${sid}" aria-hidden="true">▶</span>
+    </button>
+    <div class="cs-hook">
+      <label for="hook-${sid}">Session hook</label>
+      <input type="text" id="hook-${sid}" data-char-hook="${E(c.name)}" placeholder="What pulls ${E(short)} into this session?">
     </div>
-    <div class="char-body" id="body-${sid}">
-      <div class="hp-grid">
-        <div class="hpbox"><label>HP Max</label><div class="hpval">${hpMax}</div></div>
-        <div class="hpbox"><label>HP Current</label><div class="hpval">${hpCur}</div></div>
-        <div class="hpbox"><label>AC</label><div class="hpval">${ac}</div></div>
-        <div class="hpbox"><label>Speed</label><div class="hpval">${spd}</div></div>
-      </div>
-      <div class="stat-grid">${statHtml}</div>
-      <div class="dg3">
-        <div class="db"><label>Player</label><p>${c.player||'—'}</p></div>
-        <div class="db"><label>Background</label><p>${c.background||'—'}</p></div>
-        <div class="db"><label>Saves</label><p>${saves||'—'}</p></div>
-      </div>
-      <div class="dg2">
-        <div class="db"><label>Languages</label><div class="tags">${langs||'<span class="tag">Common</span>'}</div></div>
-        <div class="db"><label>Proficiency Bonus</label><p>+${c.proficiency||c.proficiencyBonus||2}</p></div>
-      </div>
-      ${skills?`<div class="db" style="margin-bottom:.7rem"><label>Skills</label><div class="tags">${skills}</div></div>`:''}
-      ${equip?`<div class="db" style="margin-bottom:.7rem"><label>Equipment</label><div class="tags">${equip}</div></div>`:''}
-      ${spells?`<div class="db" style="margin-bottom:.7rem"><label>Spells</label><div class="tags">${spells}</div></div>`:''}
-      ${spellcast?`<div style="margin-bottom:.7rem">${spellcast}</div>`:''}
-      ${featureHtml?`<div style="margin-bottom:.7rem">${featureHtml}</div>`:''}
-      ${personalityText?`<div class="backstory-box"><div class="backstory-lbl">Personality</div><p style="font-family:'Crimson Text',serif;font-size:.95rem;line-height:1.5">${personalityText}</p></div>`:''}
-      ${backstory?`<div class="backstory-box"><div class="backstory-lbl">Backstory</div><p style="font-family:'Crimson Text',serif;font-size:.95rem;line-height:1.5">${backstory.replace(/\n/g,'<br>')}</p></div>`:''}
-      <div class="hook-box"><div class="hook-lbl">★ Session Hook for ${c.name}</div><input type="text" data-char-hook="${c.name.replace(/"/g,'&quot;')}" placeholder="What connects ${c.name} to this session?" style="margin-top:.2rem"></div>
-      <button class="abtn" style="margin-top:.6rem;border-color:var(--blue);color:var(--blue)" data-char-import="${sid}">⚔ Add to Initiative Tracker</button>
+    <div class="char-body cs-body" id="body-${sid}">
+      <div class="cs-tabs" role="tablist">${tabs.map(([k,l],i)=>`<button role="tab" class="cs-tab${i===0?' on':''}" data-cs-tab="${k}" aria-selected="${i===0}">${l}</button>`).join('')}</div>
+      ${tabs.map(([k,,h],i)=>`<div class="cs-panel${i===0?' on':''}" data-cs-panel="${k}" role="tabpanel">${h}</div>`).join('')}
+      <div class="cs-foot"><button class="abtn" data-char-import="${sid}">⚔ Add ${E(short)} to initiative</button></div>
     </div>`;
   container.appendChild(div);
-  // Attach event listeners after insertion
-  const hdrEl=div.querySelector('[data-char-toggle]');
-  if(hdrEl)hdrEl.addEventListener('click',()=>toggleCS(sid));
-  const impBtn=div.querySelector('[data-char-import]');
-  if(impBtn)impBtn.addEventListener('click',()=>importToInit(sid));
-  // Restore a saved session hook for this character, if one is waiting
+  div.querySelector('[data-char-toggle]').addEventListener('click',()=>toggleCS(sid));
+  div.querySelector('[data-char-import]').addEventListener('click',()=>importToInit(sid));
+  div.querySelectorAll('[data-cs-tab]').forEach(t=>t.addEventListener('click',()=>{
+    div.querySelectorAll('[data-cs-tab]').forEach(x=>{ const on=x===t; x.classList.toggle('on',on); x.setAttribute('aria-selected',on); });
+    div.querySelectorAll('[data-cs-panel]').forEach(p=>p.classList.toggle('on',p.dataset.csPanel===t.dataset.csTab));
+  }));
   const hookInp=div.querySelector('[data-char-hook]');
+  const markHook=()=>div.querySelector('.cs-hook').classList.toggle('is-empty',!hookInp.value.trim());
   if(hookInp && pendingCharHooks[c.name]!==undefined) hookInp.value=pendingCharHooks[c.name];
-  // Auto-expand on load
-  const bodyEl=document.getElementById('body-'+sid);
-  const chevEl=document.getElementById('chev-'+sid);
-  if(bodyEl) bodyEl.classList.add('open');
-  if(chevEl) chevEl.classList.add('open');
-  // Wrap spell names with tooltip triggers
+  hookInp.addEventListener('input',markHook); markHook();
   wrapSpellsInElement(div);
-  // Sync to relationship web
   if(typeof webSyncPCs === 'function') webSyncPCs();
 }
 
@@ -2198,6 +2318,7 @@ function toggleCS(id){
   const chev=document.getElementById('chev-'+id);
   const open=body.classList.toggle('open');
   chev.classList.toggle('open',open);
+  const hdr=document.querySelector(`[data-char-toggle="${id}"]`); if(hdr) hdr.setAttribute('aria-expanded',open);
 }
 
 // ══════════════════════════════════════════════════════
@@ -3478,7 +3599,7 @@ function wrapSpellsInElement(el){
   
   nodes.forEach(textNode => {
     const parent = textNode.parentNode;
-    if(!parent || parent.classList.contains('spell-link') || parent.tagName === 'SCRIPT' || parent.tagName === 'STYLE' || (parent.closest && parent.closest('button,label,select,option,textarea,.dmg-bar-title,.stitle,.tab-groups,.modal-title,.run-h,.cp-sec'))) return;
+    if(!parent || parent.classList.contains('spell-link') || parent.tagName === 'SCRIPT' || parent.tagName === 'STYLE' || (parent.closest && parent.closest('button,label,select,option,textarea,.dmg-bar-title,.stitle,.tab-groups,.modal-title,.run-h,.cp-sec,.cs-hdr,[data-cs-panel="story"],[data-cs-panel="features"],[data-cs-panel="gear"]'))) return;
     
     let text = textNode.textContent;
     let changed = false;
